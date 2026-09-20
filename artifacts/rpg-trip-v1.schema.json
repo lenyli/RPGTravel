@@ -1,0 +1,634 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "1.1"
+    },
+    "adventure": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "全冒险唯一的小写字母、数字及下划线 ID",
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{0,63}$"
+        },
+        "title": {
+          "description": "非空标题，最多 160 字符",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "pattern": "\\S"
+        },
+        "subtitle": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "destination": {
+          "description": "目的地和明确游览范围",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "pattern": "\\S"
+        },
+        "startDate": {
+          "description": "目的地本地日历日期 YYYY-MM-DD",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "endDate": {
+          "description": "目的地本地日历日期 YYYY-MM-DD",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "timeZone": {
+          "description": "目的地 IANA 时区；不确定为 null",
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "gameStyle": {
+          "maxItems": 20,
+          "type": "array",
+          "items": {
+            "description": "非空标题，最多 160 字符",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160,
+            "pattern": "\\S"
+          }
+        },
+        "premise": {
+          "description": "不泄露最终答案的故事开场",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 20000,
+          "pattern": "\\S"
+        },
+        "mainMystery": {
+          "description": "贯穿旅程的主要疑问",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 20000,
+          "pattern": "\\S"
+        },
+        "finalGoal": {
+          "description": "完整非空文本，最多 20000 字符",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 20000,
+          "pattern": "\\S"
+        },
+        "endingTitle": {
+          "description": "非空标题，最多 160 字符",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "pattern": "\\S"
+        },
+        "endingText": {
+          "description": "所有地点完成或跳过后展示的完整结局，与访问顺序无关",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 20000,
+          "pattern": "\\S"
+        },
+        "practicalNotes": {
+          "maxItems": 100,
+          "type": "array",
+          "items": {
+            "description": "完整非空文本，最多 20000 字符",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20000,
+            "pattern": "\\S"
+          }
+        },
+        "verificationNotes": {
+          "description": "未能核验的真实出行信息及限制",
+          "maxItems": 100,
+          "type": "array",
+          "items": {
+            "description": "完整非空文本，最多 20000 字符",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20000,
+            "pattern": "\\S"
+          }
+        },
+        "sources": {
+          "maxItems": 100,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "全冒险唯一的小写字母、数字及下划线 ID",
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]{0,63}$"
+              },
+              "title": {
+                "description": "非空标题，最多 160 字符",
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160,
+                "pattern": "\\S"
+              },
+              "url": {
+                "description": "实际查阅的 http/https 来源页面",
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048,
+                "pattern": "^https?:\\/\\/[^\\s]+$"
+              },
+              "checkedOn": {
+                "description": "生成 AI 实际查阅的日期，不是提示生成日期",
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "url",
+              "checkedOn"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "subtitle",
+        "destination",
+        "startDate",
+        "endDate",
+        "timeZone",
+        "gameStyle",
+        "premise",
+        "mainMystery",
+        "finalGoal",
+        "endingTitle",
+        "endingText",
+        "practicalNotes",
+        "verificationNotes",
+        "sources"
+      ],
+      "additionalProperties": false
+    },
+    "chapters": {
+      "minItems": 1,
+      "maxItems": 60,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "全冒险唯一的小写字母、数字及下划线 ID",
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]{0,63}$"
+          },
+          "order": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 60
+          },
+          "title": {
+            "description": "非空标题，最多 160 字符",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160,
+            "pattern": "\\S"
+          },
+          "area": {
+            "description": "按地点区域分组，不是固定日程",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160,
+            "pattern": "\\S"
+          },
+          "intro": {
+            "description": "完整非空文本，最多 20000 字符",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20000,
+            "pattern": "\\S"
+          },
+          "questIds": {
+            "description": "本区域任务的展示顺序，不限制到访顺序",
+            "minItems": 1,
+            "maxItems": 60,
+            "type": "array",
+            "items": {
+              "description": "全冒险唯一的小写字母、数字及下划线 ID",
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]{0,63}$"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "order",
+          "title",
+          "area",
+          "intro",
+          "questIds"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "quests": {
+      "minItems": 1,
+      "maxItems": 60,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "全冒险唯一的小写字母、数字及下划线 ID",
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]{0,63}$"
+          },
+          "chapterId": {
+            "description": "全冒险唯一的小写字母、数字及下划线 ID",
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]{0,63}$"
+          },
+          "order": {
+            "description": "全旅程连续展示序号 1..N，不是完成依赖",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 60
+          },
+          "title": {
+            "description": "非空标题，最多 160 字符",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160,
+            "pattern": "\\S"
+          },
+          "location": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "非空标题，最多 160 字符",
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160,
+                "pattern": "\\S"
+              },
+              "address": {
+                "description": "游客可辨认的完整真实地点范围，不编造门牌",
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 20000,
+                "pattern": "\\S"
+              },
+              "query": {
+                "description": "地点名称加地区的地图搜索词",
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1000,
+                "pattern": "\\S"
+              },
+              "latitude": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": -90,
+                    "maximum": 90
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "longitude": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": -180,
+                    "maximum": 180
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "coordinateSystem": {
+                "type": "string",
+                "const": "WGS84"
+              },
+              "coordinateSourceId": {
+                "description": "可靠 WGS84 坐标来源 ID，无坐标时为 null",
+                "anyOf": [
+                  {
+                    "description": "全冒险唯一的小写字母、数字及下划线 ID",
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9_]{0,63}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "name",
+              "address",
+              "query",
+              "latitude",
+              "longitude",
+              "coordinateSystem",
+              "coordinateSourceId"
+            ],
+            "additionalProperties": false
+          },
+          "visit": {
+            "type": "object",
+            "properties": {
+              "recommendedDate": {
+                "description": "可选出行提示日期，不构成任务门禁；没有明确需要时为 null",
+                "anyOf": [
+                  {
+                    "description": "目的地本地日历日期 YYYY-MM-DD",
+                    "type": "string",
+                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "recommendedTime": {
+                "description": "建议时段，不保证实际开放；未知为 null",
+                "anyOf": [
+                  {
+                    "description": "非空标题，最多 160 字符",
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 160,
+                    "pattern": "\\S"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "estimatedMinutes": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 720
+              },
+              "transportNote": {
+                "type": "string",
+                "maxLength": 20000
+              },
+              "accessNote": {
+                "description": "开放、预约、门票；无法确认时明确写待核验",
+                "type": "string",
+                "maxLength": 20000
+              },
+              "safetyNote": {
+                "type": "string",
+                "maxLength": 20000
+              },
+              "fallbackText": {
+                "description": "跳过现场行动时仍可推进的剧情补叙，不冒称已完成",
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 20000,
+                "pattern": "\\S"
+              }
+            },
+            "required": [
+              "recommendedDate",
+              "recommendedTime",
+              "estimatedMinutes",
+              "transportNote",
+              "accessNote",
+              "safetyNote",
+              "fallbackText"
+            ],
+            "additionalProperties": false
+          },
+          "story": {
+            "type": "object",
+            "properties": {
+              "scene": {
+                "description": "本地点独立调查所需的完整情景与背景，不预设访问过其他地点",
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 20000,
+                "pattern": "\\S"
+              },
+              "currentMystery": {
+                "description": "完整非空文本，最多 20000 字符",
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 20000,
+                "pattern": "\\S"
+              }
+            },
+            "required": [
+              "scene",
+              "currentMystery"
+            ],
+            "additionalProperties": false
+          },
+          "npcIds": {
+            "maxItems": 60,
+            "type": "array",
+            "items": {
+              "description": "全冒险唯一的小写字母、数字及下划线 ID",
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]{0,63}$"
+            }
+          },
+          "objectives": {
+            "minItems": 3,
+            "maxItems": 5,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "description": "全冒险唯一的小写字母、数字及下划线 ID",
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_]{0,63}$"
+                },
+                "text": {
+                  "description": "完整非空文本，最多 20000 字符",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 20000,
+                  "pattern": "\\S"
+                }
+              },
+              "required": [
+                "id",
+                "text"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "completionText": {
+            "description": "完整非空文本，最多 20000 字符",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20000,
+            "pattern": "\\S"
+          },
+          "rewardClueIds": {
+            "minItems": 1,
+            "maxItems": 3,
+            "type": "array",
+            "items": {
+              "description": "全冒险唯一的小写字母、数字及下划线 ID",
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]{0,63}$"
+            }
+          },
+          "sourceIds": {
+            "maxItems": 100,
+            "type": "array",
+            "items": {
+              "description": "全冒险唯一的小写字母、数字及下划线 ID",
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]{0,63}$"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "chapterId",
+          "order",
+          "title",
+          "location",
+          "visit",
+          "story",
+          "npcIds",
+          "objectives",
+          "completionText",
+          "rewardClueIds",
+          "sourceIds"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "clues": {
+      "minItems": 1,
+      "maxItems": 180,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "全冒险唯一的小写字母、数字及下划线 ID",
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]{0,63}$"
+          },
+          "title": {
+            "description": "非空标题，最多 160 字符",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160,
+            "pattern": "\\S"
+          },
+          "content": {
+            "description": "完整非空文本，最多 20000 字符",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20000,
+            "pattern": "\\S"
+          },
+          "sourceQuestId": {
+            "description": "全冒险唯一的小写字母、数字及下划线 ID",
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]{0,63}$"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "content",
+          "sourceQuestId"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "npcs": {
+      "maxItems": 60,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "全冒险唯一的小写字母、数字及下划线 ID",
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]{0,63}$"
+          },
+          "name": {
+            "description": "非空标题，最多 160 字符",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160,
+            "pattern": "\\S"
+          },
+          "role": {
+            "description": "非空标题，最多 160 字符",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160,
+            "pattern": "\\S"
+          },
+          "description": {
+            "description": "完整非空文本，最多 20000 字符",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20000,
+            "pattern": "\\S"
+          },
+          "motivation": {
+            "description": "故事设计内部动机，不在初见时剧透",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20000,
+            "pattern": "\\S"
+          },
+          "fictional": {
+            "type": "boolean",
+            "const": true
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "role",
+          "description",
+          "motivation",
+          "fictional"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "adventure",
+    "chapters",
+    "quests",
+    "clues",
+    "npcs"
+  ],
+  "additionalProperties": false
+}

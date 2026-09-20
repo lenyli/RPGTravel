@@ -1,0 +1,37 @@
+{
+  "verifiedAt": "2026-09-20 14:46",
+  "candidate": "1.1.0",
+  "decisionVersion": "v1.1",
+  "schemaVersion": "1.1",
+  "progressVersion": 2,
+  "unit": {
+    "passed": 149,
+    "failed": 0
+  },
+  "e2e": {
+    "startTime": "2026-09-20T06:42:52.122Z",
+    "duration": 45998.242,
+    "expected": 52,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "engines": [
+    "Chromium",
+    "WebKit (macOS, iPhone 13 emulation)"
+  ],
+  "offline": {
+    "chromium": "context offline + same-context page close/reopen",
+    "webkit": "production resource sockets disconnected; uncached fetch rejects; same-context page close/reopen; setOffline internal error retained separately"
+  },
+  "zip": {
+    "path": "artifacts/RPGTravel-1.1.0-static.zip",
+    "bytes": 185288,
+    "sha256": "f98ae25efc03860d45f64cc347f071d3670f2c7448f8b67fbac2609235c7f721",
+    "matchesDist": true,
+    "files": 11,
+    "failurePreservesPrevious": true
+  },
+  "publicDeployment": false,
+  "realIPhoneVerified": false
+}

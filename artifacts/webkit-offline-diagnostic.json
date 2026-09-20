@@ -1,0 +1,28 @@
+{
+  "observedOn": "2026-09-20",
+  "browser": "Playwright WebKit 1.55.1 on macOS, iPhone 13 emulation",
+  "failedSimulation": {
+    "method": "BrowserContext.setOffline(true) after navigator.serviceWorker.ready and a controlled production page",
+    "rootReopen": "page.goto: WebKit encountered an internal error",
+    "subpathReload": "page.reload: WebKit encountered an internal error",
+    "evidence": "Full 48-case run tool output: 40 passed, 8 failed; two failures were the WebKit offline emulation errors above."
+  },
+  "networkOutageComparison": {
+    "method": "Local acceptance origin destroys all production resource sockets. An uncached fetch is asserted to reject; same browser context, origin and site storage retained. No route fulfillment or mocked app resources.",
+    "observedResult": "Full root offline workflow passed: same-context close/reopen, exact action recovery, completion/skip/ending, saved form draft, Prompt copy/fallback, file export and restore. Subpath offline full reload and action start passed. Chromium used BrowserContext.setOffline(true); WebKit used verified production resource socket outage.",
+    "realDeviceVerified": false
+  },
+  "finalAcceptance": {
+    "schemaVersion": "1.1",
+    "progressVersion": 2,
+    "stats": {
+      "startTime": "2026-09-20T06:42:52.122Z",
+      "duration": 45998.242,
+      "expected": 52,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "report": "artifacts/e2e-results.json"
+  }
+}

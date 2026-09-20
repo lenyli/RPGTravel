@@ -1,0 +1,218 @@
+{
+  "schemaVersion": "1.1",
+  "adventure": {
+    "id": "trip_fixture_01",
+    "title": "逆风信笺 · 协议测试",
+    "subtitle": "合成坐标，仅用于测试，不是现实旅行推荐",
+    "destination": "虚构旧城（仅工程测试）",
+    "startDate": "2026-09-23",
+    "endDate": "2026-09-24",
+    "timeZone": "Asia/Shanghai",
+    "gameStyle": ["环境探索", "调查叙事"],
+    "premise": "一名修书人请你归还一封没有收件人姓名的信。信封画着一扇窗，署名却被刻意剪去。她在旧城三个地点留下了互相独立的数字记录，你可以按自己的实际行程任选一处开始。她说自己并不想知道秘密，只希望这封信不要继续被当成失约的证据。",
+    "mainMystery": "为什么一封送达过的信，又回到了寄件人的手里？",
+    "finalGoal": "在旧城不同地点收集相互印证的材料，查清信件被保存的缘由；到访顺序由你决定。",
+    "endingTitle": "信已送达",
+    "endingText": "窗边留下的不是等待，书页中的不是退信，码头记号也并非告别。无论以什么顺序获得，三份材料都拼出了同一个选择：收信人曾收到约定，随后主动离开旧城，并把信交给修书人保存。被剪掉的姓名是她最后保留的隐私。你没有替任何人安排重逢，只让一封信不再承担一场从未发生的失约。故事在这里收束。",
+    "practicalNotes": ["仅供工程测试，地点完全虚构。请勿导航或用作实际行程。"],
+    "verificationNotes": [
+      "此包不包含真实旅行信息，未作地点、开放时间或历史核验。"
+    ],
+    "sources": [
+      {
+        "id": "source_test",
+        "title": "模拟坐标来源，仅用于测试",
+        "url": "https://example.com/synthetic-coordinate",
+        "checkedOn": "2026-09-20"
+      }
+    ]
+  },
+  "chapters": [
+    {
+      "id": "chapter_01",
+      "order": 1,
+      "title": "窗与书的痕迹",
+      "area": "虚构旧城东部",
+      "intro": "旧城东部的两处数字记录分别保留了信封的样貌与保存方式。任选一处都能独立开始调查；所有纸页与对白只存在于这个测试故事中。",
+      "questIds": ["quest_01", "quest_02"]
+    },
+    {
+      "id": "chapter_02",
+      "order": 2,
+      "title": "河岸留下的选择",
+      "area": "虚构旧城河岸",
+      "intro": "河岸记录保留了一份独立的保管说明。你可以直接从这里开始，寻找的不是一个迟到的人，而是一次被忽略的选择。",
+      "questIds": ["quest_03"]
+    }
+  ],
+  "quests": [
+    {
+      "id": "quest_01",
+      "chapterId": "chapter_01",
+      "order": 1,
+      "title": "没有署名的窗",
+      "location": {
+        "name": "测试场景·东窗回廊（虚构）",
+        "address": "测试用虚构地点，不对应现实地址",
+        "query": "测试场景 东窗回廊 非真实地点",
+        "latitude": 0,
+        "longitude": 0,
+        "coordinateSystem": "WGS84",
+        "coordinateSourceId": "source_test"
+      },
+      "visit": {
+        "recommendedDate": null,
+        "recommendedTime": null,
+        "estimatedMinutes": 25,
+        "transportNote": "测试场景内步行，不代表现实路线。",
+        "accessNote": "无真实开放信息；这是工程测试场景。",
+        "safetyNote": "正式旅行应留在开放步道，不进入未开放空间。",
+        "fallbackText": "你没有进入回廊。修书人提供了 App 内的信封摹本说明：信封画着一扇窗，三条横向压痕从窗框外穿到框内，形状与旧书装订线一致。这份独立的数字材料表明信封曾被夹在书中，无需完成任何其他地点的行动。"
+      },
+      "story": {
+        "scene": "在这个虚构回廊的场景中，修书人的留言出现在你的屏幕上：‘别急着找名字。’文字摹写写道：信封上是一扇狭长拱窗，三条横向压痕从窗框外一直穿到框内。阿简没有陪你来，这段文字就是她提供的全部记录，不存在待打开的图片附件。",
+        "currentMystery": "信封上的窗是地址，还是从别处压印出来的痕迹？"
+      },
+      "npcIds": ["npc_01"],
+      "objectives": [
+        {
+          "id": "objective_01",
+          "text": "在测试场景中停在回廊的公共观察点，留意窗框的整体轮廓。"
+        },
+        {
+          "id": "objective_02",
+          "text": "比较剧情里的信封图案与窗框形状，不寻找现实中的秘密标记。"
+        },
+        {
+          "id": "objective_03",
+          "text": "沿开放通道换一个角度，留意图案横向线条是否更像书脊压痕。"
+        }
+      ],
+      "completionText": "窗形只解释了图案的一半。横穿图案的线条来自装订，信封曾被夹在一本书中。",
+      "rewardClueIds": ["clue_01"],
+      "sourceIds": []
+    },
+    {
+      "id": "quest_02",
+      "chapterId": "chapter_01",
+      "order": 2,
+      "title": "夹在书里的回信",
+      "location": {
+        "name": "测试场景·旧书铺外廊（虚构）",
+        "address": "测试用虚构地点，不对应现实地址",
+        "query": "测试场景 旧书铺外廊 非真实地点",
+        "latitude": null,
+        "longitude": null,
+        "coordinateSystem": "WGS84",
+        "coordinateSourceId": null
+      },
+      "visit": {
+        "recommendedDate": null,
+        "recommendedTime": null,
+        "estimatedMinutes": 30,
+        "transportNote": "测试书铺是可独立选择的故事地点，无需先到其他场景。",
+        "accessNote": "无真实开放信息；不要求现实店员配合。",
+        "safetyNote": "不翻动未经允许接触的书籍和私人文件。",
+        "fallbackText": "书铺这处没有现场完成。修书人提供了 App 内虚构的修复记录：一封画着窗的信曾夹在书中，信封背面写着“已经收到，请替我保管”。她同时说明，记录里的波纹是旅人日志的标识。这份材料完整保留了已收到信件的证据，不依赖其他调查。"
+      },
+      "story": {
+        "scene": "阿简在 App 内发来一份独立的虚构修复记录，交代了本地点的全部背景：一封画着窗的信曾夹在旧书里，纸上留下三条装订压痕；信封背面写着“已经收到，请替我保管”，旁边的波纹是旅人日志的标识。她留言：“保管和退回，原来不是同一件事。”不需要先阅读其他任务，也不需要店员出示任何真实档案。",
+        "currentMystery": "既然信已经被收到，为什么后来又被退回？"
+      },
+      "npcIds": ["npc_01"],
+      "objectives": [
+        {
+          "id": "objective_04",
+          "text": "在测试书铺场景的公共外廊停留，观察从街口到河岸的视线方向。"
+        },
+        {
+          "id": "objective_05",
+          "text": "阅读本节完整展示的数字修复记录，对照“已经收到”与“请替我保管”两句文字。"
+        },
+        {
+          "id": "objective_06",
+          "text": "观察公共外廊与街口之间的空间关系，再自行选择开放通道离开，不进入私人物品存放区。"
+        }
+      ],
+      "completionText": "‘已经收到’推翻了失约的假设。剩下的问题不再是谁没有赴约，而是谁选择把收到的信交还保存。",
+      "rewardClueIds": ["clue_02"],
+      "sourceIds": []
+    },
+    {
+      "id": "quest_03",
+      "chapterId": "chapter_02",
+      "order": 3,
+      "title": "给离开的人留白",
+      "location": {
+        "name": "测试场景·河岸公共平台（虚构）",
+        "address": "测试用虚构地点，不对应现实地址",
+        "query": "测试场景 河岸公共平台 非真实地点",
+        "latitude": null,
+        "longitude": null,
+        "coordinateSystem": "WGS84",
+        "coordinateSourceId": null
+      },
+      "visit": {
+        "recommendedDate": null,
+        "recommendedTime": null,
+        "estimatedMinutes": 20,
+        "transportNote": "这是可随时独立选择的测试地点，不安排固定日期，不设置真实时钟门禁。",
+        "accessNote": "无真实开放信息；不要求看到日出、船或特定人物。",
+        "safetyNote": "留在安全公共区域，不靠近水边、不翻越护栏。",
+        "fallbackText": "你没有进行河岸观察。修书人仍提供了本地点完整的 App 内保管说明：一封画着窗的信由收件人亲自交回，她即将主动离开旧城，并要求剪去姓名。文字材料保留了她亲自作出选择的证据，不依赖任何现场景象或其他地点的线索。"
+      },
+      "story": {
+        "scene": "阿简在 App 内展示一份独立的虚构保管说明，完整交代了本地点的背景：一名旅人收到一封画着窗的信，后来亲自将它交回保存。说明写着：“信已亲收。我将离开旧城，姓名由我亲手剪去。请留下这封信，不必寻找我。”阿简留言：“留下信，也许是为了保存选择。”本节已经提供全部可读材料，不需要前往别处取得线索，也不存在未显示的附件。",
+        "currentMystery": "一个人主动离开，是否仍能被另一种讲述误解为被遗忘？"
+      },
+      "npcIds": ["npc_01"],
+      "objectives": [
+        {
+          "id": "objective_07",
+          "text": "在测试平台的安全区域停下，面向场景开阔的一侧，不以天气现象作为完成条件。"
+        },
+        {
+          "id": "objective_08",
+          "text": "阅读本节已经完整展示的保管说明，分别找到“亲收”“离开”和“亲手剪去姓名”三处文字。"
+        },
+        {
+          "id": "objective_09",
+          "text": "读完本节的信笺文字后离开测试场景，结束这一处观察；不继续追索被主动隐去的姓名。"
+        }
+      ],
+      "completionText": "这份保管说明把主动离开与被动失约区分开来。信由收件人亲手交回，姓名由她自己剪去；这封信被留下，是为了保存一个不愿被改写的选择。",
+      "rewardClueIds": ["clue_03"],
+      "sourceIds": []
+    }
+  ],
+  "clues": [
+    {
+      "id": "clue_01",
+      "title": "横穿窗形的装订线",
+      "content": "信封上的横线来自装订，说明它曾夹在书中。窗形本身不能证明收件人的住处；这份材料可以与其他地点的记录相互印证，但无需按顺序取得。",
+      "sourceQuestId": "quest_01"
+    },
+    {
+      "id": "clue_02",
+      "title": "已经收到",
+      "content": "“已经收到，请替我保管”说明信件并未遗失，交回保存也不等于拒绝赴约。这是书铺记录本身提供的证据。",
+      "sourceQuestId": "quest_02"
+    },
+    {
+      "id": "clue_03",
+      "title": "保留姓名的空白",
+      "content": "保管说明写明，收件人亲手交回了信，并选择剪去姓名。这份独立记录说明离开是她本人的选择，而不是一次被迫失约。",
+      "sourceQuestId": "quest_03"
+    }
+  ],
+  "npcs": [
+    {
+      "id": "npc_01",
+      "name": "修书人阿简",
+      "role": "App 内的虚构修复记录保管者",
+      "description": "她起初只想归还一封被误解的信，以屏幕留言参与故事，不承诺出现在现实现场。",
+      "motivation": "她希望纠正自己把主动离开误读为失约的旧判断，但不想泄露收件人的身份。",
+      "fictional": true
+    }
+  ]
+}

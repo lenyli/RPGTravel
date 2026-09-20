@@ -1,0 +1,5 @@
+# RPGTravel
+
+共享规则：[上级 CLAUDE.md](../CLAUDE.md)。
+
+项目事实入口：[README.md](README.md)、[CURRENT_STATUS.md](CURRENT_STATUS.md)、[DECISION_EVENTS.md](DECISION_EVENTS.md)。

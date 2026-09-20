@@ -1,0 +1,2035 @@
+{
+  "config": {
+    "configFile": "/Volumes/Leny/Projects/RPGTravel/playwright.config.ts",
+    "rootDir": "/Volumes/Leny/Projects/RPGTravel/tests/e2e",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 2
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "artifacts/e2e-results.json"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "artifacts/e2e-report",
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/Volumes/Leny/Projects/RPGTravel/artifacts/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Volumes/Leny/Projects/RPGTravel/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 45000
+      },
+      {
+        "outputDir": "/Volumes/Leny/Projects/RPGTravel/artifacts/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/Volumes/Leny/Projects/RPGTravel/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.55.1",
+    "workers": 2,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "free-order.spec.ts",
+      "file": "free-order.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "按地点自由选择 3→1→2，只有全部地点解决后才展示结局",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3241,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:42:56.730Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "04866de5b2023a51c6fa-fb353bdeead30e709c1f",
+          "file": "free-order.spec.ts",
+          "line": 31,
+          "column": 1
+        },
+        {
+          "title": "部分行动可跨地点来回切换，刷新保留各地点精确勾选",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1427,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:00.081Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "04866de5b2023a51c6fa-2def6d3b7e0c75c07c60",
+          "file": "free-order.spec.ts",
+          "line": 70,
+          "column": 1
+        },
+        {
+          "title": "按地点自由选择 3→1→2，只有全部地点解决后才展示结局",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 2962,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:09.462Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "04866de5b2023a51c6fa-650d0cfe7147266ff81c",
+          "file": "free-order.spec.ts",
+          "line": 31,
+          "column": 1
+        },
+        {
+          "title": "部分行动可跨地点来回切换，刷新保留各地点精确勾选",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1314,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:12.607Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "04866de5b2023a51c6fa-f63f54589b2e4387c69c",
+          "file": "free-order.spec.ts",
+          "line": 70,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "journey.spec.ts",
+      "file": "journey.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "首页直接为表单；复制完整 Prompt 且草稿在关闭重开后保留",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1323,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:42:56.734Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "home-empty-mobile",
+                      "contentType": "image/png",
+                      "path": "/Volumes/Leny/Projects/RPGTravel/artifacts/test-results/journey-首页直接为表单；复制完整-Prompt-且草稿在关闭重开后保留-chromium/attachments/home-empty-mobile-5e78fbacce659a278c94c16bd2c91c8486025dc9.png"
+                    },
+                    {
+                      "name": "home-empty-desktop",
+                      "contentType": "image/png",
+                      "path": "/Volumes/Leny/Projects/RPGTravel/artifacts/test-results/journey-首页直接为表单；复制完整-Prompt-且草稿在关闭重开后保留-chromium/attachments/home-empty-desktop-1488a83126b822f1b971461514cc048f75ca06cb.png"
+                    },
+                    {
+                      "name": "home-mobile",
+                      "contentType": "image/png",
+                      "path": "/Volumes/Leny/Projects/RPGTravel/artifacts/test-results/journey-首页直接为表单；复制完整-Prompt-且草稿在关闭重开后保留-chromium/attachments/home-mobile-4cc2b73a828202625d55cfa1a810edaf60cd9751.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bf222bad70f76648f722-e2bbcf26cbc45c15037e",
+          "file": "journey.spec.ts",
+          "line": 20,
+          "column": 1
+        },
+        {
+          "title": "复制失败提供完整可选文本；导入错误保留原文并提供完整修复 Prompt",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 362,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:42:58.163Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bf222bad70f76648f722-16dd48525953d63150fb",
+          "file": "journey.spec.ts",
+          "line": 67,
+          "column": 1
+        },
+        {
+          "title": "导入预览只展示概要；地点可自由选择且未开始剧情不泄露；完成所有地点后收束",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 2747,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:42:58.529Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "places-mobile",
+                      "contentType": "image/png",
+                      "path": "/Volumes/Leny/Projects/RPGTravel/artifacts/test-results/journey-导入预览只展示概要；地点可自由选择且未开始剧情不泄露；完成所有地点后收束-chromium/attachments/places-mobile-b8dae2b30eb3e60ed6e5342803da7db7a4d2129a.png"
+                    },
+                    {
+                      "name": "quest-current-mobile",
+                      "contentType": "image/png",
+                      "path": "/Volumes/Leny/Projects/RPGTravel/artifacts/test-results/journey-导入预览只展示概要；地点可自由选择且未开始剧情不泄露；完成所有地点后收束-chromium/attachments/quest-current-mobile-23fc14f7bdb2a13329f443ac6bf8260571c53c16.png"
+                    },
+                    {
+                      "name": "quest-completed-mobile",
+                      "contentType": "image/png",
+                      "path": "/Volumes/Leny/Projects/RPGTravel/artifacts/test-results/journey-导入预览只展示概要；地点可自由选择且未开始剧情不泄露；完成所有地点后收束-chromium/attachments/quest-completed-mobile-743f5b21b7c4f8a30be3811a9a00956f4439e834.png"
+                    },
+                    {
+                      "name": "ending-mobile",
+                      "contentType": "image/png",
+                      "path": "/Volumes/Leny/Projects/RPGTravel/artifacts/test-results/journey-导入预览只展示概要；地点可自由选择且未开始剧情不泄露；完成所有地点后收束-chromium/attachments/ending-mobile-82f07d18c38001e1de4a7a510b934266f7318b6a.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bf222bad70f76648f722-0d5fec9d66c59557950b",
+          "file": "journey.spec.ts",
+          "line": 97,
+          "column": 1
+        },
+        {
+          "title": "跳过可取消；补叙不伪造勾选，含跳过的结局正确表述",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1979,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:01.279Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bf222bad70f76648f722-49c9527727568adcbefb",
+          "file": "journey.spec.ts",
+          "line": 162,
+          "column": 1
+        },
+        {
+          "title": "同故事重复导入明确选择，另存实例与同 adventure.id 的新故事进度隔离",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1347,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:03.261Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bf222bad70f76648f722-fb2480323bbd957c2ab3",
+          "file": "journey.spec.ts",
+          "line": 208,
+          "column": 1
+        },
+        {
+          "title": "完整存档导出恢复精确进度；故事导出从零开始；文件导入可用",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 2012,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:04.612Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bf222bad70f76648f722-97a4146d376743393d7c",
+          "file": "journey.spec.ts",
+          "line": 238,
+          "column": 1
+        },
+        {
+          "title": "进度损坏不静默清零，明确选择仅导入故事；未知备份版本拒绝",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 748,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:06.628Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bf222bad70f76648f722-b668be71581d8e8d55e0",
+          "file": "journey.spec.ts",
+          "line": 290,
+          "column": 1
+        },
+        {
+          "title": "重开与删除均确认，取消保持内容，只操作指定实例",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1244,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:07.380Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bf222bad70f76648f722-889f66c27af210aba8ed",
+          "file": "journey.spec.ts",
+          "line": 318,
+          "column": 1
+        },
+        {
+          "title": "恶意 HTML 是纯文本，未点击地图/来源不发第三方请求",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 582,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:08.628Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bf222bad70f76648f722-75887a0c9540696ae964",
+          "file": "journey.spec.ts",
+          "line": 369,
+          "column": 1
+        },
+        {
+          "title": "首页直接为表单；复制完整 Prompt 且草稿在关闭重开后保留",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1543,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:13.930Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "home-empty-mobile",
+                      "contentType": "image/png",
+                      "path": "/Volumes/Leny/Projects/RPGTravel/artifacts/test-results/journey-首页直接为表单；复制完整-Prompt-且草稿在关闭重开后保留-webkit/attachments/home-empty-mobile-58eeb9668e5dbfc074dd3d1e7a11b933adde089f.png"
+                    },
+                    {
+                      "name": "home-mobile",
+                      "contentType": "image/png",
+                      "path": "/Volumes/Leny/Projects/RPGTravel/artifacts/test-results/journey-首页直接为表单；复制完整-Prompt-且草稿在关闭重开后保留-webkit/attachments/home-mobile-662bc66ee689c04ad156a7dc7f6fd52a8ea2eca1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bf222bad70f76648f722-e3673f15b57f57ea9431",
+          "file": "journey.spec.ts",
+          "line": 20,
+          "column": 1
+        },
+        {
+          "title": "复制失败提供完整可选文本；导入错误保留原文并提供完整修复 Prompt",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 570,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:15.478Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bf222bad70f76648f722-a2cf0fb2b32c4c2813e2",
+          "file": "journey.spec.ts",
+          "line": 67,
+          "column": 1
+        },
+        {
+          "title": "导入预览只展示概要；地点可自由选择且未开始剧情不泄露；完成所有地点后收束",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 2795,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:16.052Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "places-mobile",
+                      "contentType": "image/png",
+                      "path": "/Volumes/Leny/Projects/RPGTravel/artifacts/test-results/journey-导入预览只展示概要；地点可自由选择且未开始剧情不泄露；完成所有地点后收束-webkit/attachments/places-mobile-b8c337dad8e877339e07d7565654a2d1c48537b0.png"
+                    },
+                    {
+                      "name": "quest-current-mobile",
+                      "contentType": "image/png",
+                      "path": "/Volumes/Leny/Projects/RPGTravel/artifacts/test-results/journey-导入预览只展示概要；地点可自由选择且未开始剧情不泄露；完成所有地点后收束-webkit/attachments/quest-current-mobile-4c27546955ebb08112aa7932190912c0f9006a23.png"
+                    },
+                    {
+                      "name": "quest-completed-mobile",
+                      "contentType": "image/png",
+                      "path": "/Volumes/Leny/Projects/RPGTravel/artifacts/test-results/journey-导入预览只展示概要；地点可自由选择且未开始剧情不泄露；完成所有地点后收束-webkit/attachments/quest-completed-mobile-5b707ec7db1bf9fd7857d46d7cdb75166592012e.png"
+                    },
+                    {
+                      "name": "ending-mobile",
+                      "contentType": "image/png",
+                      "path": "/Volumes/Leny/Projects/RPGTravel/artifacts/test-results/journey-导入预览只展示概要；地点可自由选择且未开始剧情不泄露；完成所有地点后收束-webkit/attachments/ending-mobile-ed731261fc397956320c1dc868b6183ae385fcc5.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bf222bad70f76648f722-44475b99f6e703257b33",
+          "file": "journey.spec.ts",
+          "line": 97,
+          "column": 1
+        },
+        {
+          "title": "跳过可取消；补叙不伪造勾选，含跳过的结局正确表述",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 2071,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:18.850Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bf222bad70f76648f722-3c1a80c58e95a7be36b2",
+          "file": "journey.spec.ts",
+          "line": 162,
+          "column": 1
+        },
+        {
+          "title": "同故事重复导入明确选择，另存实例与同 adventure.id 的新故事进度隔离",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1428,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:20.925Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bf222bad70f76648f722-b5f89b06498cd57c7144",
+          "file": "journey.spec.ts",
+          "line": 208,
+          "column": 1
+        },
+        {
+          "title": "完整存档导出恢复精确进度；故事导出从零开始；文件导入可用",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1935,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:22.357Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bf222bad70f76648f722-e25b52444a596d3642ec",
+          "file": "journey.spec.ts",
+          "line": 238,
+          "column": 1
+        },
+        {
+          "title": "进度损坏不静默清零，明确选择仅导入故事；未知备份版本拒绝",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1112,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:24.295Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bf222bad70f76648f722-4512df22c393065bb697",
+          "file": "journey.spec.ts",
+          "line": 290,
+          "column": 1
+        },
+        {
+          "title": "重开与删除均确认，取消保持内容，只操作指定实例",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1641,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:25.410Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bf222bad70f76648f722-cf7cb55805c2e5ff6c55",
+          "file": "journey.spec.ts",
+          "line": 318,
+          "column": 1
+        },
+        {
+          "title": "恶意 HTML 是纯文本，未点击地图/来源不发第三方请求",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 679,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:27.055Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bf222bad70f76648f722-0b2f3bd67c4f607ee420",
+          "file": "journey.spec.ts",
+          "line": 369,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "pwa.spec.ts",
+      "file": "pwa.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "生产缓存就绪后同 context 断网关闭重开，草稿、任务、结束与备份恢复均可用",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3526,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "Expect \"poll toBe\"",
+                      "duration": 12
+                    },
+                    {
+                      "title": "Expect \"poll toBe\"",
+                      "duration": 1
+                    }
+                  ],
+                  "startTime": "2026-09-20T06:43:01.516Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "offline-ending",
+                      "contentType": "image/png",
+                      "path": "/Volumes/Leny/Projects/RPGTravel/artifacts/test-results/pwa-生产缓存就绪后同-context-断网关闭重开，草稿、任务、结束与备份恢复均可用-chromium/attachments/offline-ending-cacf4be86f64f3d6bdc60b76cf8565687c16bec1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "30bf0965a0eb07fc9173-05d468c2b936313565e5",
+          "file": "pwa.spec.ts",
+          "line": 32,
+          "column": 1
+        },
+        {
+          "title": "真实子路径构建的 manifest、资源与 SW scope 一致并可离线刷新深链接",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 549,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "Expect \"poll toBe\"",
+                      "duration": 6
+                    }
+                  ],
+                  "startTime": "2026-09-20T06:43:05.046Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "30bf0965a0eb07fc9173-92e3786d13cc7c084be8",
+          "file": "pwa.spec.ts",
+          "line": 126,
+          "column": 1
+        },
+        {
+          "title": "新版 SW 等待用户选择，保存并更新保留草稿、精确进度与同域其他缓存",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2909,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "Expect \"poll toBe\"",
+                      "duration": 6
+                    }
+                  ],
+                  "startTime": "2026-09-20T06:43:05.598Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "30bf0965a0eb07fc9173-a5f6480e66bd1e15114d",
+          "file": "pwa.spec.ts",
+          "line": 183,
+          "column": 1
+        },
+        {
+          "title": "生产缓存就绪后同 context 断网关闭重开，草稿、任务、结束与备份恢复均可用",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3618,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "Expect \"poll toBe\"",
+                      "duration": 14
+                    },
+                    {
+                      "title": "Expect \"poll toBe\"",
+                      "duration": 2
+                    }
+                  ],
+                  "startTime": "2026-09-20T06:43:19.857Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "offline-method",
+                      "contentType": "text/plain",
+                      "body": "V2ViS2l0OiBwcm9kdWN0aW9uIG9yaWdpbiBjbG9zZXMgcmVzb3VyY2Ugc29ja2V0czsgYW4gdW5jYWNoZWQgZmV0Y2ggaXMgdmVyaWZpZWQgdG8gZmFpbC4gUGxheXdyaWdodCBzZXRPZmZsaW5lIGNhdXNlcyBhIHNlcGFyYXRlIFdlYktpdCBpbnRlcm5hbCBuYXZpZ2F0aW9uIGVycm9yIGluIHRoaXMgZW52aXJvbm1lbnQu"
+                    },
+                    {
+                      "name": "offline-ending",
+                      "contentType": "image/png",
+                      "path": "/Volumes/Leny/Projects/RPGTravel/artifacts/test-results/pwa-生产缓存就绪后同-context-断网关闭重开，草稿、任务、结束与备份恢复均可用-webkit/attachments/offline-ending-c2fc0bbcea1705a905d24264d8e7d36eb470c343.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "30bf0965a0eb07fc9173-76420adcb7c16ab40014",
+          "file": "pwa.spec.ts",
+          "line": 32,
+          "column": 1
+        },
+        {
+          "title": "真实子路径构建的 manifest、资源与 SW scope 一致并可离线刷新深链接",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 590,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "Expect \"poll toBe\"",
+                      "duration": 6
+                    }
+                  ],
+                  "startTime": "2026-09-20T06:43:23.663Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "30bf0965a0eb07fc9173-92840b27d196befdaeba",
+          "file": "pwa.spec.ts",
+          "line": 126,
+          "column": 1
+        },
+        {
+          "title": "新版 SW 等待用户选择，保存并更新保留草稿、精确进度与同域其他缓存",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1961,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "Expect \"poll toBe\"",
+                      "duration": 9
+                    }
+                  ],
+                  "startTime": "2026-09-20T06:43:24.257Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "30bf0965a0eb07fc9173-8bd13af09fb9ee9a03e5",
+          "file": "pwa.spec.ts",
+          "line": 183,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "resilience.spec.ts",
+      "file": "resilience.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "提交 complete 保存失败后重试，仍呈现正确反馈并仅推进一次",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1225,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:08.517Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c1cdccb29e536012e9c2-9c429d83c8b137494403",
+          "file": "resilience.spec.ts",
+          "line": 16,
+          "column": 3
+        },
+        {
+          "title": "提交 skip 保存失败后重试，仍呈现正确反馈并仅推进一次",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 861,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:09.747Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c1cdccb29e536012e9c2-bbc6e2b282d44c347044",
+          "file": "resilience.spec.ts",
+          "line": 16,
+          "column": 3
+        },
+        {
+          "title": "损坏的草稿设置不导致白屏，现有冒险仍可读取",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1179,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:10.612Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c1cdccb29e536012e9c2-3f18c448a7205f55b966",
+          "file": "resilience.spec.ts",
+          "line": 74,
+          "column": 1
+        },
+        {
+          "title": "键盘跳到主要内容保留 hash 路由并真正移动焦点",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 381,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:11.794Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c1cdccb29e536012e9c2-cf0e15f69522e7920efb",
+          "file": "resilience.spec.ts",
+          "line": 108,
+          "column": 1
+        },
+        {
+          "title": "导航只使用受控地图域名与编码地址，无坐标也能开始",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 581,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:12.179Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c1cdccb29e536012e9c2-4bd09a945a66bd552468",
+          "file": "resilience.spec.ts",
+          "line": 117,
+          "column": 1
+        },
+        {
+          "title": "一次性前台定位：success，不影响手动开始",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1278,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:12.764Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c1cdccb29e536012e9c2-df86757daa6efb42712d",
+          "file": "resilience.spec.ts",
+          "line": 148,
+          "column": 3
+        },
+        {
+          "title": "一次性前台定位：denied，不影响手动开始",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1280,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:14.045Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c1cdccb29e536012e9c2-9866f62c202fe8bd1330",
+          "file": "resilience.spec.ts",
+          "line": 148,
+          "column": 3
+        },
+        {
+          "title": "一次性前台定位：timeout，不影响手动开始",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1263,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:15.328Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c1cdccb29e536012e9c2-443ba96c429c202a865b",
+          "file": "resilience.spec.ts",
+          "line": 148,
+          "column": 3
+        },
+        {
+          "title": "一次性前台定位：unavailable，不影响手动开始",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1280,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:16.596Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c1cdccb29e536012e9c2-a8e11249df774997acb6",
+          "file": "resilience.spec.ts",
+          "line": 148,
+          "column": 3
+        },
+        {
+          "title": "数据库不能打开时保留可操作中文错误，不调用删除数据库",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 144,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:17.879Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c1cdccb29e536012e9c2-5168a71bce78f402ccd7",
+          "file": "resilience.spec.ts",
+          "line": 232,
+          "column": 1
+        },
+        {
+          "title": "进度写入失败显著提示未保存，重试成功后恢复精确行动",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 649,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:18.027Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c1cdccb29e536012e9c2-0653c38717f5ff18cffe",
+          "file": "resilience.spec.ts",
+          "line": 248,
+          "column": 1
+        },
+        {
+          "title": "360/390px、横屏、桌面与 200% 文字没有页面横向溢出，底栏不覆盖末项",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 908,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:18.679Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "quest-text-200-percent",
+                      "contentType": "image/png",
+                      "path": "/Volumes/Leny/Projects/RPGTravel/artifacts/test-results/resilience-360-390px、横屏、桌面与-200-文字没有页面横向溢出，底栏不覆盖末项-chromium/attachments/quest-text-200-percent-72ac2bcf4659ac3f35b9ebba6cdac49725b8e2bd.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c1cdccb29e536012e9c2-6505de856f15e1afd2b5",
+          "file": "resilience.spec.ts",
+          "line": 277,
+          "column": 1
+        },
+        {
+          "title": "提交 complete 保存失败后重试，仍呈现正确反馈并仅推进一次",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1141,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:26.228Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c1cdccb29e536012e9c2-5b389aa6a9dab8f40f0a",
+          "file": "resilience.spec.ts",
+          "line": 16,
+          "column": 3
+        },
+        {
+          "title": "提交 skip 保存失败后重试，仍呈现正确反馈并仅推进一次",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 951,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:27.372Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c1cdccb29e536012e9c2-3bdadb67ab20b61dd531",
+          "file": "resilience.spec.ts",
+          "line": 16,
+          "column": 3
+        },
+        {
+          "title": "损坏的草稿设置不导致白屏，现有冒险仍可读取",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1279,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:28.327Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c1cdccb29e536012e9c2-0d136d3775518dcac4a3",
+          "file": "resilience.spec.ts",
+          "line": 74,
+          "column": 1
+        },
+        {
+          "title": "键盘跳到主要内容保留 hash 路由并真正移动焦点",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 504,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:29.610Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c1cdccb29e536012e9c2-c20e5f1d151d1fc559f6",
+          "file": "resilience.spec.ts",
+          "line": 108,
+          "column": 1
+        },
+        {
+          "title": "导航只使用受控地图域名与编码地址，无坐标也能开始",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 658,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:30.118Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c1cdccb29e536012e9c2-a26241ea6d38dc536fcb",
+          "file": "resilience.spec.ts",
+          "line": 117,
+          "column": 1
+        },
+        {
+          "title": "一次性前台定位：success，不影响手动开始",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1345,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:30.779Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c1cdccb29e536012e9c2-8c4c091326e233336615",
+          "file": "resilience.spec.ts",
+          "line": 148,
+          "column": 3
+        },
+        {
+          "title": "一次性前台定位：denied，不影响手动开始",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1194,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:32.128Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c1cdccb29e536012e9c2-beef3ff36c88bb54724c",
+          "file": "resilience.spec.ts",
+          "line": 148,
+          "column": 3
+        },
+        {
+          "title": "一次性前台定位：timeout，不影响手动开始",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1196,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:33.325Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c1cdccb29e536012e9c2-94ca2d0a509a5ed5f6a9",
+          "file": "resilience.spec.ts",
+          "line": 148,
+          "column": 3
+        },
+        {
+          "title": "一次性前台定位：unavailable，不影响手动开始",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1239,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:34.525Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c1cdccb29e536012e9c2-de1d7f07eb3a10ce14b4",
+          "file": "resilience.spec.ts",
+          "line": 148,
+          "column": 3
+        },
+        {
+          "title": "数据库不能打开时保留可操作中文错误，不调用删除数据库",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 199,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:35.768Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c1cdccb29e536012e9c2-5dd5676f4215ae91003c",
+          "file": "resilience.spec.ts",
+          "line": 232,
+          "column": 1
+        },
+        {
+          "title": "进度写入失败显著提示未保存，重试成功后恢复精确行动",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 745,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:35.970Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c1cdccb29e536012e9c2-0741882377e06f57281d",
+          "file": "resilience.spec.ts",
+          "line": 248,
+          "column": 1
+        },
+        {
+          "title": "360/390px、横屏、桌面与 200% 文字没有页面横向溢出，底栏不覆盖末项",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1361,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T06:43:36.718Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "quest-text-200-percent",
+                      "contentType": "image/png",
+                      "path": "/Volumes/Leny/Projects/RPGTravel/artifacts/test-results/resilience-360-390px、横屏、桌面与-200-文字没有页面横向溢出，底栏不覆盖末项-webkit/attachments/quest-text-200-percent-2bfb4860b5b3a7cd2669d588c6d75f755800db36.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c1cdccb29e536012e9c2-cc6d6eb88762f11d0df0",
+          "file": "resilience.spec.ts",
+          "line": 277,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-20T06:42:52.122Z",
+    "duration": 45998.242,
+    "expected": 52,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

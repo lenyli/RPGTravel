@@ -1,0 +1,50 @@
+[
+  {
+    "file": "invalid-unknown-field.json",
+    "code": "UNKNOWN_FIELD"
+  },
+  {
+    "file": "invalid-duplicate-id.json",
+    "code": "DUPLICATE_ID"
+  },
+  {
+    "file": "invalid-missing-clue.json",
+    "code": "UNKNOWN_CLUE"
+  },
+  {
+    "file": "invalid-chapter-membership.json",
+    "code": "CHAPTER_MISMATCH"
+  },
+  {
+    "file": "invalid-quest-order.json",
+    "code": "INVALID_QUEST_ORDER"
+  },
+  {
+    "file": "invalid-impossible-date.json",
+    "code": "INVALID_DATE"
+  },
+  {
+    "file": "invalid-optional-visit-date.json",
+    "code": "INVALID_DATE"
+  },
+  {
+    "file": "invalid-coordinate-pair.json",
+    "code": "COORDINATE_PAIR_REQUIRED"
+  },
+  {
+    "file": "invalid-coordinate-source.json",
+    "code": "COORDINATE_SOURCE_REQUIRED"
+  },
+  {
+    "file": "invalid-source-protocol.json",
+    "code": "INVALID_SOURCE_URL"
+  },
+  {
+    "file": "invalid-missing-ending.json",
+    "code": "INVALID_FIELD"
+  },
+  {
+    "file": "invalid-version.json",
+    "code": "UNSUPPORTED_SCHEMA_VERSION"
+  }
+]
