@@ -1,9 +1,0 @@
-node_modules
-dist*
-package-lock.json
-artifacts
-playwright-report
-test-results
-
-# Decision events are append-only; do not reformat their historical bytes.
-DECISION_EVENTS.md

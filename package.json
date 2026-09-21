@@ -9,16 +9,8 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run",
-    "test:e2e": "playwright test",
     "build": "vite build",
-    "build:pages": "node scripts/build-pages.mjs",
-    "preview": "vite preview --host 127.0.0.1",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "schema": "node --import tsx scripts/export-schema.ts",
-    "package": "node scripts/package.mjs",
-    "package:pages": "node scripts/package.mjs --pages"
+    "preview": "vite preview --host 127.0.0.1"
   },
   "dependencies": {
     "idb": "8.0.3",

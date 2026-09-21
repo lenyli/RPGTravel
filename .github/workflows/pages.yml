@@ -23,6 +23,15 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
+      - name: Check the publication allowlist
+        shell: bash
+        run: |
+          set -euo pipefail
+          blocked="$(git ls-files -ci --exclude-standard)"
+          if [[ -n "$blocked" ]]; then
+            printf '%s\n' 'Files outside the publication allowlist are tracked:' "$blocked"
+            exit 1
+          fi
       - name: Set up Node.js
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
@@ -34,10 +43,25 @@ jobs:
           enablement: false
       - name: Install dependencies
         run: npm ci
+      - name: Typecheck production source
+        run: npm run typecheck
       - name: Build for the repository path
         run: npm run build
         env:
           DEPLOY_BASE: /RPGTravel/
+          APP_BUILD: ${{ github.sha }}
+      - name: Check production output
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f dist/index.html
+          test -f dist/sw.js
+          test -f dist/manifest.webmanifest
+          unexpected="$(find dist -type f | grep -Ev '\.(html|js|css|png|webmanifest)$' || true)"
+          if [[ -n "$unexpected" ]]; then
+            printf '%s\n' 'Unexpected production files:' "$unexpected"
+            exit 1
+          fi
       - name: Upload production files
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5
         with:
