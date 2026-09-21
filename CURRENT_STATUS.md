@@ -31,8 +31,8 @@ lastUpdated：2026-09-21 12:26（Asia/Shanghai）
 
 ## 部署与本机启动
 
-- 线上入口：[旅章](https://lenyli.github.io/RPGTravel/)。现有 Pages 发布源为 `workflow`，继续启用 HTTPS。仅手动运行 GitHub Actions，以 `/RPGTravel/` 构建并上传 `dist`，不再将 main 根目录源码当作网站。
-- [最新部署工作流](https://github.com/lenyli/RPGTravel/actions/runs/35557505717) 的 build / deploy 全部成功，发布应用源码提交 `756d1acd1652b08a5fd6c101a33c2349ddaeddc7`，包含游戏风格选填、默认空白与草稿兼容。应用为 2.0.0，部署授权决定为 v2.1。
+- 线上入口：[旅章](https://lenyli.github.io/RPGTravel/)。现有 Pages 发布源为 `workflow`，继续启用 HTTPS。推送到 `main` 会自动运行 GitHub Actions，以 `/RPGTravel/` 构建并上传 `dist`；同时保留手动触发，不再将 main 根目录源码当作网站。
+- 自动部署配置已启用；2026-09-21 的验证 run `35561910694` 中 build / deploy 均成功，随后对部署说明的文档更新也会按同一 `main` push 流程自动发布。应用为 2.0.0，部署授权决定为 v2.1。
 - 线上首页、脚本、CSS、图标、manifest、SW / Workbox 共 11 个文件均 HTTP 200，与本地 `dist-pages` 逐字节一致。HTML 引用 `/RPGTravel/assets/`，不存在未替换的 `%BASE_URL%` 或 `/src/main.tsx`；manifest id/scope/start_url 均正确。
 - 实际内置浏览器显示完整旅行表单、旅章导航和“喜欢的游戏风格 选填”；字段值为空、没有 placeholder、不设 required，控制台无 error；没有停留在启动提示页。证据：[pages-deployment-verification.json](artifacts/pages-deployment-verification.json)。缓存就绪提示不等于已进行真机断网测试。
 - 本机仍使用 `http://127.0.0.1:4173/`；已有《云外无终》0 / 10 存档保留。双击 `启动旅章.command` 启动 HTTP 预览；直接文件入口仅显示说明，不执行应用。启动器通过 shell 语法检查，未模拟 Finder 双击；工具禁止访问 `file://`，没有绕过。
@@ -51,7 +51,7 @@ lastUpdated：2026-09-21 12:26（Asia/Shanghai）
 | 构建及静态包 | 根路径与 Pages 构建通过，Schema 同源导出；两份 ZIP 完整性及各 11 个文件与构建逐字节一致 |
 | 项目记录 | 静态布局检查通过；ProjectRecord 已退役，无镜像待同步 |
 
-证据：[单元结果](artifacts/unit-results.json)、[浏览器专项](artifacts/import-compat-e2e-results.json)、[汇总与包哈希](artifacts/verification-summary.json)。本次代码待部署到线上。
+证据：[单元结果](artifacts/unit-results.json)、[浏览器专项](artifacts/import-compat-e2e-results.json)、[汇总与包哈希](artifacts/verification-summary.json)。本次代码已进入 GitHub Pages 自动部署基线。
 
 2026-09-20 的完整浏览器回归基线为 66 / 66（Chromium 33、WebKit 33），本次未重跑全量：覆盖照片手记、3→1→2 自由地点、备份恢复、离线重开、SW 更新保留数据、根/子路径及窄屏布局。证据：[完整浏览器基线](artifacts/e2e-results.json)、[当时截图](artifacts/screenshots/manifest.json)。本次无新增截图。
 
