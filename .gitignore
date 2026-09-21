@@ -4,6 +4,7 @@
 *
 !*/
 !/.gitignore
+!/README.md
 !/.github/workflows/pages.yml
 !/index.html
 !/package.json
