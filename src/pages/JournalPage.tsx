@@ -6,8 +6,18 @@ import {
   progressSummary,
 } from '../domain/progress';
 import { Ending } from './QuestPage';
-export default function JournalPage({ record }: { record: StoredAdventure }) {
-  const [tab, setTab] = useState<'clues' | 'journal'>('clues');
+import PhotoJournal from '../components/PhotoJournal';
+export default function JournalPage({
+  record,
+  photoQuestId,
+}: {
+  record: StoredAdventure;
+  photoQuestId?: string;
+}) {
+  const [tab, setTab] = useState<'clues' | 'journal' | 'photos'>(
+    photoQuestId ? 'photos' : 'clues',
+  );
+  const [selectedQuest, setSelectedQuest] = useState(photoQuestId);
   const clues = unlockedClues(record.data, record.progress);
   const resolved = resolvedQuests(record.data, record.progress);
   return (
@@ -29,9 +39,18 @@ export default function JournalPage({ record }: { record: StoredAdventure }) {
         >
           冒险日志 · {resolved.length}
         </button>
+        <button
+          role="tab"
+          aria-selected={tab === 'photos'}
+          onClick={() => setTab('photos')}
+        >
+          照片手记 · {record.photos.length}
+        </button>
       </div>
       <div role="tabpanel">
-        {tab === 'clues' ? (
+        {tab === 'photos' ? (
+          <PhotoJournal record={record} initialQuestId={selectedQuest} />
+        ) : tab === 'clues' ? (
           clues.length ? (
             <div className="clues-grid">
               {clues.map(({ clue, via }, i) => (
@@ -80,6 +99,20 @@ export default function JournalPage({ record }: { record: StoredAdventure }) {
                       ? q.visit.fallbackText
                       : q.completionText}
                   </p>
+                  <button
+                    className="secondary"
+                    onClick={() => {
+                      setSelectedQuest(q.id);
+                      setTab('photos');
+                    }}
+                  >
+                    查看 / 添加本任务照片（
+                    {
+                      record.photos.filter((photo) => photo.questId === q.id)
+                        .length
+                    }
+                    ）
+                  </button>
                 </article>
               );
             })}

@@ -213,7 +213,7 @@ describe('reply extraction', () => {
       expect(absolute.errors[0].code).toBe('INPUT_TOO_LARGE');
   });
 
-  it('allows a backup envelope under 4 MiB for the separate full backup validator', () => {
+  it('allows a backup envelope under 20 MiB for the separate full backup validator', () => {
     const envelope = {
       format: 'RPG_TRIP_SAVE',
       saveVersion: 1,

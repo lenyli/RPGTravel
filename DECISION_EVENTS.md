@@ -70,3 +70,26 @@ none。
 
 ### Implementation
 src/ 全模块、public/icons、固定 package/lockfile、测试 fixtures、149 项单元测试、52 项 Chromium / WebKit 验收通过。生产构建、同源 Schema、根/子路径、SW 更新数据保留、移动布局及自由顺序存档往返均通过。dist 与 artifacts/RPGTravel-1.1.0-static.zip 已核验一致。WebKit 离线采用实际资源连接切断对照，setOffline 内部错误保留证据；未公开部署、未作真实手机验收。实际报告与截图在 artifacts/，当前事实见 CURRENT_STATUS.md。
+
+## RPGTRAVEL-20260920-004
+
+- date: 2026-09-20
+- type: decision
+- project: RPGTravel
+- relates_to: RPGTRAVEL-20260920-002
+- supersedes: none
+
+### Summary
+应用正式命名为“旅章”，任务日志支持本机照片手记与完整备份。
+
+### Decision
+按用户要求修改显示名称、页面标题与安装名称，保留 RPGTravel 仓库标识、数据库与存档身份。每项任务可在未完成时添加照片、说明、放大回看与确认删除；图像在设备内缩放重编码，移除源图元信息。完整存档含照片，故事分享不含个人照片；备份增加严格 v2 并兼容旧 v1，照片不进入 AI 故事协议。重开保留照片，删除冒险连带删除，写入失败可重试或导出。仍为无后端、无云同步的纯本机 PWA。
+
+### Reason
+用户明确要求“app名字改为 旅章。任务日志里可以上传照片，不是只用文字记录”，需要让真实观察可随任务归档并可靠携带。
+
+### Rejected
+向远端上传照片、把照片交给 AI、仅显示临时图片却不持久化、导出完整存档时静默遗漏照片。
+
+### Implementation
+src/config.ts、index.html、src/domain/photos.ts、src/components/PhotoJournal.tsx、日志/任务页、state、IndexedDB 存储与备份导入导出。应用候选 2.0.0；决定版本 v2.0。实际验证与交付入口见 CURRENT_STATUS.md。

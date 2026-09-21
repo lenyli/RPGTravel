@@ -9,6 +9,13 @@ import {
 import type { TripInput } from './protocol/prompt';
 import type { RPGTrip } from './protocol/schema';
 import {
+  preparePhoto,
+  validatePhotos,
+  MAX_PHOTOS_PER_QUEST,
+  MAX_PHOTOS_PER_ADVENTURE,
+  type PhotoAttachment,
+} from './domain/photos';
+import {
   transitionProgress,
   type Progress,
   type ProgressAction,
@@ -21,6 +28,7 @@ import {
   listAdventures,
   restartAdventure,
   saveProgress,
+  savePhotos,
   setSetting,
   type StoredAdventure,
 } from './storage/db';
@@ -37,7 +45,11 @@ const emptyDraft: Draft = {
   },
   raw: '',
 };
-type Pending = { record: StoredAdventure; next: Progress };
+type Pending = {
+  record: StoredAdventure;
+  next: Progress;
+  photos?: PhotoAttachment[];
+};
 function useWorkspace() {
   const [records, setRecords] = useState<StoredAdventure[]>([]);
   const [draft, setDraftState] = useState<Draft>(emptyDraft);
@@ -178,13 +190,75 @@ function useWorkspace() {
       setBusy(false);
     }
   };
-  const add = async (data: RPGTrip, raw: string, progress: Progress | null) =>
+  const add = async (
+    data: RPGTrip,
+    raw: string,
+    progress: Progress | null,
+    photos: PhotoAttachment[] = [],
+  ) =>
     run(async () => {
-      const record = await createAdventure(data, raw, progress);
+      const record = await createAdventure(data, raw, progress, photos);
       updateRecord(record);
       setNotice('冒险已保存到本机');
       return record;
     });
+  const persistPhotos = async (
+    record: StoredAdventure,
+    photos: PhotoAttachment[],
+  ) => {
+    const checked = validatePhotos(record.data, photos);
+    if (!checked.success) throw new Error(checked.errors[0].message);
+    try {
+      const saved = await savePhotos(
+        record.instanceId,
+        photos,
+        record.revision,
+      );
+      updateRecord(saved);
+      setNotice('照片手记已保存到本机');
+      return saved;
+    } catch (e) {
+      setPending({ record, next: record.progress, photos });
+      throw e;
+    }
+  };
+  const addPhotos = async (
+    record: StoredAdventure,
+    questId: string,
+    files: File[],
+    caption: string,
+  ) => {
+    if (pendingRef.current) {
+      setError('仍有未保存内容，请先重试保存或导出备份。');
+      return;
+    }
+    return run(async () => {
+      if (
+        record.photos.length + files.length > MAX_PHOTOS_PER_ADVENTURE ||
+        record.photos.filter((p) => p.questId === questId).length +
+          files.length >
+          MAX_PHOTOS_PER_QUEST
+      ) {
+        throw new Error(
+          `每项任务最多 ${MAX_PHOTOS_PER_QUEST} 张照片，每份冒险最多 ${MAX_PHOTOS_PER_ADVENTURE} 张。请减少选择数量。`,
+        );
+      }
+      const prepared: PhotoAttachment[] = [];
+      for (const file of files)
+        prepared.push(await preparePhoto(file, questId, caption));
+      return persistPhotos(record, [...record.photos, ...prepared]);
+    });
+  };
+  const changePhotos = async (
+    record: StoredAdventure,
+    photos: PhotoAttachment[],
+  ) => {
+    if (pendingRef.current) {
+      setError('仍有未保存内容，请先重试保存或导出备份。');
+      return;
+    }
+    return run(() => persistPhotos(record, photos));
+  };
   const act = async (record: StoredAdventure, action: ProgressAction) => {
     if (pendingRef.current) {
       setError('仍有未保存进度，请先重试保存或导出备份。');
@@ -211,14 +285,12 @@ function useWorkspace() {
     run(async () => {
       const p = pendingRef.current;
       if (p) {
-        const saved = await saveProgress(
-          p.record.instanceId,
-          p.next,
-          p.record.revision,
-        );
+        const saved = p.photos
+          ? await savePhotos(p.record.instanceId, p.photos, p.record.revision)
+          : await saveProgress(p.record.instanceId, p.next, p.record.revision);
         updateRecord(saved);
         setPending(null);
-        setNotice('进度已保存到本机');
+        setNotice('未保存内容已写入本机');
       }
       await saveDraft();
     });
@@ -236,7 +308,7 @@ function useWorkspace() {
     run(async () => {
       const saved = await restartAdventure(record.instanceId, record.revision);
       updateRecord(saved);
-      setNotice('已重开，故事内容保留');
+      setNotice('已重开，故事与照片手记保留');
       return saved;
     });
   const remember = (id: string) => {
@@ -281,6 +353,8 @@ function useWorkspace() {
     load,
     saveDraft,
     add,
+    addPhotos,
+    changePhotos,
     act,
     retryPending,
     remove,

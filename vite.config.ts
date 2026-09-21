@@ -22,7 +22,7 @@ export default defineConfig({
             tag: 'meta',
             attrs: {
               name: 'rpg-build',
-              content: process.env.APP_BUILD || '1.1.0',
+              content: process.env.APP_BUILD || '2.0.0',
             },
             injectTo: 'head',
           },

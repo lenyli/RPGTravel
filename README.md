@@ -1,4 +1,4 @@
-# RPG 旅行
+# 旅章
 
 记录类型：项目
 
@@ -6,7 +6,7 @@
 
 | 字段     | 内容                                                                                                                           |
 | -------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| 项目名称 | RPGTravel                                                                                                                      |
+| 项目名称 | 旅章（RPGTravel）                                                                                                              |
 | 项目简介 | 将旅行需求转换为可复制给外部 AI 的故事生成提示，再把完整故事包导入本机，沿真实地点进行调查、揭露线索与收束故事的离线旅行 PWA。 |
 | 项目类型 | 独立应用项目                                                                                                                   |
 | 领域     | 旅行叙事与现场探索                                                                                                             |
@@ -20,9 +20,9 @@
 
 ## 定位与范围
 
-首页始终是旅行表单：填目的地与日期 → 复制生成 Prompt → 自行交给常用 AI → 粘贴完整回答 → 预览 → 保存并开始。生成、校验和游玩全部在设备内执行。
+首页始终是旅行表单：填目的地与日期 → 复制生成 Prompt → 自行交给常用 AI → 粘贴完整回答 → 预览 → 保存并开始。Prompt 生成、导入校验与游玩在设备内执行，故事生成由用户自己的 AI 完成。
 
-**无 AI API、无账号、无应用后端、无云同步。** 不读取系统剪贴板，不后台定位，不上传照片，不记录轨迹。复制给 AI、打开地图/来源和分享备份由用户主动触发。
+**无 AI API、无账号、无应用后端、无云同步。** 不读取系统剪贴板，不后台定位，照片只保存在本机，不发送到服务器或 AI；不记录轨迹。复制给 AI、打开地图/来源和分享备份由用户主动触发。
 
 AI 按地点生成独立调查，不安排必须照走的固定行程。各地点围绕同一谜团提供不同线索，没有地点前置条件；旅行日期用于季节与开放信息背景，任务日期与时段只是可选参考，编号只作查找顺序。
 
@@ -36,18 +36,19 @@ AI 按地点生成独立调查，不安排必须照走的固定行程。各地�
 
 - `src/protocol/schema.ts`：唯一正式 strict Zod 结构；通过 `z.infer` 导出 TypeScript 类型，通过 `z.toJSONSchema` 生成完整自包含 JSON Schema。
 - `src/protocol/validate.ts`：真实日历日期、全局 ID、地点分组与展示顺序、引用、来源和可信 WGS84 坐标校验。
-- `src/protocol/extract.ts`：有限容错的标记/裸 JSON/单围栏提取、安全键检查和 UTF-8 限额。原包最多 2 MiB，备份最多 4 MiB，内含紧凑故事仍最多 2 MiB。
+- `src/protocol/extract.ts`：有限容错的标记/裸 JSON/单围栏提取、安全键检查和 UTF-8 限额。原包最多 2 MiB，带照片备份最多 20 MiB，内含紧凑故事仍最多 2 MiB。
 - `src/protocol/prompt.ts`：完整生成/修复模板，与导入器共享 Schema；用户数据经过 JSON 序列化，未关联的新表单不冒充原始请求。
 - `src/domain/progress.ts`：唯一任务进度事实，日志/线索派生；纯函数验证动作，自由选择地点、保留各地点独立进度，不重复存剧情状态。
+- `src/domain/photos.ts`：本机图片解码、缩放与 JPEG 重编码；照片结构、引用、像素、数量与容量校验。
 - `src/domain/navigation.ts`：受控地图关键词 URL、按需定位、Haversine 直线距离，不向地图传入 PWA 获取的精确起点。
-- `src/storage/db.ts`：DB v1 的 adventures / progress / settings；UUID 实例主键、完整事务和版本冲突检查。
-- `src/storage/backup.ts`：`RPG_TRIP_SAVE` v1 双模式存档；恢复创建新实例，损坏进度须明确选择仅导入故事。
+- `src/storage/db.ts`：DB v1 的 adventures / progress / settings；UUID 实例主键、完整事务和版本冲突检查；进度记录可附照片，旧记录缺字段时按空列表读取，不改变数据库名称和版本。
+- `src/storage/backup.ts`：`RPG_TRIP_SAVE` v1 / v2 存档；含照片的完整备份使用 v2，兼容旧 v1；恢复创建新实例，损坏进度或照片须明确选择仅导入故事。
 - `src/state.tsx`：草稿读取与 400ms 自动保存、事务后 UI 更新、未保存进度保留与重试；应用更新前等待全部写入。
 - `src/pages/`：首页、调查、地点、日志、冒险库。`src/components/` 只容纳复用交互。
 
 每个地点独立转换 `available → active → completed / skipped`，available 也可经确认直接 skipped。初始所有地点均可选择；同时允许多个已开始但未解决的调查，`currentQuestId` 仅记录当前选择。完成后默认选中一个尚未解决的地点作为继续入口，随时可改选，不等于路线要求。日期、定位、地点编号和外部地图都不是推进门槛。
 
-当前生成协议为 `schemaVersion: "1.1"`，外壳仍为 `RPG_TRIP_V1`；进度版本为 2，备份 envelope 版本仍为 1。章节仅按地点区域组织，去除了 day 和任务 initialStatus/unlockQuestIds；recommendedDate 可以为 null。尚未发布的旧 1.0 草案不自动猜测转换，导入时明确报不支持，并可复制同源修复 Prompt 重新生成。
+当前生成协议为 `schemaVersion: "1.1"`，外壳仍为 `RPG_TRIP_V1`；进度版本为 2，含照片的备份 envelope 使用版本 2，无照片或仅故事仍输出兼容版本 1。照片不进入 AI 故事协议。章节仅按地点区域组织，去除了 day 和任务 initialStatus/unlockQuestIds；recommendedDate 可以为 null。尚未发布的旧 1.0 草案不自动猜测转换，导入时明确报不支持，并可复制同源修复 Prompt 重新生成。
 
 ### 本机隐私与存储
 
@@ -86,7 +87,7 @@ npm run preview -- --port 4173
 - `test:e2e` 基于真实生产产物，需要先 `build`；自动启动根目录 preview 和仅本地的升级/子路径验收服务器。测试构建位于 `artifacts/deployment/`，不进入静态部署包。
 - 浏览器结果：`artifacts/e2e-results.json`、本地 HTML 报告 `artifacts/e2e-report/index.html`、截图 `artifacts/screenshots/`。
 - `schema` 实际从 `schema.ts` 导出 `artifacts/rpg-trip-v1.schema.json`。
-- `package` 将当前 `dist/` 内容打包为 `artifacts/RPGTravel-1.1.0-static.zip`，生成同名 `.sha256`。打包前必须先构建。
+- `package` 将当前 `dist/` 内容打包为 `artifacts/RPGTravel-2.0.0-static.zip`，生成同名 `.sha256`。打包前必须先构建。
 - `format` 用于显式格式化；提交前使用 `format:check` 检查。JSON fixtures 来源于执行指导附录 A，无效用例有明确分类清单。
 
 ### 安装、部署与离线边界
@@ -105,9 +106,17 @@ DEPLOY_BASE=/rpg-trip/ npm run build
 
 支持浏览器安装提示时出现安装按钮；iPhone/iPad 在 Safari 分享菜单选择“添加到主屏幕”。安装状态与缓存状态分别显示。桌面 WebKit 自动化不等于真实 iPhone Safari 或主屏幕 PWA 验收。
 
+### 照片手记
+
+在任务页点“为本任务添加照片”，或打开“日志 → 照片手记”，选择关联任务后添加照片。无需完成任务即可记录；支持多选、说明文字、整张放大、修改说明和确认删除。拍照仍遵守现场规则，照片不作为到达证明或完成门槛。
+
+图片在设备内重编码为 JPEG，去除源照片的 EXIF 等元信息，长边至多 1600 像素，压缩后单张不超过 1 MiB。支持 JPEG / PNG / WebP，HEIC / HEIF 取决于浏览器是否能解码；不支持时会明确提示先转换。原文件不超过 20 MiB / 4000 万像素。每项任务最多 6 张、每份冒险最多 30 张，照片总容量最多 12 MiB；原片请自行保留。
+
+写入失败会显示未保存状态，可重试或导出包含待保存照片的完整存档；没有成功写入时不会冒称已保存。重开只清除行动进度，保留照片；删除冒险会连带删除本存档照片，需先确认。不同冒险实例相互独立。
+
 ### 文件备份
 
-在“我的冒险”选择“导出完整存档”保留故事、勾选与进度；“导出故事”仅含故事。标准 envelope 不包含 rawReply、旅行表单草稿和定位数据。
+在“我的冒险”选择“导出完整存档”保留故事、勾选、进度、照片与照片说明；“导出故事”仅含故事，不含个人照片。标准 envelope 不包含 rawReply、旅行表单草稿和定位数据。含照片的备份上限 20 MiB；导入旧无照片存档不影响已有本机内容。
 
 文件默认名为 `冒险标题_存档_YYYY-MM-DD.rpgtrip.json`，使用通用下载、系统分享（可用时）或复制完整文件内容兜底。浏览器/系统决定保存位置，应用只确认文件已生成。首页“从文件恢复”可选 JSON / rpgtrip，也可粘贴文件文本；每次恢复是新存档，相同故事由用户选择打开已有或另存一份。
 
@@ -129,7 +138,7 @@ DEPLOY_BASE=/rpg-trip/ npm run build
 
 无 Next.js 服务端、Electron/Tauri 原生壳、地图 SDK、远程字体/CDN、AI 服务、账户和云同步。无 GPS 自动完成、实时路线规划、后台监听、多人或复杂分支。普通实现细节按已确认指导执行，真实权限、账号、费用和不可解决环境限制才阻塞相应分支。
 
-应用名称统一在 `src/config.ts` 修改，页面标题、界面和 manifest 随构建使用同一配置；产品正式更名时同步项目文档标题。协议结构不可单独手工维护第二份 JSON Schema；改动协议必须同步结构、Prompt、校验与正反例。
+应用现名“旅章”，项目目录/远端标识仍为 RPGTravel，数据库、origin 与旧存档身份保持不变。应用名称统一在 `src/config.ts` 修改，页面标题、界面和 manifest 随构建使用同一配置；产品正式更名时同步项目文档标题。协议结构不可单独手工维护第二份 JSON Schema；改动协议必须同步结构、Prompt、校验与正反例。
 
 ## 记录与链接
 

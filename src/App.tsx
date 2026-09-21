@@ -19,7 +19,9 @@ function Shell() {
     window.addEventListener('hashchange', change);
     return () => window.removeEventListener('hashchange', change);
   }, []);
-  const [page, id] = hash.replace(/^#\/?/, '').split('/');
+  const [page, id, section, photoQuestId] = hash
+    .replace(/^#\/?/, '')
+    .split('/');
   const record = app.records.find((r) => r.instanceId === id);
   useEffect(() => {
     if (record) app.remember(record.instanceId);
@@ -74,6 +76,7 @@ function Shell() {
                 <ExportButton
                   data={app.pending.record.data}
                   progress={app.pending.next}
+                  photos={app.pending.photos ?? app.pending.record.photos}
                 >
                   导出未保存进度
                 </ExportButton>
@@ -103,7 +106,11 @@ function Shell() {
           ) : page === 'route' ? (
             <RoutePage record={record} />
           ) : page === 'journal' ? (
-            <JournalPage record={record} />
+            <JournalPage
+              key={`${id}:${section}:${photoQuestId}`}
+              record={record}
+              photoQuestId={section === 'photos' ? photoQuestId : undefined}
+            />
           ) : (
             <HomePage />
           )

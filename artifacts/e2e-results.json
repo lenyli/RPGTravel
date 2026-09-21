@@ -102,12 +102,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 3241,
+                  "duration": 3195,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:42:56.730Z",
+                  "startTime": "2026-09-20T08:26:35.108Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -136,12 +136,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1427,
+                  "duration": 1478,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:00.081Z",
+                  "startTime": "2026-09-20T08:26:38.415Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -168,14 +168,14 @@
               "results": [
                 {
                   "workerIndex": 2,
-                  "parallelIndex": 1,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2962,
+                  "duration": 2968,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:09.462Z",
+                  "startTime": "2026-09-20T08:26:53.517Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -202,14 +202,14 @@
               "results": [
                 {
                   "workerIndex": 2,
-                  "parallelIndex": 1,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1314,
+                  "duration": 1307,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:12.607Z",
+                  "startTime": "2026-09-20T08:26:56.676Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -246,12 +246,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 1323,
+                  "duration": 1328,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:42:56.734Z",
+                  "startTime": "2026-09-20T08:26:35.113Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -296,12 +296,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 362,
+                  "duration": 376,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:42:58.163Z",
+                  "startTime": "2026-09-20T08:26:36.549Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -330,12 +330,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 2747,
+                  "duration": 2815,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:42:58.529Z",
+                  "startTime": "2026-09-20T08:26:36.929Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -385,12 +385,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 1979,
+                  "duration": 1962,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:01.279Z",
+                  "startTime": "2026-09-20T08:26:39.748Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -419,12 +419,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 1347,
+                  "duration": 1380,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:03.261Z",
+                  "startTime": "2026-09-20T08:26:41.713Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -453,12 +453,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 2012,
+                  "duration": 2080,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:04.612Z",
+                  "startTime": "2026-09-20T08:26:43.097Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -487,12 +487,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 748,
+                  "duration": 866,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:06.628Z",
+                  "startTime": "2026-09-20T08:26:45.180Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -521,12 +521,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 1244,
+                  "duration": 1293,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:07.380Z",
+                  "startTime": "2026-09-20T08:26:46.049Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -560,7 +560,7 @@
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:08.628Z",
+                  "startTime": "2026-09-20T08:26:47.347Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -587,14 +587,14 @@
               "results": [
                 {
                   "workerIndex": 2,
-                  "parallelIndex": 1,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1543,
+                  "duration": 1538,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:13.930Z",
+                  "startTime": "2026-09-20T08:26:57.993Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -632,14 +632,14 @@
               "results": [
                 {
                   "workerIndex": 2,
-                  "parallelIndex": 1,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 570,
+                  "duration": 616,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:15.478Z",
+                  "startTime": "2026-09-20T08:26:59.535Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -666,14 +666,14 @@
               "results": [
                 {
                   "workerIndex": 2,
-                  "parallelIndex": 1,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2795,
+                  "duration": 2749,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:16.052Z",
+                  "startTime": "2026-09-20T08:27:00.155Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -721,14 +721,14 @@
               "results": [
                 {
                   "workerIndex": 2,
-                  "parallelIndex": 1,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2071,
+                  "duration": 2078,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:18.850Z",
+                  "startTime": "2026-09-20T08:27:02.908Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -755,14 +755,14 @@
               "results": [
                 {
                   "workerIndex": 2,
-                  "parallelIndex": 1,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1428,
+                  "duration": 1460,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:20.925Z",
+                  "startTime": "2026-09-20T08:27:04.990Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -789,14 +789,14 @@
               "results": [
                 {
                   "workerIndex": 2,
-                  "parallelIndex": 1,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1935,
+                  "duration": 1981,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:22.357Z",
+                  "startTime": "2026-09-20T08:27:06.454Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -823,14 +823,14 @@
               "results": [
                 {
                   "workerIndex": 2,
-                  "parallelIndex": 1,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1112,
+                  "duration": 1151,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:24.295Z",
+                  "startTime": "2026-09-20T08:27:08.438Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -857,14 +857,14 @@
               "results": [
                 {
                   "workerIndex": 2,
-                  "parallelIndex": 1,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1641,
+                  "duration": 1680,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:25.410Z",
+                  "startTime": "2026-09-20T08:27:09.593Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -891,14 +891,14 @@
               "results": [
                 {
                   "workerIndex": 2,
-                  "parallelIndex": 1,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 679,
+                  "duration": 645,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:27.055Z",
+                  "startTime": "2026-09-20T08:27:11.277Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -909,6 +909,582 @@
           "id": "bf222bad70f76648f722-0b2f3bd67c4f607ee420",
           "file": "journey.spec.ts",
           "line": 369,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "photos.spec.ts",
+      "file": "photos.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "旅章名称在界面、HTML 和安装 manifest 一致",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 173,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T08:26:39.903Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "84355032f05087d5fef9-30db21f450ce7cf87cb8",
+          "file": "photos.spec.ts",
+          "line": 51,
+          "column": 1
+        },
+        {
+          "title": "未完成任务即可多选照片；刷新保留且各任务说明与照片隔离",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 947,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "Expect \"poll toBe\"",
+                      "duration": 8
+                    },
+                    {
+                      "title": "Expect \"poll toBe\"",
+                      "duration": 7
+                    }
+                  ],
+                  "startTime": "2026-09-20T08:26:40.080Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "84355032f05087d5fef9-f4ed0dfd406108e99a19",
+          "file": "photos.spec.ts",
+          "line": 67,
+          "column": 1
+        },
+        {
+          "title": "照片可预览与修改说明，删除必须确认且取消不丢记录",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1196,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T08:26:41.031Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "84355032f05087d5fef9-d7cab27bc63d980bbd7a",
+          "file": "photos.spec.ts",
+          "line": 132,
+          "column": 1
+        },
+        {
+          "title": "损坏图片明确失败并保留已有照片，之后仍可正常添加",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 712,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "Expect \"poll toBe\"",
+                      "duration": 7
+                    }
+                  ],
+                  "startTime": "2026-09-20T08:26:42.230Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "84355032f05087d5fef9-f8d9a9f7e2a40e8d1f09",
+          "file": "photos.spec.ts",
+          "line": 177,
+          "column": 1
+        },
+        {
+          "title": "照片写入失败不伪装成功，重试原批次仅保存一次且旧照片保留",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 965,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "Expect \"poll toBe\"",
+                      "duration": 7
+                    },
+                    {
+                      "title": "Expect \"poll toBe\"",
+                      "duration": 4
+                    }
+                  ],
+                  "startTime": "2026-09-20T08:26:42.945Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "84355032f05087d5fef9-bd8277d9d1198955178f",
+          "file": "photos.spec.ts",
+          "line": 195,
+          "column": 1
+        },
+        {
+          "title": "完整照片备份可恢复原关联与说明，故事导出和其他实例不包含照片",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1379,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "Expect \"poll toBe\"",
+                      "duration": 8
+                    },
+                    {
+                      "title": "Expect \"poll toBe\"",
+                      "duration": 3
+                    }
+                  ],
+                  "startTime": "2026-09-20T08:26:43.914Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "84355032f05087d5fef9-de4eb8b43e1a1a4e0bc0",
+          "file": "photos.spec.ts",
+          "line": 257,
+          "column": 1
+        },
+        {
+          "title": "已缓存应用断网关闭重开仍可读取照片并导出完整备份",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 846,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "Expect \"poll toBe\"",
+                      "duration": 6
+                    },
+                    {
+                      "title": "Expect \"poll toBe\"",
+                      "duration": 28
+                    }
+                  ],
+                  "startTime": "2026-09-20T08:26:45.297Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "84355032f05087d5fef9-dd74951c03b77c1bd278",
+          "file": "photos.spec.ts",
+          "line": 303,
+          "column": 1
+        },
+        {
+          "title": "旅章名称在界面、HTML 和安装 manifest 一致",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 462,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T08:26:59.301Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "84355032f05087d5fef9-6981d840bf8e1f416920",
+          "file": "photos.spec.ts",
+          "line": 51,
+          "column": 1
+        },
+        {
+          "title": "未完成任务即可多选照片；刷新保留且各任务说明与照片隔离",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1177,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "Expect \"poll toBe\"",
+                      "duration": 18
+                    },
+                    {
+                      "title": "Expect \"poll toBe\"",
+                      "duration": 12
+                    }
+                  ],
+                  "startTime": "2026-09-20T08:26:59.927Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "84355032f05087d5fef9-9f7586f55773c3dcb787",
+          "file": "photos.spec.ts",
+          "line": 67,
+          "column": 1
+        },
+        {
+          "title": "照片可预览与修改说明，删除必须确认且取消不丢记录",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1613,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-20T08:27:01.109Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "84355032f05087d5fef9-c4398c000960538c388e",
+          "file": "photos.spec.ts",
+          "line": 132,
+          "column": 1
+        },
+        {
+          "title": "损坏图片明确失败并保留已有照片，之后仍可正常添加",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 889,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "Expect \"poll toBe\"",
+                      "duration": 10
+                    }
+                  ],
+                  "startTime": "2026-09-20T08:27:02.726Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "84355032f05087d5fef9-6f4fd2d3e260d7d796de",
+          "file": "photos.spec.ts",
+          "line": 177,
+          "column": 1
+        },
+        {
+          "title": "照片写入失败不伪装成功，重试原批次仅保存一次且旧照片保留",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1201,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "Expect \"poll toBe\"",
+                      "duration": 8
+                    },
+                    {
+                      "title": "Expect \"poll toBe\"",
+                      "duration": 3
+                    }
+                  ],
+                  "startTime": "2026-09-20T08:27:03.619Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "84355032f05087d5fef9-74936fb27f6f1114e06c",
+          "file": "photos.spec.ts",
+          "line": 195,
+          "column": 1
+        },
+        {
+          "title": "完整照片备份可恢复原关联与说明，故事导出和其他实例不包含照片",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1874,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "Expect \"poll toBe\"",
+                      "duration": 26
+                    },
+                    {
+                      "title": "Expect \"poll toBe\"",
+                      "duration": 9
+                    }
+                  ],
+                  "startTime": "2026-09-20T08:27:04.824Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "84355032f05087d5fef9-5ad5081162734cd45331",
+          "file": "photos.spec.ts",
+          "line": 257,
+          "column": 1
+        },
+        {
+          "title": "已缓存应用断网关闭重开仍可读取照片并导出完整备份",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1289,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "Expect \"poll toBe\"",
+                      "duration": 7
+                    },
+                    {
+                      "title": "Expect \"poll toBe\"",
+                      "duration": 116
+                    }
+                  ],
+                  "startTime": "2026-09-20T08:27:06.702Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "84355032f05087d5fef9-0115e321ce23663ac450",
+          "file": "photos.spec.ts",
+          "line": 303,
           "column": 1
         }
       ]
@@ -935,7 +1511,7 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 3526,
+                  "duration": 3542,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
@@ -950,7 +1526,7 @@
                       "duration": 1
                     }
                   ],
-                  "startTime": "2026-09-20T06:43:01.516Z",
+                  "startTime": "2026-09-20T08:26:46.152Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -985,7 +1561,7 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 549,
+                  "duration": 596,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
@@ -996,7 +1572,7 @@
                       "duration": 6
                     }
                   ],
-                  "startTime": "2026-09-20T06:43:05.046Z",
+                  "startTime": "2026-09-20T08:26:49.698Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1025,7 +1601,7 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2909,
+                  "duration": 2945,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
@@ -1033,10 +1609,10 @@
                   "steps": [
                     {
                       "title": "Expect \"poll toBe\"",
-                      "duration": 6
+                      "duration": 7
                     }
                   ],
-                  "startTime": "2026-09-20T06:43:05.598Z",
+                  "startTime": "2026-09-20T08:26:50.297Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1063,9 +1639,9 @@
               "results": [
                 {
                   "workerIndex": 3,
-                  "parallelIndex": 0,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 3618,
+                  "duration": 3434,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
@@ -1073,14 +1649,14 @@
                   "steps": [
                     {
                       "title": "Expect \"poll toBe\"",
-                      "duration": 14
+                      "duration": 3
                     },
                     {
                       "title": "Expect \"poll toBe\"",
                       "duration": 2
                     }
                   ],
-                  "startTime": "2026-09-20T06:43:19.857Z",
+                  "startTime": "2026-09-20T08:27:07.999Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -1118,9 +1694,9 @@
               "results": [
                 {
                   "workerIndex": 3,
-                  "parallelIndex": 0,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 590,
+                  "duration": 636,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
@@ -1131,7 +1707,7 @@
                       "duration": 6
                     }
                   ],
-                  "startTime": "2026-09-20T06:43:23.663Z",
+                  "startTime": "2026-09-20T08:27:11.437Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1158,9 +1734,9 @@
               "results": [
                 {
                   "workerIndex": 3,
-                  "parallelIndex": 0,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 1961,
+                  "duration": 2081,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
@@ -1171,7 +1747,7 @@
                       "duration": 9
                     }
                   ],
-                  "startTime": "2026-09-20T06:43:24.257Z",
+                  "startTime": "2026-09-20T08:27:12.077Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1205,15 +1781,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 1225,
+                  "duration": 1239,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:08.517Z",
+                  "startTime": "2026-09-20T08:26:47.937Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1239,15 +1815,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 861,
+                  "duration": 879,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:09.747Z",
+                  "startTime": "2026-09-20T08:26:49.180Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1273,15 +1849,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 1179,
+                  "duration": 1163,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:10.612Z",
+                  "startTime": "2026-09-20T08:26:50.063Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1307,15 +1883,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
                   "duration": 381,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:11.794Z",
+                  "startTime": "2026-09-20T08:26:51.230Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1341,15 +1917,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 581,
+                  "duration": 578,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:12.179Z",
+                  "startTime": "2026-09-20T08:26:51.615Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1375,15 +1951,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 1278,
+                  "duration": 1279,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:12.764Z",
+                  "startTime": "2026-09-20T08:26:52.197Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1409,15 +1985,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 1280,
+                  "duration": 1263,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:14.045Z",
+                  "startTime": "2026-09-20T08:26:53.479Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1443,15 +2019,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 1263,
+                  "duration": 1279,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:15.328Z",
+                  "startTime": "2026-09-20T08:26:54.746Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1477,15 +2053,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
                   "duration": 1280,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:16.596Z",
+                  "startTime": "2026-09-20T08:26:56.029Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1511,15 +2087,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 144,
+                  "duration": 146,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:17.879Z",
+                  "startTime": "2026-09-20T08:26:57.312Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1545,15 +2121,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 649,
+                  "duration": 665,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:18.027Z",
+                  "startTime": "2026-09-20T08:26:57.461Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1579,15 +2155,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 908,
+                  "duration": 893,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:18.679Z",
+                  "startTime": "2026-09-20T08:26:58.129Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -1619,15 +2195,15 @@
               "projectName": "webkit",
               "results": [
                 {
-                  "workerIndex": 3,
+                  "workerIndex": 2,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1141,
+                  "duration": 1171,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:26.228Z",
+                  "startTime": "2026-09-20T08:27:11.930Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1653,15 +2229,15 @@
               "projectName": "webkit",
               "results": [
                 {
-                  "workerIndex": 3,
+                  "workerIndex": 2,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 951,
+                  "duration": 966,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:27.372Z",
+                  "startTime": "2026-09-20T08:27:13.105Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1687,15 +2263,15 @@
               "projectName": "webkit",
               "results": [
                 {
-                  "workerIndex": 3,
+                  "workerIndex": 2,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1279,
+                  "duration": 1283,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:28.327Z",
+                  "startTime": "2026-09-20T08:27:14.074Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1721,15 +2297,15 @@
               "projectName": "webkit",
               "results": [
                 {
-                  "workerIndex": 3,
+                  "workerIndex": 2,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 504,
+                  "duration": 461,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:29.610Z",
+                  "startTime": "2026-09-20T08:27:15.361Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1755,15 +2331,15 @@
               "projectName": "webkit",
               "results": [
                 {
-                  "workerIndex": 3,
+                  "workerIndex": 2,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 658,
+                  "duration": 690,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:30.118Z",
+                  "startTime": "2026-09-20T08:27:15.826Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1789,15 +2365,15 @@
               "projectName": "webkit",
               "results": [
                 {
-                  "workerIndex": 3,
+                  "workerIndex": 2,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1345,
+                  "duration": 1273,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:30.779Z",
+                  "startTime": "2026-09-20T08:27:16.519Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1823,15 +2399,15 @@
               "projectName": "webkit",
               "results": [
                 {
-                  "workerIndex": 3,
+                  "workerIndex": 2,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1194,
+                  "duration": 1188,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:32.128Z",
+                  "startTime": "2026-09-20T08:27:17.795Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1857,15 +2433,15 @@
               "projectName": "webkit",
               "results": [
                 {
-                  "workerIndex": 3,
+                  "workerIndex": 2,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1196,
+                  "duration": 1193,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:33.325Z",
+                  "startTime": "2026-09-20T08:27:18.987Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1891,15 +2467,15 @@
               "projectName": "webkit",
               "results": [
                 {
-                  "workerIndex": 3,
+                  "workerIndex": 2,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1239,
+                  "duration": 1197,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:34.525Z",
+                  "startTime": "2026-09-20T08:27:20.183Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1925,15 +2501,15 @@
               "projectName": "webkit",
               "results": [
                 {
-                  "workerIndex": 3,
+                  "workerIndex": 2,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 199,
+                  "duration": 195,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:35.768Z",
+                  "startTime": "2026-09-20T08:27:21.384Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1959,15 +2535,15 @@
               "projectName": "webkit",
               "results": [
                 {
-                  "workerIndex": 3,
+                  "workerIndex": 2,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 745,
+                  "duration": 674,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:35.970Z",
+                  "startTime": "2026-09-20T08:27:21.583Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1993,15 +2569,15 @@
               "projectName": "webkit",
               "results": [
                 {
-                  "workerIndex": 3,
+                  "workerIndex": 2,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1361,
+                  "duration": 1482,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-20T06:43:36.718Z",
+                  "startTime": "2026-09-20T08:27:22.260Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -2025,9 +2601,9 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-09-20T06:42:52.122Z",
-    "duration": 45998.242,
-    "expected": 52,
+    "startTime": "2026-09-20T08:26:30.861Z",
+    "duration": 52922.868,
+    "expected": 66,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

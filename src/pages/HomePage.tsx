@@ -8,6 +8,7 @@ import {
 } from '../protocol/prompt';
 import type { Issue } from '../protocol/validate';
 import { parseImport } from '../storage/backup';
+import { MAX_ENVELOPE_BYTES } from '../protocol/extract';
 import { CopyButton, Compass, Modal } from '../components/Common';
 
 type Preview = Extract<ReturnType<typeof parseImport>, { success: true }>;
@@ -22,6 +23,8 @@ export default function HomePage() {
   const [duplicate, setDuplicate] = useState(false);
   const [showFormErrors, setShowFormErrors] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+  const personalBackup =
+    raw.includes('"RPG_TRIP_SAVE"') || raw.includes('data:image/');
   const existing = preview
     ? app.records.find(
         (r) => JSON.stringify(r.data) === JSON.stringify(preview.data),
@@ -45,12 +48,12 @@ export default function HomePage() {
   };
   const readFile = async (file: File | undefined) => {
     if (!file) return;
-    if (file.size > 4 * 1024 * 1024) {
+    if (file.size > MAX_ENVELOPE_BYTES) {
       setErrors([
         {
           code: 'INPUT_TOO_LARGE',
           path: '$',
-          message: '文件超过 4 MiB，请选择单个冒险备份。',
+          message: `文件超过 ${MAX_ENVELOPE_BYTES / 1024 / 1024} MiB，请选择单个冒险备份。`,
         },
       ]);
       return;
@@ -81,8 +84,10 @@ export default function HomePage() {
       preview.data,
       preview.rawReply,
       preview.progress,
+      preview.photos,
     );
     if (record) {
+      if (preview.photos.length) app.setDraft({ input, raw: preview.rawReply });
       app.remember(record.instanceId);
       location.hash = `/quest/${record.instanceId}`;
     }
@@ -299,7 +304,9 @@ export default function HomePage() {
             />
             {errors.length > 0 && (
               <div className="error-panel" role="alert">
-                <h3>这份回答需要修正</h3>
+                <h3>
+                  {personalBackup ? '这份备份未能恢复' : '这份回答需要修正'}
+                </h3>
                 {errors.slice(0, 6).map((e, i) => (
                   <p key={i}>
                     {e.message}
@@ -313,9 +320,11 @@ export default function HomePage() {
                     还有 {errors.length - 6} 项，修复 Prompt 会包含全部错误。
                   </p>
                 )}
-                <CopyButton text={createRepairPrompt(raw, errors)}>
-                  复制修复 Prompt
-                </CopyButton>
+                {!personalBackup && (
+                  <CopyButton text={createRepairPrompt(raw, errors)}>
+                    复制修复 Prompt
+                  </CopyButton>
+                )}
                 {storyOnly && (
                   <button
                     className="secondary"
@@ -329,7 +338,9 @@ export default function HomePage() {
                   </button>
                 )}
                 <p className="muted">
-                  原始回答已保留。把修复提示交给原来的 AI，取得完整回答后再试。
+                  {personalBackup
+                    ? '请重新选择完整备份文件。照片和私人存档不需要交给 AI 修复；仅导入故事会放弃这份文件中的进度和照片，原有存档不受影响。'
+                    : '原始回答已保留。把修复提示交给原来的 AI，取得完整回答后再试。'}
                 </p>
               </div>
             )}
@@ -386,6 +397,11 @@ export default function HomePage() {
               </dd>
             </div>
           </dl>
+          {preview.photos.length > 0 && (
+            <p className="success">
+              随存档恢复 {preview.photos.length} 张任务照片。
+            </p>
+          )}
           <p className="success">
             格式检查通过，尚有 {preview.data.adventure.verificationNotes.length}{' '}
             条出行信息待核验。

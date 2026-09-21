@@ -3,6 +3,7 @@ import type { RPGTrip, Quest } from '../protocol/schema';
 import type { Progress } from '../domain/progress';
 import { mapUrls } from '../domain/navigation';
 import { createSave, saveFilename } from '../storage/backup';
+import type { PhotoAttachment } from '../domain/photos';
 
 export function Compass({ className = '' }: { className?: string }) {
   return (
@@ -211,10 +212,12 @@ export function PracticalNotes({ data }: { data: RPGTrip }) {
 export function ExportButton({
   data,
   progress,
+  photos = [],
   children,
 }: {
   data: RPGTrip;
   progress: Progress | null;
+  photos?: PhotoAttachment[];
   children: ReactNode;
 }) {
   const [backupText, setBackupText] = useState('');
@@ -229,7 +232,11 @@ export function ExportButton({
   );
   const prepare = () => {
     try {
-      const content = JSON.stringify(createSave(data, progress), null, 2);
+      const content = JSON.stringify(
+        createSave(data, progress, undefined, photos),
+        null,
+        2,
+      );
       setBackupText(content);
       const saved = new File([content], saveFilename(data), {
         type: 'application/json',

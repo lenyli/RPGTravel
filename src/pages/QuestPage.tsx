@@ -351,6 +351,12 @@ export default function QuestPage({ record }: { record: StoredAdventure }) {
           现场无法完成 / 跳过本节
         </button>
       </section>
+      <a
+        className="button secondary full"
+        href={`#/journal/${record.instanceId}/photos/${quest.id}`}
+      >
+        为本任务添加照片
+      </a>
       <PracticalNotes data={data} />
       {skip && (
         <Modal

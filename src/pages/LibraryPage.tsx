@@ -98,7 +98,11 @@ export default function LibraryPage() {
                   继续冒险 →
                 </a>
                 <div className="export-actions">
-                  <ExportButton data={record.data} progress={record.progress}>
+                  <ExportButton
+                    data={record.data}
+                    progress={record.progress}
+                    photos={record.photos}
+                  >
                     导出完整存档
                   </ExportButton>
                   <ExportButton data={record.data} progress={null}>
@@ -129,7 +133,7 @@ export default function LibraryPage() {
       <section className="storage-note">
         <h2>给冒险留一份副本</h2>
         <p>
-          导出完整存档可保留勾选与线索；导出故事仅分享内容。恢复文件总会创建新存档，不覆盖原来的进度。
+          导出完整存档可保留勾选、线索和照片手记；导出故事仅分享剧本，不含你的照片。恢复文件总会创建新存档，不覆盖原来的进度。
         </p>
         <button className="secondary" onClick={() => void preserve()}>
           请求保留本机数据
@@ -148,8 +152,8 @@ export default function LibraryPage() {
           <h3>{confirm.record.data.adventure.title}</h3>
           <p>
             {confirm.type === 'restart'
-              ? '这会清除该存档的所有行动进度，保留原故事。其他冒险不受影响。'
-              : '这会删除该存档的故事和进度。其他冒险不受影响，建议先导出备份。'}
+              ? '这会清除该存档的所有行动进度，保留原故事与照片手记。其他冒险不受影响。'
+              : '这会删除该存档的故事、进度和照片手记。其他冒险不受影响，建议先导出完整备份。'}
           </p>
           {app.error && (
             <p role="alert" className="error-panel">

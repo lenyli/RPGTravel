@@ -36,7 +36,7 @@ const types = {
   '.svg': 'image/svg+xml',
 };
 const servers = [];
-for (const port of [4174, 4175, 4176, 4177]) {
+for (const port of [4174, 4175, 4176, 4177, 4178]) {
   const subpath = port === 4175 || port === 4177;
   let current = subpath ? 'subpath' : 'release-a';
   let offline = false;
@@ -106,7 +106,7 @@ for (const port of [4174, 4175, 4176, 4177]) {
   servers.push(server);
 }
 console.log(
-  'Acceptance build servers: root 4174/4176; /rpg-trip/ on 4175/4177',
+  'Acceptance build servers: root 4174/4176; /rpg-trip/ on 4175/4177; photos on 4178',
 );
 for (const signal of ['SIGINT', 'SIGTERM']) {
   process.on(signal, () => {

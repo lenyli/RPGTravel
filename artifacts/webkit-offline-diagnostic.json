@@ -9,20 +9,22 @@
   },
   "networkOutageComparison": {
     "method": "Local acceptance origin destroys all production resource sockets. An uncached fetch is asserted to reject; same browser context, origin and site storage retained. No route fulfillment or mocked app resources.",
-    "observedResult": "Full root offline workflow passed: same-context close/reopen, exact action recovery, completion/skip/ending, saved form draft, Prompt copy/fallback, file export and restore. Subpath offline full reload and action start passed. Chromium used BrowserContext.setOffline(true); WebKit used verified production resource socket outage.",
+    "observedResult": "Full root offline workflow passed: same-context close/reopen, exact action recovery, completion/skip/ending, saved form draft, Prompt copy/fallback, file export and restore. Subpath offline full reload and action start passed. Chromium used BrowserContext.setOffline(true); WebKit used verified production resource socket outage. Candidate 2.0.0 additionally passed saved-photo close/reopen, decoding and full-backup export on independent outage origin port 4178.",
     "realDeviceVerified": false
   },
   "finalAcceptance": {
     "schemaVersion": "1.1",
     "progressVersion": 2,
     "stats": {
-      "startTime": "2026-09-20T06:42:52.122Z",
-      "duration": 45998.242,
-      "expected": 52,
+      "startTime": "2026-09-20T08:26:30.861Z",
+      "duration": 52922.868,
+      "expected": 66,
       "skipped": 0,
       "unexpected": 0,
       "flaky": 0
     },
-    "report": "artifacts/e2e-results.json"
+    "report": "artifacts/e2e-results.json",
+    "candidate": "2.0.0",
+    "photoSaveVersion": 2
   }
 }

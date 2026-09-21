@@ -2,12 +2,23 @@ import 'fake-indexeddb/auto';
 import { IDBFactory } from 'fake-indexeddb';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { openDB } from 'idb';
+import { readFileSync } from 'node:fs';
 import fixture from '../fixtures/valid-trip.json';
 import type { RPGTrip } from '../../src/protocol/schema';
 import { initialProgress, transitionProgress } from '../../src/domain/progress';
 import { createSave, parseImport } from '../../src/storage/backup';
+import type { PhotoAttachment } from '../../src/domain/photos';
 
 const trip = fixture as RPGTrip;
+const photo: PhotoAttachment = {
+  id: 'photo_01',
+  questId: 'quest_01',
+  createdAt: '2026-09-20T00:00:00Z',
+  caption: '山间石阶',
+  width: 2,
+  height: 2,
+  dataUrl: `data:image/jpeg;base64,${readFileSync(new URL('../fixtures/photo-valid.jpg', import.meta.url)).toString('base64')}`,
+};
 let storage: typeof import('../../src/storage/db');
 
 beforeEach(async () => {
@@ -21,6 +32,165 @@ afterEach(() => {
 });
 
 describe('真实 IndexedDB 事务语义（fake-indexeddb）', () => {
+  it('旧数据库没有照片字段时读取为空且不迁移或重建数据库', async () => {
+    const adventure = await storage.createAdventure(trip, 'legacy');
+    const db = await openDB('rpg-travel', 1);
+    await db.put('progress', {
+      instanceId: adventure.instanceId,
+      progress: adventure.progress,
+      revision: 0,
+    });
+    const upgrade = vi.spyOn(indexedDB, 'deleteDatabase');
+    expect(await storage.getAdventure(adventure.instanceId)).toMatchObject({
+      photos: [],
+      revision: 0,
+    });
+    expect(db.version).toBe(1);
+    expect(upgrade).not.toHaveBeenCalled();
+    db.close();
+  });
+
+  it('照片与进度原子恢复；只在photos保存附件，不在原始回复复制照片', async () => {
+    const selected = transitionProgress(trip, initialProgress(trip), {
+      type: 'select',
+      questId: 'quest_03',
+    });
+    const progress = transitionProgress(trip, selected, {
+      type: 'skip',
+      questId: 'quest_03',
+    });
+    const parsed = parseImport(
+      JSON.stringify(createSave(trip, progress, undefined, [photo])),
+    );
+    if (!parsed.success) throw new Error('Photo backup fixture failed');
+    const adventure = await storage.createAdventure(
+      parsed.data,
+      parsed.rawReply,
+      parsed.progress,
+      parsed.photos,
+    );
+    expect(adventure.photos).toEqual([photo]);
+    expect(adventure.progress).toEqual(progress);
+    expect(adventure.rawReply).not.toContain(photo.dataUrl);
+    const readBack = await storage.getAdventure(adventure.instanceId);
+    expect(readBack?.photos).toEqual([photo]);
+    expect((await storage.listAdventures())[0].photos).toEqual([photo]);
+  });
+
+  it('照片保存捕获入队快照，后续进度写入和重开保留照片，删除连带照片', async () => {
+    const adventure = await storage.createAdventure(trip, 'raw');
+    const photos = [structuredClone(photo)];
+    const writing = storage.savePhotos(adventure.instanceId, photos, 0);
+    photos[0].caption = '后来编辑不得串入在途保存';
+    const saved = await writing;
+    expect(saved.photos).toEqual([photo]);
+    expect(saved.progress).toEqual(adventure.progress);
+    expect(saved.revision).toBe(1);
+    const progress = transitionProgress(trip, saved.progress, {
+      type: 'skip',
+      questId: 'quest_01',
+    });
+    const progressed = await storage.saveProgress(
+      adventure.instanceId,
+      progress,
+      1,
+    );
+    expect(progressed.photos).toEqual([photo]);
+    const restarted = await storage.restartAdventure(adventure.instanceId, 2);
+    expect(restarted.photos).toEqual([photo]);
+    expect(restarted.progress.quests.quest_01.status).toBe('available');
+    await storage.deleteAdventure(adventure.instanceId);
+    const db = await openDB('rpg-travel', 1);
+    expect(await db.get('progress', adventure.instanceId)).toBeUndefined();
+    expect(await storage.getAdventure(adventure.instanceId)).toBeUndefined();
+    db.close();
+  });
+
+  it('照片和行动进度共享并发版本，旧页面不能覆盖另一个页面的新照片', async () => {
+    const adventure = await storage.createAdventure(trip, 'raw');
+    const progress = transitionProgress(trip, adventure.progress, {
+      type: 'start',
+      questId: 'quest_01',
+    });
+    const [photoResult, progressResult] = await Promise.allSettled([
+      storage.savePhotos(adventure.instanceId, [photo], 0),
+      storage.saveProgress(adventure.instanceId, progress, 0),
+    ]);
+    expect(photoResult.status).toBe('fulfilled');
+    expect(progressResult.status).toBe('rejected');
+    if (progressResult.status === 'rejected')
+      expect(progressResult.reason.code).toBe('STALE_PROGRESS');
+    expect((await storage.getAdventure(adventure.instanceId))?.photos).toEqual([
+      photo,
+    ]);
+    await expect(
+      storage.savePhotos(adventure.instanceId, [], 0),
+    ).rejects.toMatchObject({ code: 'STALE_PROGRESS' });
+    await storage.saveProgress(adventure.instanceId, progress, 1);
+    await expect(
+      storage.savePhotos(adventure.instanceId, [], 1),
+    ).rejects.toMatchObject({ code: 'STALE_PROGRESS' });
+    expect((await storage.getAdventure(adventure.instanceId))?.photos).toEqual([
+      photo,
+    ]);
+  });
+
+  it('照片事务后半段写入失败时保留旧照片和版本，重试可以保存', async () => {
+    const adventure = await storage.createAdventure(trip, 'raw', null, [photo]);
+    const changed = { ...photo, caption: '另一条记录' };
+    const original = IDBObjectStore.prototype.put;
+    const failing = vi
+      .spyOn(IDBObjectStore.prototype, 'put')
+      .mockImplementation(function (
+        this: IDBObjectStore,
+        value: unknown,
+        key?: IDBValidKey,
+      ) {
+        if (this.name === 'adventures')
+          throw new DOMException('Photo quota test', 'QuotaExceededError');
+        return key === undefined
+          ? original.call(this, value)
+          : original.call(this, value, key);
+      });
+    await expect(
+      storage.savePhotos(adventure.instanceId, [changed], 0),
+    ).rejects.toMatchObject({ code: 'QUOTA_EXCEEDED' });
+    failing.mockRestore();
+    expect(await storage.getAdventure(adventure.instanceId)).toMatchObject({
+      photos: [photo],
+      revision: 0,
+      progress: adventure.progress,
+    });
+    await expect(
+      storage.savePhotos(adventure.instanceId, [changed], 0),
+    ).resolves.toMatchObject({ photos: [changed], revision: 1 });
+  });
+
+  it('坏照片拒绝创建或写入，本机损坏明确报错且不清空原字段', async () => {
+    const invalid = { ...photo, questId: 'quest_missing' };
+    await expect(
+      storage.createAdventure(trip, 'raw', null, [invalid]),
+    ).rejects.toMatchObject({ code: 'INVALID_PHOTOS' });
+    expect(await storage.listAdventures()).toEqual([]);
+    const adventure = await storage.createAdventure(trip, 'raw', null, [photo]);
+    await expect(
+      storage.savePhotos(adventure.instanceId, [invalid], 0),
+    ).rejects.toMatchObject({ code: 'INVALID_PHOTOS' });
+    expect((await storage.getAdventure(adventure.instanceId))?.photos).toEqual([
+      photo,
+    ]);
+    const db = await openDB('rpg-travel', 1);
+    const state = await db.get('progress', adventure.instanceId);
+    await db.put('progress', { ...state, photos: [invalid] });
+    await expect(
+      storage.getAdventure(adventure.instanceId),
+    ).rejects.toMatchObject({ code: 'CORRUPT_PHOTOS' });
+    expect((await db.get('progress', adventure.instanceId)).photos).toEqual([
+      invalid,
+    ]);
+    db.close();
+  });
+
   it('相同故事 ID 仍生成独立 UUID，精确恢复勾选且不套用初始状态', async () => {
     const first = await storage.createAdventure(trip, 'raw first');
     const second = await storage.createAdventure(trip, 'raw second');

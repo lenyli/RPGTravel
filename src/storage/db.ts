@@ -1,6 +1,7 @@
 import { openDB, type DBSchema, type IDBPDatabase } from 'idb';
 import type { RPGTrip } from '../protocol/schema';
 import { validateTrip } from '../protocol/validate';
+import { validatePhotos, type PhotoAttachment } from '../domain/photos';
 import {
   initialProgress,
   isIsoInstant,
@@ -17,13 +18,19 @@ export type AdventureRecord = {
 };
 export type StoredAdventure = AdventureRecord & {
   progress: Progress;
+  photos: PhotoAttachment[];
   revision: number;
 };
 interface TripDatabase extends DBSchema {
   adventures: { key: string; value: AdventureRecord };
   progress: {
     key: string;
-    value: { instanceId: string; progress: Progress; revision: number };
+    value: {
+      instanceId: string;
+      progress: Progress;
+      photos?: PhotoAttachment[];
+      revision: number;
+    };
   };
   settings: { key: string; value: unknown };
 }
@@ -224,10 +231,20 @@ function checkedStored(
       'CORRUPT_PROGRESS',
       `这份本机进度校验失败：${progress.errors[0].message} 未自动清零，请从备份恢复。`,
     );
+  const photos = validatePhotos(
+    trip.data,
+    state.photos === undefined ? [] : state.photos,
+  );
+  if (!photos.success)
+    throw new StorageError(
+      'CORRUPT_PHOTOS',
+      `这份本机照片校验失败：${photos.errors[0].message} 未自动删除，请从备份恢复。`,
+    );
   return {
     ...record,
     data: trip.data,
     progress: progress.data,
+    photos: photos.data,
     revision: state.revision,
   };
 }
@@ -277,6 +294,7 @@ export function createAdventure(
   data: RPGTrip,
   rawReply: string,
   progress: Progress | null = null,
+  photos: PhotoAttachment[] = [],
 ): Promise<StoredAdventure> {
   // Clone before queuing so later edits in the UI cannot mutate a pending write.
   const trip = validateTrip(data);
@@ -291,6 +309,11 @@ export function createAdventure(
   if (!checked.success)
     return Promise.reject(
       new StorageError('INVALID_PROGRESS', checked.errors[0].message),
+    );
+  const checkedPhotos = validatePhotos(trip.data, photos);
+  if (!checkedPhotos.success)
+    return Promise.reject(
+      new StorageError('INVALID_PHOTOS', checkedPhotos.errors[0].message),
     );
   const now = new Date().toISOString();
   const record: AdventureRecord = {
@@ -308,9 +331,15 @@ export function createAdventure(
       await transaction.objectStore('progress').add({
         instanceId: record.instanceId,
         progress: checked.data,
+        photos: checkedPhotos.data,
         revision: 0,
       });
-      return { ...record, progress: checked.data, revision: 0 };
+      return {
+        ...record,
+        progress: checked.data,
+        photos: checkedPhotos.data,
+        revision: 0,
+      };
     });
   });
 }
@@ -351,11 +380,66 @@ export function saveProgress(
         rawReply: existing.rawReply,
       };
       const revision = existing.revision + 1;
-      await transaction
-        .objectStore('progress')
-        .put({ instanceId, progress: checked.data, revision });
+      await transaction.objectStore('progress').put({
+        instanceId,
+        progress: checked.data,
+        photos: existing.photos,
+        revision,
+      });
       await transaction.objectStore('adventures').put(updated);
-      return { ...updated, progress: checked.data, revision };
+      return {
+        ...updated,
+        progress: checked.data,
+        photos: existing.photos,
+        revision,
+      };
+    });
+  });
+}
+
+export function savePhotos(
+  instanceId: string,
+  photos: PhotoAttachment[],
+  expectedRevision: number,
+): Promise<StoredAdventure> {
+  const captured: unknown = structuredClone(photos);
+  return enqueue(async () => {
+    const db = await database();
+    const transaction = db.transaction(['adventures', 'progress'], 'readwrite');
+    return commitTransaction(transaction, async () => {
+      const [record, state] = await Promise.all([
+        transaction.objectStore('adventures').get(instanceId),
+        transaction.objectStore('progress').get(instanceId),
+      ]);
+      const existing = checkedStored(record, state);
+      if (!existing)
+        throw new StorageError('MISSING_ADVENTURE', '这份冒险已被删除。');
+      if (existing.revision !== expectedRevision)
+        throw new StorageError(
+          'STALE_PROGRESS',
+          '另一页面已保存更新的进度或照片。本次修改未覆盖它；请重新打开存档后继续。',
+        );
+      const checked = validatePhotos(existing.data, captured);
+      if (!checked.success)
+        throw new StorageError('INVALID_PHOTOS', checked.errors[0].message);
+      const updated: AdventureRecord = {
+        ...record!,
+        updatedAt: new Date().toISOString(),
+      };
+      const revision = existing.revision + 1;
+      await transaction.objectStore('progress').put({
+        instanceId,
+        progress: existing.progress,
+        photos: checked.data,
+        revision,
+      });
+      await transaction.objectStore('adventures').put(updated);
+      return {
+        ...updated,
+        progress: existing.progress,
+        photos: checked.data,
+        revision,
+      };
     });
   });
 }
@@ -388,9 +472,9 @@ export function restartAdventure(
       const revision = existing.revision + 1;
       await transaction
         .objectStore('progress')
-        .put({ instanceId, progress, revision });
+        .put({ instanceId, progress, photos: existing.photos, revision });
       await transaction.objectStore('adventures').put(updated);
-      return { ...updated, progress, revision };
+      return { ...updated, progress, photos: existing.photos, revision };
     });
   });
 }

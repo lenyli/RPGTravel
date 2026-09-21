@@ -1,7 +1,7 @@
 import type { Issue } from './validate';
 
 export const MAX_REPLY_BYTES = 2 * 1024 * 1024;
-export const MAX_ENVELOPE_BYTES = 4 * 1024 * 1024;
+export const MAX_ENVELOPE_BYTES = 20 * 1024 * 1024;
 const forbiddenKeys = new Set(['__proto__', 'prototype', 'constructor']);
 export const isReservedId = (id: string): boolean => forbiddenKeys.has(id);
 
@@ -96,7 +96,7 @@ export function extractReply(raw: string): Extraction {
   if (bytes > MAX_ENVELOPE_BYTES)
     return fail(
       'INPUT_TOO_LARGE',
-      '内容超过 4 MiB 绝对上限，请只导入一份故事或存档。',
+      '内容超过 20 MiB 存档上限，请只导入一份故事或存档。AI 原始回复仍限 2 MiB。',
     );
   const warnings: string[] = [];
   const withoutBom = raw.replace(/^(\s*)\uFEFF/, '$1');
