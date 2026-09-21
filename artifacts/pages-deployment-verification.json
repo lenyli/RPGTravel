@@ -1,18 +1,18 @@
 {
-  "verifiedAt": "2026-09-21T11:00:27+08:00",
+  "verifiedAt": "2026-09-21T11:28:23+08:00",
   "url": "https://lenyli.github.io/RPGTravel/",
-  "runId": 35555906496,
-  "runUrl": "https://github.com/lenyli/RPGTravel/actions/runs/35555906496",
-  "deployedCommit": "627c41bf6de3d4c6596e8039656b619b9c3e68b6",
+  "runId": 35557505717,
+  "runUrl": "https://github.com/lenyli/RPGTravel/actions/runs/35557505717",
+  "deployedCommit": "756d1acd1652b08a5fd6c101a33c2349ddaeddc7",
   "buildType": "workflow",
   "resources": [
     {
-      "path": "assets/index-B2A7IiV_.js",
+      "path": "assets/index-B_K3y_tu.js",
       "status": 200,
       "contentType": "application/javascript; charset=utf-8",
-      "bytes": 364855,
+      "bytes": 365287,
       "matchesLocalPagesBuild": true,
-      "sha256": "89175888b077265072d73768243abc4cb466ff5be9dd0d319b8bd49c414fe3d9"
+      "sha256": "4485accfa8cdf5edb7ce86ba9a1b5b7338dad5e1c2b58a3479d640551b819702"
     },
     {
       "path": "assets/index-Ck6b0qu-.css",
@@ -68,7 +68,7 @@
       "contentType": "text/html; charset=utf-8",
       "bytes": 1682,
       "matchesLocalPagesBuild": true,
-      "sha256": "cb9e776071e97f56896538f4a28cb19b6a97dd70365bfbc240db57257d058973"
+      "sha256": "18f9ceb75c91215f50db2453f0045cd47df43f44f8a8671fad2bd23f60a265e8"
     },
     {
       "path": "manifest.webmanifest",
@@ -84,7 +84,7 @@
       "contentType": "application/javascript; charset=utf-8",
       "bytes": 1869,
       "matchesLocalPagesBuild": true,
-      "sha256": "1223d279e8716dff8abf93b525b729bfe06c55203966c943138c350c2b4bf369"
+      "sha256": "06b2a7049a249e6f9e1aacbadd1ae741f0265bc5d89309533de2b443e1d0891b"
     },
     {
       "path": "workbox-5bc3ec07.js",
@@ -100,12 +100,17 @@
     "title": "旅章",
     "formVisible": true,
     "sourceFallbackReplaced": true,
-    "offlineReadyIndicator": true,
+    "gameStyle": {
+      "label": "喜欢的游戏风格 选填",
+      "value": "",
+      "required": false,
+      "placeholder": null
+    },
     "consoleErrors": [],
     "actualOfflineChecked": false
   },
   "personalStoryPublished": false,
   "realPhoneVerified": false,
   "workflowConclusion": "success",
-  "workflowCompletedAt": "2026-09-21T02:59:01Z"
+  "workflowCompletedAt": "2026-09-21T03:27:11Z"
 }
