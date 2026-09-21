@@ -1,7 +1,7 @@
 {
   "verifiedAt": "2026-09-20 16:28",
   "candidate": "2.0.0",
-  "decisionVersion": "v2.0",
+  "decisionVersion": "v2.1",
   "schemaVersion": "1.1",
   "progressVersion": 2,
   "unit": {
@@ -33,7 +33,7 @@
     "zipIntegrity": true,
     "verifiedAt": "2026-09-21 10:43"
   },
-  "publicDeployment": false,
+  "publicDeployment": true,
   "realIPhoneVerified": false,
   "appName": "旅章",
   "photoSaveVersion": 2,
@@ -62,10 +62,11 @@
     "note": "Verified through existing PWA save-and-update UI; no test photos added to user story. IAB offline status label still shows preparing; actual IAB offline mode not validated."
   },
   "deploymentRepair": {
-    "verifiedAt": "2026-09-21 10:43",
-    "report": "artifacts/pages-verification.json",
+    "verifiedAt": "2026-09-21 11:02",
+    "report": "artifacts/pages-deployment-verification.json",
     "publicSiteExists": true,
-    "publicSiteRepaired": false,
-    "businessSuiteRerun": false
+    "publicSiteRepaired": true,
+    "businessSuiteRerun": false,
+    "runUrl": "https://github.com/lenyli/RPGTravel/actions/runs/35555906496"
   }
 }

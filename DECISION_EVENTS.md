@@ -93,3 +93,26 @@ src/ 全模块、public/icons、固定 package/lockfile、测试 fixtures、149 
 
 ### Implementation
 src/config.ts、index.html、src/domain/photos.ts、src/components/PhotoJournal.tsx、日志/任务页、state、IndexedDB 存储与备份导入导出。应用候选 2.0.0；决定版本 v2.0。实际验证与交付入口见 CURRENT_STATUS.md。
+
+## RPGTRAVEL-20260921-001
+
+- date: 2026-09-21
+- type: revision
+- project: RPGTravel
+- relates_to: RPGTRAVEL-20260920-001, RPGTRAVEL-20260920-004
+- supersedes: RPGTRAVEL-20260920-001
+
+### Summary
+按用户“修复并部署”的明确授权，修复并发布现有 GitHub Pages 站点。
+
+### Decision
+仅替代启动决定中禁止公开部署的部分：允许更新 `lenyli/RPGTravel` 的现有站点 `https://lenyli.github.io/RPGTravel/`。发布源从 main 根目录源码改为 GitHub Actions；按 `/RPGTravel/` 编译，只发布 `dist`，后续仍手动触发。无 AI API、后端、账号、云同步的产品边界保留；不创建新仓库，不把个人剧本与照片加入静态部署。
+
+### Reason
+用户报告线上与本地白屏，随后提供启动提示截图并明确要求“修复并部署”。原线上发布的源码引用 `/src/main.tsx`，该入口返回 404，必须改为发布编译产物。
+
+### Rejected
+继续直接发布源码根目录；把根路径静态包直接放到 `/RPGTravel/`；为解决部署问题增加后端或公开个人存档。
+
+### Implementation
+现有 Pages 已设为 workflow，`.github/workflows/pages.yml` 对源码提交 `627c41bf6de3d4c6596e8039656b619b9c3e68b6` 的运行 `35555906496` 构建/发布成功；线上 11 个资源与本地专用构建逐字节一致，实际浏览器表单启动、缓存就绪、无控制台 error。应用版本保持 2.0.0，决定版本变为 v2.1。证据见 `artifacts/pages-deployment-verification.json`，真机范围以 CURRENT_STATUS 为准。

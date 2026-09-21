@@ -96,16 +96,16 @@ npm run preview -- --port 4173
 
 本机使用：双击 [启动旅章.command](启动旅章.command)。启动器复用 4173 上已有的旅章；否则构建根路径产物并启动预览，自动打开 `http://127.0.0.1:4173/`，终端窗口需保持打开。首次缺少依赖时先执行 `npm ci`。也可以手动运行 `npm run build` 与 `npm run preview -- --port 4173 --strictPort`。`file://` 不属于可安装/离线的运行方式。
 
-仓库对应站点为 `https://lenyli.github.io/RPGTravel/`，必须按大小写一致的 `/RPGTravel/` 构建。专用命令：
+线上入口为 [旅章](https://lenyli.github.io/RPGTravel/)，必须按大小写一致的 `/RPGTravel/` 构建。专用命令：
 
 ```sh
 npm run build:pages
 npm run package:pages
 ```
 
-输出 `dist-pages/` 与 `artifacts/RPGTravel-2.0.0-github-pages.zip`；根路径包 `RPGTravel-2.0.0-static.zip` 供本机或域名根目录使用，两种包不可混用。`vite.config.ts` 统一控制资源、manifest id/start_url/scope 与缓存标识。hash 路由无需服务端重写。更换 origin 之前先导出备份，迁移后手动恢复。
+输出 `dist-pages/` 与 `artifacts/RPGTravel-2.0.0-github-pages.zip`；根路径包 `RPGTravel-2.0.0-static.zip` 供本机或域名根目录使用，两种包不可混用。`vite.config.ts` 统一控制资源、manifest id/start_url/scope 与缓存标识。hash 路由无需服务端重写。本机地址与线上地址是不同 origin，存档不会自动迁移；请在本机导出完整存档，再到线上“从文件恢复”。
 
-已准备 [.github/workflows/pages.yml](.github/workflows/pages.yml)：仅手动触发，Node 22 安装固定依赖后以 `/RPGTravel/` 构建，仅上传 `dist/`。获得发布授权后，将此工作流提交到远端默认分支，在仓库 Settings → Pages 将 Source 设为 GitHub Actions，再从 Actions 手动运行“Deploy 旅章 to GitHub Pages”。流程不创建站点，也不因推送自动公开部署。发布是否成功以 [CURRENT_STATUS.md](CURRENT_STATUS.md) 的实际线上核验为准。
+已准备 [.github/workflows/pages.yml](.github/workflows/pages.yml)：仅手动触发，Node 22 安装固定依赖后以 `/RPGTravel/` 构建，仅上传 `dist/`。现有站点已按用户授权切换为 GitHub Actions，并成功部署。后续更新先将修改推送到远端默认分支，再从 Actions 手动运行“Deploy 旅章 to GitHub Pages”。流程不创建站点，也不因推送自动公开部署。发布是否成功以 [CURRENT_STATUS.md](CURRENT_STATUS.md) 的实际线上核验为准。
 
 部署配置依据 [Vite GitHub Pages 文档](https://vite.dev/guide/static-deploy.html#github-pages) 和 [GitHub Pages 工作流文档](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)。
 

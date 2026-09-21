@@ -2,13 +2,13 @@
 
 项目状态：进行中
 
-当前阶段：本机预览已恢复；GitHub Pages 白屏根因已确认，部署修复与专用包已在本机验证，尚未发布修复。
+当前阶段：旅章已在现有 GitHub Pages 成功发布，线上白屏已修复；网页启动与全部静态资源已核验，真实手机验收待进行。
 
-lastUpdated：2026-09-21 10:43（Asia/Shanghai）
+lastUpdated：2026-09-21 11:02（Asia/Shanghai）
 
 ## 当前实现
 
-- 应用名称“旅章”，PWA 候选 2.0.0；决定版本 v2.0；故事协议 schemaVersion 1.1（RPG_TRIP_V1 外壳），进度版本 2。仓库、数据库与旧存档身份保持不变。
+- 应用名称“旅章”，PWA 候选 2.0.0；决定版本 v2.1（新增现有站点发布授权）；故事协议 schemaVersion 1.1（RPG_TRIP_V1 外壳），进度版本 2。仓库、数据库与旧存档身份保持不变。
 - 首屏旅行表单、完整生成 Prompt、复制兜底、草稿保存、整条回答/文件导入、中文校验与修复 Prompt、概要预览。
 - 按地点独立任务，所有地点均可选择；编号不限制完成顺序，日期仅作参考。支持先做 3 再做 1、2，或保留当前勾选切换其他地点。叙事提示禁止前置任务和固定行程。
 - 手动开始、3–5 项行动、主动完成、跳过补叙、已获线索、按实际解决时间排列的日志、全部地点解决后的结局。
@@ -30,16 +30,16 @@ lastUpdated：2026-09-21 10:43（Asia/Shanghai）
 
 ## 部署与本机启动
 
-- 2026-09-21 实际读取 `https://lenyli.github.io/RPGTravel/`：首页 HTTP 200，但仍含 `%BASE_URL%` 和 `/src/main.tsx`；该脚本 URL 返回 404。确认当前发布了源码入口，应用未启动。尚未变更远端或 GitHub Pages 账号设置，线上问题未声称解决。
-- 新增手动 Pages 工作流，正确设置 `/RPGTravel/` 并仅上传编译后的 `dist`；新 `build:pages` / `package:pages` 输出专用 `dist-pages/` 与 ZIP，不混用根路径产物。
-- 双击 `启动旅章.command` 可启动本机 HTTP 预览；HTML 源码入口加入失败说明，避免仅显示空白。启动器做过 shell 语法检查，未模拟 Finder 双击；当前预览通过同样的 npm preview 命令启动。
-- 本机实际浏览器确认：4173“我的冒险”显示旅章和《云外无终》0 / 10 原存档；4179 的 `/RPGTravel/` 专用产物显示完整表单并报告资源已缓存。未执行实际断网检查；工具禁止访问 `file://`，直接文件入口仅作源码检查，没有绕过限制。
-- 根路径与 Pages 构建、两份 ZIP 完整性/11 个文件字节一致、页面全部脚本/样式/图标/manifest 路径存在、manifest scope/start_url/id 正确，全部通过。证据：[pages-verification.json](artifacts/pages-verification.json)。
-- 工作流 YAML、手动触发、最小权限、固定官方 Action SHA、上传范围与关闭站点自动启用均通过静态检查。实际云端执行待发布授权。
+- 线上入口：[旅章](https://lenyli.github.io/RPGTravel/)。现有 Pages 发布源为 `workflow`，继续启用 HTTPS。仅手动运行 GitHub Actions，以 `/RPGTravel/` 构建并上传 `dist`，不再将 main 根目录源码当作网站。
+- [部署工作流 #1](https://github.com/lenyli/RPGTravel/actions/runs/35555906496) 的 build / deploy 全部成功，发布应用源码提交 `627c41bf6de3d4c6596e8039656b619b9c3e68b6`。本次修复发布配置，没有改应用业务源码或重新提升应用版本；应用为 2.0.0，部署授权决定为 v2.1。
+- 线上首页、脚本、CSS、图标、manifest、SW / Workbox 共 11 个文件均 HTTP 200，与本地 `dist-pages` 逐字节一致。HTML 引用 `/RPGTravel/assets/`，不存在未替换的 `%BASE_URL%` 或 `/src/main.tsx`；manifest id/scope/start_url 均正确。
+- 实际内置浏览器显示完整旅行表单、旅章导航和“应用资源已缓存，可离线使用”，控制台无 error；没有停留在启动提示页。证据：[pages-deployment-verification.json](artifacts/pages-deployment-verification.json)。缓存就绪提示不等于已进行真机断网测试。
+- 本机仍使用 `http://127.0.0.1:4173/`；已有《云外无终》0 / 10 存档保留。双击 `启动旅章.command` 启动 HTTP 预览；直接文件入口仅显示说明，不执行应用。启动器通过 shell 语法检查，未模拟 Finder 双击；工具禁止访问 `file://`，没有绕过。
+- 两份本地静态包保持根路径与 `/RPGTravel/` 用途区分，包完整性、11 个文件字节一致与资源路径检查通过；本机验证见 [pages-verification.json](artifacts/pages-verification.json)。线上和本机属于不同 origin，需导出完整存档后手动恢复，不自动同步。
 
 ## 当前验证基线
 
-业务回归基线日期：2026-09-20；对象为旅章 2.0.0 照片手记与自由地点版本。本次只改启动与部署，未重跑下列 206 / 66 业务测试；2026-09-21 的实际针对性检查见上节。
+业务回归基线日期：2026-09-20；对象为旅章 2.0.0 照片手记与自由地点版本。本次只改启动与部署，未重跑下列 206 / 66 业务测试；2026-09-21 的构建、部署与线上针对性检查见上节。
 
 | 检查                     | 实际结果                                                                                                                                                            |
 | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -58,6 +58,7 @@ lastUpdated：2026-09-21 10:43（Asia/Shanghai）
 
 ## 交付入口
 
+- 线上访问：[旅章](https://lenyli.github.io/RPGTravel/)。
 - 源码根：`/Volumes/Leny/Projects/RPGTravel`；指定远端：[lenyli/RPGTravel](https://github.com/lenyli/RPGTravel)。
 - 本机启动：双击 `启动旅章.command`，或 `npm run preview -- --port 4173 --strictPort`，访问 `http://127.0.0.1:4173/`；首次进入直接为表单，不自动导入测试故事。
 - 静态产物：`dist/`、[RPGTravel-2.0.0-static.zip](artifacts/RPGTravel-2.0.0-static.zip)、[SHA-256](artifacts/RPGTravel-2.0.0-static.zip.sha256)；已替换旧静态包。
@@ -66,15 +67,15 @@ lastUpdated：2026-09-21 10:43（Asia/Shanghai）
 
 ## 有效决定与限制
 
-有效决定为 [RPGTRAVEL-20260920-002](DECISION_EVENTS.md#rpgtravel-20260920-002) 的自由地点玩法，以及 [RPGTRAVEL-20260920-004](DECISION_EVENTS.md#rpgtravel-20260920-004) 的“旅章”品牌与本机照片手记，其余产品与权限边界保留。初版草案 1.0 不自动猜测转换，用户可复制修复 Prompt 请求新的独立地点包。
+有效决定为 [RPGTRAVEL-20260920-002](DECISION_EVENTS.md#rpgtravel-20260920-002) 的自由地点玩法，以及 [RPGTRAVEL-20260920-004](DECISION_EVENTS.md#rpgtravel-20260920-004) 的“旅章”品牌与本机照片手记，以及 [RPGTRAVEL-20260921-001](DECISION_EVENTS.md#rpgtravel-20260921-001) 的现有 Pages 发布授权；无 AI API、后端、账号或云同步的边界保留。初版草案 1.0 不自动猜测转换，用户可复制修复 Prompt 请求新的独立地点包。
 
 WebKit 的 `context.setOffline(true)` 在此自动化环境的页面重开报内部错误；已通过服务器实际断开生产资源连接且未缓存请求失败的对照验证完整离线闭环，证据见 [诊断记录](artifacts/webkit-offline-diagnostic.json)。这不等于该模拟接口通过，也不等于真实 iPhone 验收。
 
 当前内置浏览器更新后底部仍显示“正在准备离线资源”，未在该浏览器执行实际断网验收；这不作为离线失败或通过的证据。上表离线结果适用于 Playwright 的 Chromium / WebKit 环境。
 
-没有真实手机通道；Safari 添加到主屏幕、真实系统剪贴板/文件分享、真机离线杀进程重开、相机/相册选择、HEIC 解码和实际地图 App 唤起待验收。自动化的模拟权限、缩小视口与 WebKit 不能代替这些实机结果。HEIC/HEIF 取决于浏览器解码能力，不能读取时明确提示转换为 JPEG。旅行事实与任何真实目的地未由应用联网核实。现有 HTTPS 站点正在发布错误入口，尚不可用；需要发布修复后再做真机验收。
+没有真实手机通道；Safari 添加到主屏幕、真实系统剪贴板/文件分享、真机离线杀进程重开、相机/相册选择、HEIC 解码和实际地图 App 唤起待验收。自动化的模拟权限、缩小视口与 WebKit 不能代替这些实机结果。HEIC/HEIF 取决于浏览器解码能力，不能读取时明确提示转换为 JPEG。旅行事实与任何真实目的地未由应用联网核实。现有 HTTPS 站点已可访问，可用于后续真机验收；本次未上传个人剧本或照片到静态站点。
 
 ## 下一步
 
-1. 获得针对现有 Pages 站点的发布授权后，提交/推送部署修复，切换 Pages Source 为 GitHub Actions 并手动执行工作流，再核验线上首页和资源。
-2. 用户在本机“旅章”验收《云外无终》与任务照片；公开站点恢复后再验证真实手机安装、相册/拍照、离线重开和文件保存。
+1. 用户在线验收旅章；需要继续本机《云外无终》时，先从本机导出完整存档，再在线导入。
+2. 在真实 iPhone/iPad 验证安装、相册/拍照、离线杀进程重开和文件保存。

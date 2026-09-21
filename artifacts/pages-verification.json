@@ -6,7 +6,8 @@
     "entry": "/src/main.tsx",
     "entryStatus": 404,
     "unexpandedBaseToken": true,
-    "publicSiteRepaired": false
+    "publicSiteRepaired": false,
+    "stage": "before-deployment"
   },
   "packages": [
     {
@@ -43,5 +44,11 @@
     "actualOfflineChecked": false,
     "fileUrlBrowserCheck": "Blocked by browser URL policy; source only checked",
     "launcher": "zsh -n passed; Finder double-click not tested"
+  },
+  "deployment": {
+    "verifiedAt": "2026-09-21 11:02",
+    "publicSiteRepaired": true,
+    "report": "artifacts/pages-deployment-verification.json",
+    "runUrl": "https://github.com/lenyli/RPGTravel/actions/runs/35555906496"
   }
 }

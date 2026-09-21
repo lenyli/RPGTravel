@@ -1,0 +1,111 @@
+{
+  "verifiedAt": "2026-09-21T11:00:27+08:00",
+  "url": "https://lenyli.github.io/RPGTravel/",
+  "runId": 35555906496,
+  "runUrl": "https://github.com/lenyli/RPGTravel/actions/runs/35555906496",
+  "deployedCommit": "627c41bf6de3d4c6596e8039656b619b9c3e68b6",
+  "buildType": "workflow",
+  "resources": [
+    {
+      "path": "assets/index-B2A7IiV_.js",
+      "status": 200,
+      "contentType": "application/javascript; charset=utf-8",
+      "bytes": 364855,
+      "matchesLocalPagesBuild": true,
+      "sha256": "89175888b077265072d73768243abc4cb466ff5be9dd0d319b8bd49c414fe3d9"
+    },
+    {
+      "path": "assets/index-Ck6b0qu-.css",
+      "status": 200,
+      "contentType": "text/css; charset=utf-8",
+      "bytes": 22366,
+      "matchesLocalPagesBuild": true,
+      "sha256": "163c5384af7ae1d4e59d01d7b1aeb09210e74c7c692c4c440365958a1921a6b8"
+    },
+    {
+      "path": "assets/workbox-window.prod.es5-BBnX5xw4.js",
+      "status": 200,
+      "contentType": "application/javascript; charset=utf-8",
+      "bytes": 5748,
+      "matchesLocalPagesBuild": true,
+      "sha256": "cadd21be4a88598a4dec91a26a025df0a5790ff6baec54a884e401c3f5c95557"
+    },
+    {
+      "path": "icons/apple-touch-icon.png",
+      "status": 200,
+      "contentType": "image/png",
+      "bytes": 6674,
+      "matchesLocalPagesBuild": true,
+      "sha256": "77fbf6c68ab3e743b623a58a9baf039921cc9f0722cea8f8334fe4d8ba29813d"
+    },
+    {
+      "path": "icons/icon-192.png",
+      "status": 200,
+      "contentType": "image/png",
+      "bytes": 7039,
+      "matchesLocalPagesBuild": true,
+      "sha256": "d83b8a031ec6b2b88b7e19f85b2366ec9c7c4994501825e6c988f2e4c7d89caf"
+    },
+    {
+      "path": "icons/icon-512.png",
+      "status": 200,
+      "contentType": "image/png",
+      "bytes": 24123,
+      "matchesLocalPagesBuild": true,
+      "sha256": "c045d656a6cbae474fab108ef760545377b08674a2800ddc1341a5061ffef4bd"
+    },
+    {
+      "path": "icons/maskable-512.png",
+      "status": 200,
+      "contentType": "image/png",
+      "bytes": 24123,
+      "matchesLocalPagesBuild": true,
+      "sha256": "c045d656a6cbae474fab108ef760545377b08674a2800ddc1341a5061ffef4bd"
+    },
+    {
+      "path": "index.html",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 1682,
+      "matchesLocalPagesBuild": true,
+      "sha256": "cb9e776071e97f56896538f4a28cb19b6a97dd70365bfbc240db57257d058973"
+    },
+    {
+      "path": "manifest.webmanifest",
+      "status": 200,
+      "contentType": "application/manifest+json; charset=utf-8",
+      "bytes": 542,
+      "matchesLocalPagesBuild": true,
+      "sha256": "13cc930dcf9f72cfa66da47f91082df1510b7c17c2288dea0d4aea28ae824f13"
+    },
+    {
+      "path": "sw.js",
+      "status": 200,
+      "contentType": "application/javascript; charset=utf-8",
+      "bytes": 1869,
+      "matchesLocalPagesBuild": true,
+      "sha256": "1223d279e8716dff8abf93b525b729bfe06c55203966c943138c350c2b4bf369"
+    },
+    {
+      "path": "workbox-5bc3ec07.js",
+      "status": 200,
+      "contentType": "application/javascript; charset=utf-8",
+      "bytes": 14848,
+      "matchesLocalPagesBuild": true,
+      "sha256": "95f6de361e1478054d96a198292198e6feee680dfc3d068420c77b46e73ee0ab"
+    }
+  ],
+  "browser": {
+    "engine": "Codex in-app browser",
+    "title": "旅章",
+    "formVisible": true,
+    "sourceFallbackReplaced": true,
+    "offlineReadyIndicator": true,
+    "consoleErrors": [],
+    "actualOfflineChecked": false
+  },
+  "personalStoryPublished": false,
+  "realPhoneVerified": false,
+  "workflowConclusion": "success",
+  "workflowCompletedAt": "2026-09-21T02:59:01Z"
+}
