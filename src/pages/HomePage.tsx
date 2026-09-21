@@ -174,7 +174,7 @@ export default function HomePage() {
               </label>
             </div>
             <label>
-              喜欢的游戏风格
+              喜欢的游戏风格 <span className="optional">选填</span>
               <input
                 name="gameStyle"
                 value={input.gameStyle}

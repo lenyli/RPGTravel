@@ -26,12 +26,12 @@
   },
   "zip": {
     "path": "artifacts/RPGTravel-2.0.0-static.zip",
-    "bytes": 192238,
-    "sha256": "75971de1407cc04f04df6669e11995f956f0566e2e76ed93abe6a91d5b93890a",
+    "bytes": 192422,
+    "sha256": "8d91c7f8a9f924b9aad5c680abe30c2093ab8a8741cd991fe879a41568fe9567",
     "matchesDist": true,
     "files": 11,
     "zipIntegrity": true,
-    "verifiedAt": "2026-09-21 10:43"
+    "verifiedAt": "2026-09-21T11:24:24+08:00"
   },
   "publicDeployment": true,
   "realIPhoneVerified": false,
@@ -68,5 +68,27 @@
     "publicSiteRepaired": true,
     "businessSuiteRerun": false,
     "runUrl": "https://github.com/lenyli/RPGTravel/actions/runs/35555906496"
+  },
+  "optionalGameStyle": {
+    "verifiedAt": "2026-09-21T11:24:24+08:00",
+    "promptTestsPassed": 7,
+    "promptOtherTestsNotRun": 87,
+    "typecheck": true,
+    "emptyInputAccepted": true,
+    "noHiddenPreset": true,
+    "builds": [
+      "dist",
+      "dist-pages"
+    ],
+    "fullBusinessSuiteRerun": false,
+    "localBrowser": {
+      "optionalLabel": true,
+      "blankValue": true,
+      "noPlaceholder": true,
+      "notRequired": true,
+      "existingRawReplyPreserved": true,
+      "explicitLegacyTextSurvivesReload": true,
+      "finalFormStyleBlank": true
+    }
   }
 }

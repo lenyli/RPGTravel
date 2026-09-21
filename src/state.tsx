@@ -33,13 +33,14 @@ import {
   type StoredAdventure,
 } from './storage/db';
 
-export type Draft = { input: TripInput; raw: string };
+export type Draft = { version?: 2; input: TripInput; raw: string };
 const emptyDraft: Draft = {
+  version: 2,
   input: {
     destination: '',
     startDate: '',
     endDate: '',
-    gameStyle: '塞尔达传说 / 巫师 3',
+    gameStyle: '',
     interests: '',
     constraints: '',
   },
@@ -106,8 +107,22 @@ function useWorkspace() {
           (key) => typeof saved.input[key as keyof TripInput] === 'string',
         );
       if (validDraft && !dirty.current) {
-        draftRef.current = saved;
-        setDraftState(saved);
+        if (saved.version !== 2) {
+          // Remove the former preset once; later explicit choices stay intact.
+          setDraft({
+            ...saved,
+            input: {
+              ...saved.input,
+              gameStyle:
+                saved.input.gameStyle === '塞尔达传说 / 巫师 3'
+                  ? ''
+                  : saved.input.gameStyle,
+            },
+          });
+        } else {
+          draftRef.current = saved;
+          setDraftState(saved);
+        }
       }
       if (saved && !validDraft)
         setDraftStatus(
@@ -145,8 +160,9 @@ function useWorkspace() {
   };
   const setDraft = (next: Draft) => {
     if (updateGate.current) return;
-    draftRef.current = next;
-    setDraftState(next);
+    const versioned: Draft = { ...next, version: 2 };
+    draftRef.current = versioned;
+    setDraftState(versioned);
     dirty.current = true;
     setDraftStatus('正在保存草稿…');
     clearTimeout(saveTimer.current);
