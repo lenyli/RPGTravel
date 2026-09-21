@@ -11,7 +11,8 @@ import { createHash } from 'node:crypto';
 import { resolve } from 'node:path';
 await mkdir('artifacts', { recursive: true });
 const { version } = JSON.parse(await readFile('package.json', 'utf8'));
-const filename = `RPGTravel-${version}-static.zip`;
+const pages = process.argv.includes('--pages');
+const filename = `RPGTravel-${version}-${pages ? 'github-pages' : 'static'}.zip`;
 const name = `artifacts/${filename}`;
 const temporary = await mkdtemp('artifacts/.package-');
 try {
@@ -29,7 +30,10 @@ try {
       '*/.DS_Store',
       '.DS_Store',
     ],
-    { cwd: 'dist', env: { ...process.env, COPYFILE_DISABLE: '1' } },
+    {
+      cwd: pages ? 'dist-pages' : 'dist',
+      env: { ...process.env, COPYFILE_DISABLE: '1' },
+    },
   );
   execFileSync('unzip', ['-tq', candidate], { stdio: 'pipe' });
   const data = await readFile(candidate);

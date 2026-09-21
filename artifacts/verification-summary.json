@@ -26,11 +26,12 @@
   },
   "zip": {
     "path": "artifacts/RPGTravel-2.0.0-static.zip",
-    "bytes": 191794,
-    "sha256": "a3d681a0f3065c398cf5c6b877f0e2a0359d19541605061b01bd5e942f607373",
+    "bytes": 192238,
+    "sha256": "75971de1407cc04f04df6669e11995f956f0566e2e76ed93abe6a91d5b93890a",
     "matchesDist": true,
     "files": 11,
-    "zipIntegrity": true
+    "zipIntegrity": true,
+    "verifiedAt": "2026-09-21 10:43"
   },
   "publicDeployment": false,
   "realIPhoneVerified": false,
@@ -59,5 +60,12 @@
     "progress": "0 / 10",
     "screen": "photos / q_fuhu",
     "note": "Verified through existing PWA save-and-update UI; no test photos added to user story. IAB offline status label still shows preparing; actual IAB offline mode not validated."
+  },
+  "deploymentRepair": {
+    "verifiedAt": "2026-09-21 10:43",
+    "report": "artifacts/pages-verification.json",
+    "publicSiteExists": true,
+    "publicSiteRepaired": false,
+    "businessSuiteRerun": false
   }
 }

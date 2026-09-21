@@ -92,15 +92,22 @@ npm run preview -- --port 4173
 
 ### 安装、部署与离线边界
 
-最终 `dist/` 为纯静态文件，无需常驻 Node 或服务器数据库。**当前未公开部署，也没有真实手机访问地址。** 本机验收用 `npm run preview -- --port 4173`，打开 `http://127.0.0.1:4173/`。双击 ZIP 或 `file://` 不属于可安装/离线的交付方式。
+最终构建是纯静态文件，无需应用后端。项目根 `index.html` 是开发入口，不能双击运行，也不能直接作为 GitHub Pages 首页发布。错误入口现在会显示启动说明；正常启动后由应用替换。
 
-用户后续授权部署时，将 ZIP 解压后的内容上传到指定 HTTPS 静态托管目录。hash 路由无需服务端重写。根路径默认 `/`；子路径构建：
+本机使用：双击 [启动旅章.command](启动旅章.command)。启动器复用 4173 上已有的旅章；否则构建根路径产物并启动预览，自动打开 `http://127.0.0.1:4173/`，终端窗口需保持打开。首次缺少依赖时先执行 `npm ci`。也可以手动运行 `npm run build` 与 `npm run preview -- --port 4173 --strictPort`。`file://` 不属于可安装/离线的运行方式。
+
+仓库对应站点为 `https://lenyli.github.io/RPGTravel/`，必须按大小写一致的 `/RPGTravel/` 构建。专用命令：
 
 ```sh
-DEPLOY_BASE=/rpg-trip/ npm run build
+npm run build:pages
+npm run package:pages
 ```
 
-`vite.config.ts` 统一控制 base、manifest id/start_url/scope 与缓存标识；图标引用匹配该路径。更换路径/origin 之前先导出备份，迁移后手动恢复。恢复默认根目录产物使用 `npm run build`。
+输出 `dist-pages/` 与 `artifacts/RPGTravel-2.0.0-github-pages.zip`；根路径包 `RPGTravel-2.0.0-static.zip` 供本机或域名根目录使用，两种包不可混用。`vite.config.ts` 统一控制资源、manifest id/start_url/scope 与缓存标识。hash 路由无需服务端重写。更换 origin 之前先导出备份，迁移后手动恢复。
+
+已准备 [.github/workflows/pages.yml](.github/workflows/pages.yml)：仅手动触发，Node 22 安装固定依赖后以 `/RPGTravel/` 构建，仅上传 `dist/`。获得发布授权后，将此工作流提交到远端默认分支，在仓库 Settings → Pages 将 Source 设为 GitHub Actions，再从 Actions 手动运行“Deploy 旅章 to GitHub Pages”。流程不创建站点，也不因推送自动公开部署。发布是否成功以 [CURRENT_STATUS.md](CURRENT_STATUS.md) 的实际线上核验为准。
+
+部署配置依据 [Vite GitHub Pages 文档](https://vite.dev/guide/static-deploy.html#github-pages) 和 [GitHub Pages 工作流文档](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)。
 
 首次联网打开并完成资源缓存后可离线重开首页和任务，读取草稿、生成 Prompt、导入、推进、导出和恢复。外部 AI、地图、来源网站及定位提供者不属于离线保证。普通手机局域网 HTTP 地址不是该手机的 localhost，不能据此宣称定位/安装成立。
 

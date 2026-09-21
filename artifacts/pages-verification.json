@@ -1,0 +1,47 @@
+{
+  "date": "2026-09-21",
+  "liveDiagnosis": {
+    "url": "https://lenyli.github.io/RPGTravel/",
+    "htmlStatus": 200,
+    "entry": "/src/main.tsx",
+    "entryStatus": 404,
+    "unexpandedBaseToken": true,
+    "publicSiteRepaired": false
+  },
+  "packages": [
+    {
+      "directory": "dist",
+      "base": "/",
+      "manifest": true,
+      "resources": 5,
+      "zip": "artifacts/RPGTravel-2.0.0-static.zip",
+      "bytes": 192238,
+      "sha256": "75971de1407cc04f04df6669e11995f956f0566e2e76ed93abe6a91d5b93890a",
+      "files": 11,
+      "matchesDist": true
+    },
+    {
+      "directory": "dist-pages",
+      "base": "/RPGTravel/",
+      "manifest": true,
+      "resources": 5,
+      "zip": "artifacts/RPGTravel-2.0.0-github-pages.zip",
+      "bytes": 192290,
+      "sha256": "119aac26a59bb09ee4c4839a4b4f9fba30343da19076a493c2bd429dc94f89d9",
+      "files": 11,
+      "matchesDist": true
+    }
+  ],
+  "localBrowser": {
+    "rootUrl": "http://127.0.0.1:4173/#/library",
+    "title": "旅章",
+    "story": "云外无终",
+    "progress": "0 / 10",
+    "pagesUrl": "http://127.0.0.1:4179/RPGTravel/",
+    "pagesFormVisible": true,
+    "pagesOfflineReadyIndicator": true,
+    "actualOfflineChecked": false,
+    "fileUrlBrowserCheck": "Blocked by browser URL policy; source only checked",
+    "launcher": "zsh -n passed; Finder double-click not tested"
+  }
+}

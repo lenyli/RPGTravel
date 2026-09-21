@@ -16,7 +16,28 @@
     <title>旅章</title>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <main
+        style="
+          max-width: 38rem;
+          margin: 12vh auto;
+          padding: 1.5rem;
+          font-family: system-ui, sans-serif;
+          line-height: 1.8;
+          color: #234d3c;
+        "
+      >
+        <h1>旅章正在打开</h1>
+        <p>如果一直停留在这里，应用还没有成功启动。</p>
+        <p>
+          在本机使用：请先双击项目目录里的“启动旅章.command”，再
+          <a href="http://127.0.0.1:4173/">打开本机旅章</a>。 请不要直接打开
+          index.html。
+        </p>
+        <p>如果你正在访问已发布的网站，请联系维护者检查部署文件。</p>
+        <noscript>旅章需要 JavaScript，请在浏览器中启用后刷新。</noscript>
+      </main>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
