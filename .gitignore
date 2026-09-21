@@ -11,10 +11,10 @@
 !/package-lock.json
 !/tsconfig.json
 !/vite.config.ts
-!/public/icons/apple-touch-icon.png
-!/public/icons/icon-192.png
-!/public/icons/icon-512.png
-!/public/icons/maskable-512.png
+!/public/icons/apple-touch-icon.jpg
+!/public/icons/icon-192.jpg
+!/public/icons/icon-512.jpg
+!/public/icons/maskable-512.jpg
 !/src/App.tsx
 !/src/components/Common.tsx
 !/src/components/PhotoJournal.tsx

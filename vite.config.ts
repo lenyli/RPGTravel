@@ -32,7 +32,7 @@ export default defineConfig({
     VitePWA({
       registerType: 'prompt',
       injectRegister: false,
-      includeAssets: ['icons/*.png'],
+      includeAssets: ['icons/*.jpg'],
       manifest: {
         id: base,
         name: APP_NAME,
@@ -46,28 +46,28 @@ export default defineConfig({
         background_color: '#f5f2e9',
         icons: [
           {
-            src: 'icons/icon-192.png',
+            src: 'icons/icon-192.jpg',
             sizes: '192x192',
-            type: 'image/png',
+            type: 'image/jpeg',
             purpose: 'any',
           },
           {
-            src: 'icons/icon-512.png',
+            src: 'icons/icon-512.jpg',
             sizes: '512x512',
-            type: 'image/png',
+            type: 'image/jpeg',
             purpose: 'any',
           },
           {
-            src: 'icons/maskable-512.png',
+            src: 'icons/maskable-512.jpg',
             sizes: '512x512',
-            type: 'image/png',
+            type: 'image/jpeg',
             purpose: 'maskable',
           },
         ],
       },
       workbox: {
         cacheId: `rpg-trip-${base.replace(/[^a-z0-9]/gi, '_')}`,
-        globPatterns: ['**/*.{js,css,html,png,webmanifest}'],
+        globPatterns: ['**/*.{js,css,html,jpg,jpeg,webmanifest}'],
         navigateFallback: 'index.html',
         navigateFallbackDenylist: [/\/api\//],
         cleanupOutdatedCaches: false,
