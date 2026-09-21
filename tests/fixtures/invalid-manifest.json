@@ -36,8 +36,8 @@
     "code": "COORDINATE_SOURCE_REQUIRED"
   },
   {
-    "file": "invalid-source-protocol.json",
-    "code": "INVALID_SOURCE_URL"
+    "file": "invalid-source-type.json",
+    "code": "INVALID_FIELD"
   },
   {
     "file": "invalid-missing-ending.json",

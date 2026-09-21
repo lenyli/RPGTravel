@@ -7,6 +7,21 @@ export type LocatedPosition = Coordinates & {
 };
 export type MapProvider = 'amap' | 'apple' | 'google';
 
+export function sourceHref(value: string): string | undefined {
+  // Imported source text stays unchanged; only derive a browser link for display.
+  const raw = value.trim();
+  const markdown = raw.match(/^\[[^\]\r\n]*\]\(([\s\S]*)\)$/);
+  const target = (markdown?.[1] ?? raw).replace(/^<([^<>]*)>$/, '$1');
+  if (/[\u0000-\u001f\u007f]/.test(target)) return;
+  try {
+    const url = new URL(target);
+    if (['http:', 'https:'].includes(url.protocol) && url.hostname)
+      return url.href;
+  } catch {
+    // Unrecognized addresses are still shown as their original text.
+  }
+}
+
 export function mapUrls(
   location: Quest['location'],
 ): Record<MapProvider, string> {

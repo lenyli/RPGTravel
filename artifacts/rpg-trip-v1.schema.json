@@ -143,11 +143,8 @@
                 "pattern": "\\S"
               },
               "url": {
-                "description": "实际查阅的 http/https 来源页面",
-                "type": "string",
-                "minLength": 1,
-                "maxLength": 2048,
-                "pattern": "^https?:\\/\\/[^\\s]+$"
+                "description": "AI 提供的来源网址原文；不因网址写法拒绝导入",
+                "type": "string"
               },
               "checkedOn": {
                 "description": "生成 AI 实际查阅的日期，不是提示生成日期",
@@ -217,11 +214,9 @@
             "pattern": "\\S"
           },
           "intro": {
-            "description": "完整非空文本，最多 20000 字符",
+            "description": "区域简介；没有提供时可留空",
             "type": "string",
-            "minLength": 1,
-            "maxLength": 20000,
-            "pattern": "\\S"
+            "maxLength": 20000
           },
           "questIds": {
             "description": "本区域任务的展示顺序，不限制到访顺序",

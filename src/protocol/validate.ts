@@ -1,4 +1,9 @@
-import { tripSchema, type RPGTrip } from './schema';
+import {
+  adventureSchema,
+  chapterSchema,
+  tripSchema,
+  type RPGTrip,
+} from './schema';
 import { isReservedId, MAX_REPLY_BYTES, unsafeStructureIssue } from './extract';
 
 export type Issue = { code: string; path: string; message: string };
@@ -21,9 +26,70 @@ export function isCalendarDate(value: string): boolean {
 
 function normalize(input: unknown): { value: unknown; warnings: string[] } {
   const warnings: string[] = [];
-  if (!record(input) || !Array.isArray(input.quests))
-    return { value: input, warnings };
-  const quests = input.quests.map((quest: unknown, index: number) => {
+  if (!record(input)) return { value: input, warnings };
+  const value = { ...input };
+  if (!Object.hasOwn(value, 'adventure')) {
+    const keys = Object.keys(adventureSchema.shape);
+    const flat = Object.fromEntries(keys.map((key) => [key, input[key]]));
+    const candidates = [
+      { key: '$', data: flat },
+      ...['meta', 'trip', 'metadata'].map((key) => ({ key, data: input[key] })),
+    ].filter((candidate) => adventureSchema.safeParse(candidate.data).success);
+    if (candidates.length === 1) {
+      const candidate = candidates[0];
+      value.adventure = candidate.data;
+      if (candidate.key === '$') {
+        for (const key of keys) delete value[key];
+        warnings.push(
+          '根对象中完整的冒险概要字段已收拢至 adventure，内容未改写。',
+        );
+      } else {
+        delete value[candidate.key];
+        warnings.push(
+          `完整的 ${candidate.key} 冒险概要已改用 adventure 字段，内容未改写。`,
+        );
+      }
+    }
+  }
+  if (Array.isArray(input.chapters)) {
+    value.chapters = input.chapters.map((chapter: unknown, index: number) => {
+      if (!record(chapter)) return chapter;
+      const next = { ...chapter };
+      if (
+        typeof next.subtitle === 'string' &&
+        (!Object.hasOwn(next, 'intro') || typeof next.intro === 'string')
+      ) {
+        const intro = typeof next.intro === 'string' ? next.intro : '';
+        next.intro = !intro
+          ? next.subtitle
+          : !next.subtitle || intro === next.subtitle
+            ? intro
+            : `${intro}\n\n${next.subtitle}`;
+        delete next.subtitle;
+        warnings.push(
+          `第 ${index + 1} 个章节的 subtitle 已并入 intro，原文字保留。`,
+        );
+      }
+      if (
+        !Object.hasOwn(next, 'area') &&
+        chapterSchema.shape.title.safeParse(next.title).success
+      ) {
+        next.area = next.title;
+        warnings.push(
+          `第 ${index + 1} 个章节缺少 area，已使用现有章节标题作为分组名称。`,
+        );
+      }
+      if (!Object.hasOwn(next, 'intro')) {
+        next.intro = '';
+        warnings.push(
+          `第 ${index + 1} 个章节未给出 intro，已留空，不补写剧情。`,
+        );
+      }
+      return next;
+    });
+  }
+  if (!Array.isArray(input.quests)) return { value, warnings };
+  value.quests = input.quests.map((quest: unknown, index: number) => {
     if (!record(quest)) return quest;
     const next = { ...quest };
     for (const key of ['npcIds', 'sourceIds']) {
@@ -54,7 +120,7 @@ function normalize(input: unknown): { value: unknown; warnings: string[] } {
     }
     return next;
   });
-  return { value: { ...input, quests }, warnings };
+  return { value, warnings };
 }
 
 export function validateTrip(input: unknown): TripValidation {
@@ -135,13 +201,51 @@ export function validateTrip(input: unknown): TripValidation {
             path,
             message: '字段为空、数量不足或数值过小，请按 Schema 补齐。',
           };
-        if (issue.path.at(-1) === 'url')
+        let actual = normalized.value;
+        for (const part of issue.path) {
+          actual =
+            (record(actual) || Array.isArray(actual)) &&
+            Object.hasOwn(actual, part)
+              ? (actual as Record<PropertyKey, unknown>)[part]
+              : undefined;
+        }
+        if (actual === undefined)
           return {
-            code: 'INVALID_SOURCE_URL',
+            code: 'INVALID_FIELD',
             path,
             message:
-              '来源 URL 只接受有效的 http 或 https 页面，不允许脚本或本地文件地址。',
+              path === '$.adventure'
+                ? '缺少冒险概要对象 adventure（标题、开场、结局等）；请把已有完整概要放入该对象，缺少的剧情需由 AI 补齐。'
+                : `缺少必填字段 ${String(issue.path.at(-1) ?? '$')}；请按完整 Schema 提供该字段，不使用空白代替必填内容。`,
           };
+        if (issue.code === 'invalid_type') {
+          const typeLabels: Record<string, string> = {
+            string: '文字',
+            object: '对象',
+            array: '数组',
+            number: '数字',
+            boolean: '布尔值',
+            int: '整数',
+          };
+          const expected = typeLabels[issue.expected] ?? issue.expected;
+          const received =
+            actual === null
+              ? 'null'
+              : Array.isArray(actual)
+                ? '数组'
+                : typeof actual === 'object'
+                  ? '对象'
+                  : typeof actual === 'string'
+                    ? '文字'
+                    : typeof actual === 'number'
+                      ? '数字'
+                      : typeof actual;
+          return {
+            code: 'INVALID_FIELD',
+            path,
+            message: `字段类型错误：需要${expected}，实际为${received}；请保留原内容并调整为 Schema 要求的类型。`,
+          };
+        }
         if (issue.path.at(-1) === 'id')
           return {
             code: 'INVALID_ID',
@@ -153,7 +257,9 @@ export function validateTrip(input: unknown): TripValidation {
           code: 'INVALID_FIELD',
           path,
           message:
-            '字段缺失、类型或格式不符合协议；请按完整 Schema 修正，不使用空白代替必填内容。',
+            issue.code === 'invalid_value'
+              ? `字段值不符合协议；允许值为 ${issue.values.map((value) => JSON.stringify(value)).join('、')}。`
+              : '字段格式不符合协议；请按完整 Schema 修正格式，不使用空白代替必填内容。',
         };
       }),
     };
@@ -232,17 +338,6 @@ export function validateTrip(input: unknown): TripValidation {
   }
   data.adventure.sources.forEach((source, index) => {
     checkDate(source.checkedOn, `$.adventure.sources[${index}].checkedOn`);
-    try {
-      const url = new URL(source.url);
-      if (!['http:', 'https:'].includes(url.protocol) || !url.hostname)
-        throw new Error('url');
-    } catch {
-      add(
-        'INVALID_SOURCE_URL',
-        `$.adventure.sources[${index}].url`,
-        '来源必须是有效的 http 或 https 页面地址。',
-      );
-    }
   });
 
   const chapters = [...data.chapters].sort((a, b) => a.order - b.order);

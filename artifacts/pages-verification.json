@@ -16,11 +16,11 @@
       "manifest": true,
       "resources": 5,
       "zip": "artifacts/RPGTravel-2.0.0-static.zip",
-      "bytes": 192422,
-      "sha256": "8d91c7f8a9f924b9aad5c680abe30c2093ab8a8741cd991fe879a41568fe9567",
+      "bytes": 193694,
+      "sha256": "f2b75ef97f7e91ef8f6eadbc2753ba18ced06a0f2e64bbd5c013688fa7744fe0",
       "files": 11,
       "matchesDist": true,
-      "verifiedAt": "2026-09-21T11:24:24+08:00"
+      "verifiedAt": "2026-09-21T12:26:00+08:00"
     },
     {
       "directory": "dist-pages",
@@ -28,11 +28,11 @@
       "manifest": true,
       "resources": 5,
       "zip": "artifacts/RPGTravel-2.0.0-github-pages.zip",
-      "bytes": 192463,
-      "sha256": "07b65f826f45b3f05185a68cd578f89e122231b34f7169c563e6676fab298c6f",
+      "bytes": 193739,
+      "sha256": "db22eb211907b92e647d94fb772851d06917dab0fc73d40cb878061611ebec77",
       "files": 11,
       "matchesDist": true,
-      "verifiedAt": "2026-09-21T11:24:24+08:00"
+      "verifiedAt": "2026-09-21T12:26:00+08:00"
     }
   ],
   "localBrowser": {

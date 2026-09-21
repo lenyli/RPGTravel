@@ -6,9 +6,53 @@ import {
   mapUrls,
   reliableDistance,
   requestPosition,
+  sourceHref,
 } from '../../src/domain/navigation';
 
 const location = fixture.quests[0].location as Quest['location'];
+
+describe('来源原文的安全链接', () => {
+  it.each([
+    ['https://example.com/travel', 'https://example.com/travel'],
+    [' HTTP://EXAMPLE.COM/travel ', 'http://example.com/travel'],
+    [
+      '[https://example.com/travel](https://example.com/travel)',
+      'https://example.com/travel',
+    ],
+    [
+      '[峨眉山](https://example.com/route_(north)?q=1#part)',
+      'https://example.com/route_(north)?q=1#part',
+    ],
+    ['[资料](<https://example.com/travel>)', 'https://example.com/travel'],
+    ['<https://example.com/travel>', 'https://example.com/travel'],
+  ])('从来源文本派生可打开的 HTTP/HTTPS 链接 %s', (value, href) => {
+    expect(sourceHref(value)).toBe(href);
+  });
+
+  it.each([
+    '',
+    ' \n\t',
+    '这是 AI 给出的未确认资料地址',
+    'www.example.com/travel',
+    '//example.com/travel',
+    'https://',
+    'javascript:alert(1)',
+    'data:text/html,<script>alert(1)</script>',
+    'file:///旅行/资料.html',
+    '[资料](javascript:alert(1))',
+    '[资料](data:text/html,hello)',
+    '[资料](file:///旅行/资料.html)',
+    'java\nscript:alert(1)',
+    'java\tscript:alert(1)',
+    '\u0000javascript:alert(1)',
+    '[资料](java\rscript:alert(1))',
+    'htt\tps://example.com/travel',
+    'https://exam\nple.com/travel',
+    '[资料](https://example.com/travel\rmore)',
+  ])('仅显示原文，不为不可识别或控制字符伪装的内容创建链接 %j', (value) => {
+    expect(sourceHref(value)).toBeUndefined();
+  });
+});
 
 describe('受控地图入口', () => {
   it('中文与 & 只作为编码关键词，高德无坐标也不泄露故事或起点', () => {

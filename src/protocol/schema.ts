@@ -27,12 +27,7 @@ const references = (max: number) => z.array(id).max(max);
 export const sourceSchema = z.strictObject({
   id,
   title,
-  url: z
-    .string()
-    .min(1)
-    .max(2048)
-    .regex(/^https?:\/\/[^\s]+$/)
-    .describe('实际查阅的 http/https 来源页面'),
+  url: z.string().describe('AI 提供的来源网址原文；不因网址写法拒绝导入'),
   checkedOn: date.describe('生成 AI 实际查阅的日期，不是提示生成日期'),
 });
 
@@ -70,7 +65,7 @@ export const chapterSchema = z.strictObject({
   order: z.number().int().min(1).max(60),
   title,
   area: title.describe('按地点区域分组，不是固定日程'),
-  intro: text,
+  intro: optionalText.describe('区域简介；没有提供时可留空'),
   questIds: references(60)
     .min(1)
     .describe('本区域任务的展示顺序，不限制到访顺序'),

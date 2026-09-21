@@ -46,26 +46,29 @@ export function unsafeStructureIssue(value: unknown): Issue | null {
 
 type Extraction =
   | { success: true; value: unknown; warnings: string[] }
-  | { success: false; errors: Issue[] };
+  | { success: false; errors: Issue[]; candidates?: unknown[] };
 const fail = (code: string, message: string): Extraction => ({
   success: false,
   errors: [{ code, path: '$', message }],
 });
 
-// This scanner only identifies ambiguous extra objects. It never rescues or
-// selects a substring for import; accepted candidates still use JSON.parse.
-function countJsonObjects(text: string): number {
-  let count = 0;
+// Read complete top-level containers without treating markers or braces inside
+// JSON strings as reply delimiters. Never repair truncated or malformed JSON.
+function scanJsonContainers(text: string): {
+  values: unknown[];
+  malformed: boolean;
+} {
+  const values: unknown[] = [];
   let start = -1;
-  let depth = 0;
+  const closers: string[] = [];
   let quoted = false;
   let escaped = false;
   for (let index = 0; index < text.length; index++) {
     const char = text[index];
     if (start === -1) {
-      if (char === '{') {
+      if (char === '{' || char === '[') {
         start = index;
-        depth = 1;
+        closers.push(char === '{' ? '}' : ']');
       }
       continue;
     }
@@ -76,19 +79,77 @@ function countJsonObjects(text: string): number {
       continue;
     }
     if (char === '"') quoted = true;
-    else if (char === '{') depth++;
-    else if (char === '}' && --depth === 0) {
+    else if (char === '{' || char === '[')
+      closers.push(char === '{' ? '}' : ']');
+    else if (char === '}' || char === ']') {
+      if (char !== closers.pop()) return { values, malformed: true };
+      if (closers.length) continue;
+      const candidate = text.slice(start, index + 1);
       try {
-        JSON.parse(text.slice(start, index + 1));
-        count++;
+        values.push(JSON.parse(candidate));
       } catch {
-        /* Invalid prose is not another JSON candidate. */
+        // Ordinary prose such as [说明] is not a JSON candidate. A JSON-like
+        // fragment that fails parsing must not be silently dropped.
+        if (
+          (candidate.startsWith('{') &&
+            /[":“”'}]/.test(candidate.slice(1, -1))) ||
+          /^\[\s*(?:[[{"\d\]\-]|true|false|null)/.test(candidate)
+        )
+          return { values, malformed: true };
       }
       start = -1;
-      if (count > 1) return count;
     }
   }
-  return count;
+  return { values, malformed: start !== -1 };
+}
+
+function hasPackageFields(value: unknown): boolean {
+  const pending = [value];
+  while (pending.length) {
+    const current = pending.pop();
+    if (!current || typeof current !== 'object') continue;
+    if (Array.isArray(current)) {
+      for (const child of current) pending.push(child);
+    } else if (
+      ['adventure', 'quests', 'chapters', 'adventureData'].some((key) =>
+        Object.hasOwn(current, key),
+      ) ||
+      (current as Record<string, unknown>).format === 'RPG_TRIP_SAVE'
+    )
+      return true;
+  }
+  return false;
+}
+
+function isBackupEnvelope(value: unknown): boolean {
+  return (
+    !!value &&
+    typeof value === 'object' &&
+    Object.hasOwn(value, 'format') &&
+    (value as Record<string, unknown>).format === 'RPG_TRIP_SAVE'
+  );
+}
+
+// Object key order and formatting do not make a second copy a different story.
+function sameJson(left: unknown, right: unknown): boolean {
+  const pending: [unknown, unknown][] = [[left, right]];
+  while (pending.length) {
+    const [a, b] = pending.pop()!;
+    if (a === b) continue;
+    if (!a || !b || typeof a !== 'object' || typeof b !== 'object')
+      return false;
+    if (Array.isArray(a) !== Array.isArray(b)) return false;
+    const keys = Object.keys(a);
+    if (keys.length !== Object.keys(b).length) return false;
+    for (const key of keys) {
+      if (!Object.hasOwn(b, key)) return false;
+      pending.push([
+        (a as Record<string, unknown>)[key],
+        (b as Record<string, unknown>)[key],
+      ]);
+    }
+  }
+  return true;
 }
 
 export function extractReply(raw: string): Extraction {
@@ -106,104 +167,66 @@ export function extractReply(raw: string): Extraction {
   if (!content)
     return fail('EMPTY_REPLY', '请先粘贴 AI 的完整回答或存档内容。');
 
-  let candidate = content;
-  if (content.includes('<RPG_TRIP') || content.includes('</RPG_TRIP')) {
-    const markers = [...content.matchAll(/<\/?RPG_TRIP[^>]*>/g)];
-    if (
-      markers.some(
-        ([tag]) => tag !== '<RPG_TRIP_V1>' && tag !== '</RPG_TRIP_V1>',
-      )
-    )
-      return fail(
-        'UNSUPPORTED_PROTOCOL',
-        '这份回复使用了不支持的 RPG_TRIP 协议版本；当前只支持 V1。',
-      );
-    const starts = markers.filter(([tag]) => tag === '<RPG_TRIP_V1>');
-    const ends = markers.filter(([tag]) => tag === '</RPG_TRIP_V1>');
-    if (starts.length > 1 || ends.length > 1)
-      return fail(
-        'MULTIPLE_PACKAGES',
-        '发现多个冒险包，请只保留一份完整回答后重试。',
-      );
-    if (starts.length === 1 && ends.length === 0)
-      return fail(
-        'INCOMPLETE_REPLY',
-        '这份回复缺少结尾，可能复制不完整。请重新复制完整回复。',
-      );
-    if (
-      starts.length !== 1 ||
-      ends.length !== 1 ||
-      starts[0].index! >= ends[0].index!
-    )
-      return fail(
-        'INVALID_MARKERS',
-        '协议标记缺失、顺序错误或不完整，请复制从开始到结尾的完整回答。',
-      );
-    const start = starts[0].index!;
-    const end = ends[0].index!;
-    candidate = content.slice(start + '<RPG_TRIP_V1>'.length, end).trim();
-    const outside =
-      content.slice(0, start) + content.slice(end + '</RPG_TRIP_V1>'.length);
-    if (countJsonObjects(outside) > 0)
-      return fail(
-        'MULTIPLE_PACKAGES',
-        '协议标记外还有另一份 JSON 候选内容，请只保留一份冒险包。',
-      );
-    if (outside.trim()) warnings.push('已忽略协议标记外的说明文字。');
-  } else if (!content.startsWith('{')) {
-    const fences = [
-      ...content.matchAll(/```(?:json)?[ \t]*\r?\n([\s\S]*?)\r?\n?[ \t]*```/gi),
-    ];
-    const fenceCount = (content.match(/```/g) ?? []).length;
-    if (fences.length > 1 || fenceCount > 2)
-      return fail(
-        'MULTIPLE_PACKAGES',
-        '发现多个代码围栏或候选包，请只保留一份 JSON 冒险包。',
-      );
-    if (fences.length === 1 && fenceCount === 2) {
-      candidate = fences[0][1].trim();
-      const outside =
-        content.slice(0, fences[0].index!) +
-        content.slice(fences[0].index! + fences[0][0].length);
-      if (countJsonObjects(outside) > 0)
-        return fail(
-          'MULTIPLE_PACKAGES',
-          '代码围栏外还有另一份 JSON 候选内容，请只保留一份冒险包。',
-        );
-      warnings.push('已提取唯一代码围栏中的 JSON。');
-    } else if (fenceCount) {
-      return fail(
-        'INCOMPLETE_REPLY',
-        '代码围栏不完整或不是 JSON，请重新复制完整回答。',
-      );
-    }
-  }
-
   let value: unknown;
   try {
-    value = JSON.parse(candidate);
+    // The normal protocol envelope is not a warning. Parse its entire body;
+    // repeated or mixed wrappers fall back to complete-container extraction.
+    value = JSON.parse(
+      content.startsWith('<RPG_TRIP_V1>') && content.endsWith('</RPG_TRIP_V1>')
+        ? content.slice('<RPG_TRIP_V1>'.length, -'</RPG_TRIP_V1>'.length)
+        : content,
+    );
   } catch {
-    if (bytes > MAX_REPLY_BYTES)
+    const scanned = scanJsonContainers(content);
+    if (scanned.malformed || scanned.values.length === 0) {
+      if (bytes > MAX_REPLY_BYTES)
+        return fail(
+          'REPLY_TOO_LARGE',
+          'AI 原始回复超过 2 MiB 上限，不能截断后导入。',
+        );
+      return fail(
+        'INVALID_JSON',
+        'JSON 无法解析，可能被截断或含非法标点。请复制修复提示，让 AI 返回完整包。',
+      );
+    }
+    const packages = scanned.values.filter(hasPackageFields);
+    const candidates = packages.length ? packages : scanned.values;
+    if (bytes > MAX_REPLY_BYTES && !candidates.every(isBackupEnvelope))
       return fail(
         'REPLY_TOO_LARGE',
-        'AI 原始回复超过 2 MiB 上限，不能截断后导入。',
+        'AI 原始回复超过 2 MiB 上限（包括外层说明文字），不能截断后导入。',
       );
-    if (countJsonObjects(candidate) > 1)
-      return fail(
-        'MULTIPLE_PACKAGES',
-        '发现多个 JSON 候选包，请只保留一份完整冒险包。',
-      );
-    return fail(
-      'INVALID_JSON',
-      'JSON 无法解析，可能被截断或含非法标点。请复制修复提示，让 AI 返回完整包。',
-    );
+    for (const candidate of candidates) {
+      const unsafe = unsafeStructureIssue(candidate);
+      if (unsafe) return { success: false, errors: [unsafe] };
+    }
+    const unique: unknown[] = [];
+    for (const candidate of candidates)
+      if (!unique.some((existing) => sameJson(existing, candidate)))
+        unique.push(candidate);
+    if (unique.length > 1)
+      return {
+        success: false,
+        errors: [
+          {
+            code: 'MULTIPLE_PACKAGES',
+            path: '$',
+            message:
+              '这份回答包含内容不同的多个故事或存档，请选择要导入的那一份；无需让 AI 再改写故事。',
+          },
+        ],
+        candidates: unique,
+      };
+    value = unique[0];
+    warnings.push('已忽略 JSON 对象外的标记、围栏或说明文字。');
+    if (packages.length && packages.length < scanned.values.length)
+      warnings.push('已忽略故事数据之外的 JSON 示例。');
+    if (candidates.length > 1)
+      warnings.push('已合并内容相同的重复故事或存档，保留一份完整数据。');
   }
   if (!value || typeof value !== 'object' || Array.isArray(value))
     return fail('INVALID_ROOT', '冒险或存档必须是一个完整 JSON 对象。');
-  const isBackup =
-    Object.hasOwn(value, 'format') &&
-    (value as Record<string, unknown>).format === 'RPG_TRIP_SAVE';
-  if (!isBackup && bytes > MAX_REPLY_BYTES)
+  if (!isBackupEnvelope(value) && bytes > MAX_REPLY_BYTES)
     return fail(
       'REPLY_TOO_LARGE',
       'AI 原始回复超过 2 MiB 上限（包括外层说明文字），不能截断后导入。',

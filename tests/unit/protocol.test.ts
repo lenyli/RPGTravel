@@ -15,6 +15,7 @@ import {
   MAX_REPLY_BYTES,
 } from '../../src/protocol/extract';
 import { isCalendarDate, validateTrip } from '../../src/protocol/validate';
+import { createSave, parseImport } from '../../src/storage/backup';
 import {
   createGenerationPrompt,
   createRepairPrompt,
@@ -135,67 +136,26 @@ describe('reply extraction', () => {
   });
 
   it.each([
-    [
-      'missing ending marker',
-      () => `<RPG_TRIP_V1>${encoded()}`,
-      'INCOMPLETE_REPLY',
-    ],
-    [
-      'two marker packages',
-      () => `${wrapped()}\n${wrapped()}`,
-      'MULTIPLE_PACKAGES',
-    ],
-    [
-      'unknown marker version',
-      () => `<RPG_TRIP_V2>${encoded()}</RPG_TRIP_V2>`,
-      'UNSUPPORTED_PROTOCOL',
-    ],
-    [
-      'reversed markers',
-      () => `</RPG_TRIP_V1>${encoded()}<RPG_TRIP_V1>`,
-      'INVALID_MARKERS',
-    ],
-    [
-      'closing marker alone',
-      () => `${encoded()}</RPG_TRIP_V1>`,
-      'INVALID_MARKERS',
-    ],
-    [
-      'two code fences',
-      () =>
-        `\x60\x60\x60json\n{}\n\x60\x60\x60\n\x60\x60\x60json\n{}\n\x60\x60\x60`,
-      'MULTIPLE_PACKAGES',
-    ],
-    [
-      'unclosed code fence',
-      () => `\x60\x60\x60json\n${encoded()}`,
-      'INCOMPLETE_REPLY',
-    ],
+    ['missing ending marker', () => `<RPG_TRIP_V1>${encoded()}`],
+    ['unknown outer marker', () => `<RPG_TRIP_V2>${encoded()}</RPG_TRIP_V2>`],
+    ['reversed outer markers', () => `</RPG_TRIP_V1>${encoded()}<RPG_TRIP_V1>`],
+    ['closing marker alone', () => `${encoded()}</RPG_TRIP_V1>`],
+    ['unclosed code fence', () => `\x60\x60\x60json\n${encoded()}`],
+  ])('accepts complete JSON despite %s', (_name, content) => {
+    const result = extractReply((content as () => string)());
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.value).toEqual(fixture);
+      expect(result.warnings.length).toBeGreaterThan(0);
+    }
+  });
+
+  it.each([
     ['truncated JSON', () => encoded().slice(0, -30), 'INVALID_JSON'],
     ['illegal punctuation', () => '{“schemaVersion”: "1.1"}', 'INVALID_JSON'],
-    [
-      'two bare JSON packages',
-      () => `${encoded()}\n${encoded()}`,
-      'MULTIPLE_PACKAGES',
-    ],
-    [
-      'one marker package plus extra JSON',
-      () => `${wrapped()}\n${encoded()}`,
-      'MULTIPLE_PACKAGES',
-    ],
-    [
-      'one code fence plus extra JSON',
-      () => `\x60\x60\x60json\n${encoded()}\n\x60\x60\x60\n${encoded()}`,
-      'MULTIPLE_PACKAGES',
-    ],
-    [
-      'natural language braces',
-      () => `这里是 ${encoded()} 请导入`,
-      'INVALID_JSON',
-    ],
     ['array root', () => '[]', 'INVALID_ROOT'],
     ['empty reply', () => ' \n ', 'EMPTY_REPLY'],
-  ])('rejects %s without attempting content rescue', (_name, content, code) => {
+  ])('rejects %s without reconstructing content', (_name, content, code) => {
     const result = extractReply((content as () => string)());
     expect(result.success).toBe(false);
     if (!result.success) expect(result.errors[0].code).toBe(code);
@@ -508,6 +468,64 @@ describe('coordinates and safe normalization', () => {
     raw.quests[0].story = undefined;
     raw.quests[0].sourceIds = null;
     expect(validateTrip(raw).success).toBe(false);
+  });
+});
+
+describe('source URL text preservation', () => {
+  it.each([
+    ['HTTP URL', 'http://example.com/travel?name=峨眉山#路线'],
+    ['unreachable HTTPS URL', 'https://no-such-travel-source.invalid/path'],
+    ['no scheme', 'www.example.com/峨眉山'],
+    ['Markdown link', '[峨眉山资料](https://example.com/旅行)'],
+    [
+      'AI Markdown URL label',
+      '[https://example.com/travel](https://example.com/travel)',
+    ],
+    ['surrounding whitespace', ' \nhttps://example.com/原文\t '],
+    ['incomplete URL', 'https://'],
+    ['non-HTTP scheme', 'ftp://example.com/source'],
+    ['script text', 'javascript:alert(1)'],
+    ['local file text', 'file:///旅行/资料.html'],
+    ['empty text', ''],
+    ['whitespace text', ' \n\t'],
+    ['long URL', `https://example.com/?q=${'字'.repeat(3_000)}`],
+  ])(
+    'preserves %s through reply import and backup round-trip',
+    (_name, url) => {
+      const trip = structuredClone(coordinateFixture);
+      trip.adventure.sources[0].url = url;
+      const raw = `<RPG_TRIP_V1>\n${JSON.stringify(trip)}\n</RPG_TRIP_V1>`;
+      const imported = parseImport(raw);
+      expect(imported.success).toBe(true);
+      if (!imported.success) return;
+      expect(imported.data.adventure.sources[0].url).toBe(url);
+      expect(imported.data).toEqual(trip);
+      expect(imported.rawReply).toBe(raw);
+      expect(imported.warnings).toEqual([]);
+
+      const restored = parseImport(
+        JSON.stringify(createSave(imported.data, null)),
+      );
+      expect(restored.success).toBe(true);
+      if (restored.success) expect(restored.data).toEqual(trip);
+    },
+  );
+
+  it('still requires a string URL field and valid source metadata', () => {
+    for (const invalid of [undefined, null, 123, {}, []]) {
+      const trip = structuredClone(coordinateFixture);
+      Object.assign(trip.adventure.sources[0], { url: invalid });
+      expect(codes(trip)).toContain('INVALID_FIELD');
+    }
+    const trip = structuredClone(coordinateFixture);
+    trip.adventure.sources[0].checkedOn = '2026-02-30';
+    expect(codes(trip)).toContain('INVALID_DATE');
+  });
+
+  it('retains the whole-story size limit for URL text', () => {
+    const trip = structuredClone(coordinateFixture);
+    trip.adventure.sources[0].url = 'x'.repeat(MAX_REPLY_BYTES);
+    expect(codes(trip)).toContain('TRIP_TOO_LARGE');
   });
 });
 

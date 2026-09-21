@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import type { RPGTrip, Quest } from '../protocol/schema';
 import type { Progress } from '../domain/progress';
-import { mapUrls } from '../domain/navigation';
+import { mapUrls, sourceHref } from '../domain/navigation';
 import { createSave, saveFilename } from '../storage/backup';
 import type { PhotoAttachment } from '../domain/photos';
 
@@ -196,14 +196,22 @@ export function PracticalNotes({ data }: { data: RPGTrip }) {
       ))}
       {data.adventure.sources.length > 0 && (
         <ul className="sources">
-          {data.adventure.sources.map((s) => (
-            <li key={s.id}>
-              <a href={s.url} target="_blank" rel="noopener noreferrer">
-                {s.title} ↗
-              </a>
-              <span className="muted">AI 声明查阅于 {s.checkedOn}</span>
-            </li>
-          ))}
+          {data.adventure.sources.map((s) => {
+            const href = sourceHref(s.url);
+            return (
+              <li key={s.id}>
+                {href ? (
+                  <a href={href} target="_blank" rel="noopener noreferrer">
+                    {s.title} ↗
+                  </a>
+                ) : (
+                  s.title
+                )}
+                <span className="source-url">{s.url}</span>
+                <span className="muted">AI 声明查阅于 {s.checkedOn}</span>
+              </li>
+            );
+          })}
         </ul>
       )}
     </details>

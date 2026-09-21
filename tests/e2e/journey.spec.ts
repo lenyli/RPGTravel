@@ -389,24 +389,87 @@ test('恶意 HTML 是纯文本，未点击地图/来源不发第三方请求', a
     ),
   ).toBeUndefined();
   expect(external).toEqual([]);
-  await home(page);
-  await page.getByLabel('AI 的完整回答').fill(
-    wrapped({
-      ...fixture,
-      adventure: {
-        ...fixture.adventure,
-        sources: [
-          {
-            id: 'source_bad',
-            title: '恶意来源',
-            url: 'javascript:alert(1)',
-            checkedOn: '2026-09-20',
-          },
-        ],
-      },
+  await importTrip(page, {
+    ...fixture,
+    adventure: {
+      ...fixture.adventure,
+      sources: [
+        {
+          id: 'source_script',
+          title: '脚本形式原文',
+          url: 'javascript:alert(1)',
+          checkedOn: '2026-09-20',
+        },
+        {
+          id: 'source_markdown',
+          title: 'Markdown 来源',
+          url: '[https://example.com/travel](https://example.com/travel)',
+          checkedOn: '2026-09-20',
+        },
+        {
+          id: 'source_text',
+          title: '原样保留的来源',
+          url: 'www.example.com/旅行 资料',
+          checkedOn: '2026-09-20',
+        },
+      ],
+    },
+  });
+  await page.getByText('出行提醒与信息来源', { exact: true }).click();
+  await expect(
+    page.getByText('javascript:alert(1)', { exact: true }),
+  ).toBeVisible();
+  await expect(page.getByRole('link', { name: '脚本形式原文' })).toHaveCount(0);
+  await expect(page.locator('a[href^="javascript:"]')).toHaveCount(0);
+  await expect(
+    page.getByRole('link', { name: 'Markdown 来源 ↗', exact: true }),
+  ).toHaveAttribute('href', 'https://example.com/travel');
+  await expect(
+    page.getByText('[https://example.com/travel](https://example.com/travel)', {
+      exact: true,
     }),
-  );
-  await page.getByRole('button', { name: '生成我的冒险', exact: true }).click();
-  await expect(page.getByRole('alert')).toContainText(/来源|URL|http/i);
+  ).toBeVisible();
+  await expect(
+    page.getByText('www.example.com/旅行 资料', { exact: true }),
+  ).toBeVisible();
   expect(external).toEqual([]);
+});
+
+test('重复标记与章节别名可预览，不同故事可在本机选择导入', async ({ page }) => {
+  const { adventure, ...body } = structuredClone(fixture);
+  const compatible = {
+    ...body,
+    ...adventure,
+    chapters: body.chapters.map(({ area: _area, intro, ...chapter }) => ({
+      ...chapter,
+      subtitle: intro,
+    })),
+  };
+  const duplicate = `复制 <RPG_TRIP_V1> 到 </RPG_TRIP_V1> 的故事：\n${wrapped(compatible)}\n${wrapped(compatible)}`;
+  await preview(page, duplicate);
+  await expect(page.getByRole('dialog')).toContainText(fixture.adventure.title);
+  await expect(page.getByRole('alert')).toHaveCount(0);
+  await home(page);
+
+  const second = {
+    ...fixture,
+    adventure: { ...fixture.adventure, title: '第二份协议测试故事' },
+  };
+  const multiple = `${wrapped()}\n${wrapped(second)}`;
+  await page.getByLabel('AI 的完整回答').fill(multiple);
+  await page.getByRole('button', { name: '生成我的冒险', exact: true }).click();
+  await expect(page.getByRole('dialog')).toContainText('选择要导入的故事');
+  await expect(
+    page.getByRole('button', { name: '复制修复 Prompt', exact: true }),
+  ).toHaveCount(0);
+  await page
+    .getByRole('button', { name: '第 2 份 · 第二份协议测试故事', exact: true })
+    .click();
+  await expect(page.getByRole('dialog')).toContainText('第二份协议测试故事');
+  await expect(page.getByLabel('AI 的完整回答')).toHaveValue(multiple);
+  await page.getByRole('button', { name: '保存并开始', exact: true }).click();
+  await expect(page).toHaveURL(/#\/quest\//);
+  await library(page);
+  await expect(page.locator('article')).toHaveCount(1);
+  await expect(page.locator('article')).toContainText('第二份协议测试故事');
 });

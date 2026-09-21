@@ -22,7 +22,7 @@
       {
         "id": "source_test",
         "title": "危险协议",
-        "url": "javascript:alert(1)",
+        "url": 123,
         "checkedOn": "2026-09-20"
       }
     ]

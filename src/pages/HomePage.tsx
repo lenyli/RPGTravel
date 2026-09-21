@@ -7,7 +7,7 @@ import {
   type TripInput,
 } from '../protocol/prompt';
 import type { Issue } from '../protocol/validate';
-import { parseImport } from '../storage/backup';
+import { parseImport, type ImportCandidate } from '../storage/backup';
 import { MAX_ENVELOPE_BYTES } from '../protocol/extract';
 import { CopyButton, Compass, Modal } from '../components/Common';
 
@@ -20,6 +20,8 @@ export default function HomePage() {
   const [errors, setErrors] = useState<Issue[]>([]);
   const [preview, setPreview] = useState<Preview | null>(null);
   const [storyOnly, setStoryOnly] = useState<Preview | null>(null);
+  const [candidates, setCandidates] = useState<ImportCandidate[]>([]);
+  const [repairRaw, setRepairRaw] = useState(raw);
   const [duplicate, setDuplicate] = useState(false);
   const [showFormErrors, setShowFormErrors] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -34,6 +36,8 @@ export default function HomePage() {
   const field = (key: keyof TripInput, value: string) =>
     app.setDraft({ input: { ...input, [key]: value }, raw });
   const importRaw = (text = raw) => {
+    setRepairRaw(text);
+    setCandidates([]);
     const result = parseImport(text);
     if (result.success) {
       setPreview(result);
@@ -41,7 +45,8 @@ export default function HomePage() {
       setStoryOnly(null);
       setDuplicate(false);
     } else {
-      setErrors(result.errors);
+      setErrors(result.candidates?.length ? [] : result.errors);
+      setCandidates(result.candidates ?? []);
       setPreview(null);
       setStoryOnly(result.storyOnly || null);
     }
@@ -279,6 +284,7 @@ export default function HomePage() {
                 app.setDraft({ input, raw: e.target.value });
                 setErrors([]);
                 setStoryOnly(null);
+                setCandidates([]);
               }}
             />
             <button
@@ -321,7 +327,7 @@ export default function HomePage() {
                   </p>
                 )}
                 {!personalBackup && (
-                  <CopyButton text={createRepairPrompt(raw, errors)}>
+                  <CopyButton text={createRepairPrompt(repairRaw, errors)}>
                     复制修复 Prompt
                   </CopyButton>
                 )}
@@ -362,6 +368,20 @@ export default function HomePage() {
           </aside>
         </div>
       </div>
+      {candidates.length > 0 && (
+        <Modal title="选择要导入的故事" close={() => setCandidates([])}>
+          <p>这份回复包含不同的故事或存档，请选择一份预览。原始回答会保留。</p>
+          {candidates.map((candidate, index) => (
+            <button
+              key={index}
+              className="secondary full"
+              onClick={() => importRaw(candidate.raw)}
+            >
+              第 {index + 1} 份 · {candidate.title}
+            </button>
+          ))}
+        </Modal>
+      )}
       {preview && (
         <Modal
           title={duplicate ? '这段故事已在本机' : '你的冒险准备好了'}

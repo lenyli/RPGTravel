@@ -1,12 +1,14 @@
 {
-  "verifiedAt": "2026-09-20 16:28",
+  "verifiedAt": "2026-09-21T12:26:00+08:00",
   "candidate": "2.0.0",
   "decisionVersion": "v2.1",
   "schemaVersion": "1.1",
   "progressVersion": 2,
   "unit": {
-    "passed": 206,
-    "failed": 0
+    "passed": 281,
+    "failed": 0,
+    "files": 8,
+    "verifiedAt": "2026-09-21T12:26:00+08:00"
   },
   "e2e": {
     "startTime": "2026-09-20T08:26:30.861Z",
@@ -26,12 +28,12 @@
   },
   "zip": {
     "path": "artifacts/RPGTravel-2.0.0-static.zip",
-    "bytes": 192422,
-    "sha256": "8d91c7f8a9f924b9aad5c680abe30c2093ab8a8741cd991fe879a41568fe9567",
+    "bytes": 193694,
+    "sha256": "f2b75ef97f7e91ef8f6eadbc2753ba18ced06a0f2e64bbd5c013688fa7744fe0",
     "matchesDist": true,
     "files": 11,
     "zipIntegrity": true,
-    "verifiedAt": "2026-09-21T11:24:24+08:00"
+    "verifiedAt": "2026-09-21T12:26:00+08:00"
   },
   "publicDeployment": true,
   "realIPhoneVerified": false,
@@ -93,5 +95,29 @@
     "deployed": true,
     "deploymentRunUrl": "https://github.com/lenyli/RPGTravel/actions/runs/35557505717",
     "onlineOptionalBlankConfirmed": true
+  },
+  "importCompatibility": {
+    "verifiedAt": "2026-09-21T12:26:00+08:00",
+    "typecheck": true,
+    "e2e": {
+      "startTime": "2026-09-21T04:25:07.843Z",
+      "duration": 2113.825,
+      "expected": 4,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "e2eReport": "artifacts/import-compat-e2e-results.json",
+    "fullBrowserSuiteRerun": false,
+    "liveReply": {
+      "rawPreserved": true,
+      "previewPassed": true,
+      "chapters": 3,
+      "quests": 6,
+      "consoleErrors": [],
+      "savedAsNewAdventure": false
+    },
+    "missingOriginalReply": "The earlier phone reply with 116 field errors was lost; known field shapes were verified with synthetic fixtures, not that exact reply.",
+    "deployed": false
   }
 }

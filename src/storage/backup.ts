@@ -24,16 +24,37 @@ export type ImportedAdventure = {
   rawReply: string;
   warnings: string[];
 };
+export type ImportCandidate = { title: string; raw: string };
 export type ParseImportResult =
   | ImportedAdventure
-  | { success: false; errors: Issue[]; storyOnly?: ImportedAdventure };
+  | {
+      success: false;
+      errors: Issue[];
+      storyOnly?: ImportedAdventure;
+      candidates?: ImportCandidate[];
+    };
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
 
 export function parseImport(rawReply: string): ParseImportResult {
   const extracted = extractReply(rawReply);
-  if (!extracted.success) return extracted;
+  if (!extracted.success)
+    return {
+      ...extracted,
+      candidates: extracted.candidates?.map((value, index) => {
+        const metadata = isRecord(value)
+          ? (value.adventureData ?? value.adventure ?? value)
+          : null;
+        return {
+          title:
+            isRecord(metadata) && typeof metadata.title === 'string'
+              ? metadata.title
+              : `第 ${index + 1} 份故事`,
+          raw: JSON.stringify(value),
+        };
+      }),
+    };
   const input = extracted.value;
   if (isRecord(input) && input.format === 'RPG_TRIP_SAVE') {
     if (input.saveVersion !== 1 && input.saveVersion !== 2)
