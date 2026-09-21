@@ -57,7 +57,30 @@ jobs:
           test -f dist/index.html
           test -f dist/sw.js
           test -f dist/manifest.webmanifest
-          unexpected="$(find dist -type f | grep -Ev '\.(html|js|css|png|webmanifest)$' || true)"
+          unexpected="$(find dist -type f | grep -Ev '\.(html|js|css|png|jpe?g|webmanifest)
+          if [[ -n "$unexpected" ]]; then
+            printf '%s\n' 'Unexpected production files:' "$unexpected"
+            exit 1
+          fi
+      - name: Upload production files
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5
+        with:
+          path: ./dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5
+ || true)"
           if [[ -n "$unexpected" ]]; then
             printf '%s\n' 'Unexpected production files:' "$unexpected"
             exit 1
