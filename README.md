@@ -109,7 +109,7 @@ npm run package:pages
 
 输出 `dist-pages/` 与 `artifacts/RPGTravel-2.0.0-github-pages.zip`；根路径包 `RPGTravel-2.0.0-static.zip` 供本机或域名根目录使用，两种包不可混用。`vite.config.ts` 统一控制资源、manifest id/start_url/scope 与缓存标识。hash 路由无需服务端重写。本机地址与线上地址是不同 origin，存档不会自动迁移；请在本机导出完整存档，再到线上“从文件恢复”。
 
-已准备 [.github/workflows/pages.yml](.github/workflows/pages.yml)：仅手动触发，Node 22 安装固定依赖后以 `/RPGTravel/` 构建，仅上传 `dist/`。现有站点已按用户授权切换为 GitHub Actions，并成功部署。后续更新先将修改推送到远端默认分支，再从 Actions 手动运行“Deploy 旅章 to GitHub Pages”。流程不创建站点，也不因推送自动公开部署。发布是否成功以 [CURRENT_STATUS.md](CURRENT_STATUS.md) 的实际线上核验为准。
+已准备 [.github/workflows/pages.yml](.github/workflows/pages.yml)：推送到 `main` 时自动触发，同时保留手动触发；Node 22 安装固定依赖后以 `/RPGTravel/` 构建，仅上传 `dist/`。现有站点已按用户授权切换为 GitHub Actions，并成功部署。后续更新只需推送到远端默认分支，Pages 会自动构建并发布；需要时仍可从 Actions 手动运行“Deploy 旅章 to GitHub Pages”。发布是否成功以 GitHub Actions 的实际结果和 [CURRENT_STATUS.md](CURRENT_STATUS.md) 的线上核验为准。
 
 部署配置依据 [Vite GitHub Pages 文档](https://vite.dev/guide/static-deploy.html#github-pages) 和 [GitHub Pages 工作流文档](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)。
 
