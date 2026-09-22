@@ -69,7 +69,7 @@ export default defineConfig({
         cacheId: `rpg-trip-${base.replace(/[^a-z0-9]/gi, '_')}`,
         globPatterns: ['**/*.{js,css,html,jpg,jpeg,webmanifest}'],
         navigateFallback: 'index.html',
-        navigateFallbackDenylist: [/\/api\//],
+        navigateFallbackDenylist: [/\/api\//, /\/deepseek\//],
         cleanupOutdatedCaches: false,
       },
       devOptions: { enabled: false },

@@ -319,11 +319,16 @@ export function transitionProgress(
     if (
       action.type === 'complete' &&
       (state.status !== 'active' ||
+        quest.objectives.length === 0 ||
         !quest.objectives.every(({ id }) =>
           state.checkedObjectiveIds.includes(id),
         ))
     )
-      throw new ProgressError('开始调查并勾选全部行动后，才能完成本节。');
+      throw new ProgressError(
+        quest.objectives.length === 0
+          ? '尚未提供行动，不能把这个地点标成已完成。'
+          : '开始调查并勾选全部行动后，才能完成本节。',
+      );
     if (state.status !== 'available' && state.status !== 'active')
       throw new ProgressError('本节已经解决，不能重复提交。');
     state.status = action.type === 'complete' ? 'completed' : 'skipped';
@@ -357,14 +362,20 @@ export function resolvedQuests(trip: RPGTrip, progress: Progress): Quest[] {
 
 export function unlockedClues(trip: RPGTrip, progress: Progress) {
   return resolvedQuests(trip, progress).flatMap((quest) =>
-    quest.rewardClueIds.map((id) => ({
-      clue: trip.clues.find((clue) => clue.id === id)!,
-      questId: quest.id,
-      via:
-        progress.quests[quest.id].status === 'skipped'
-          ? ('fallback' as const)
-          : ('completion' as const),
-    })),
+    quest.rewardClueIds.flatMap((id) => {
+      const clue = trip.clues.find((item) => item.id === id);
+      if (!clue) return [];
+      return [
+        {
+          clue,
+          questId: quest.id,
+          via:
+            progress.quests[quest.id].status === 'skipped'
+              ? ('fallback' as const)
+              : ('completion' as const),
+        },
+      ];
+    }),
   );
 }
 
@@ -380,5 +391,6 @@ export function progressSummary(trip: RPGTrip, progress: Progress) {
     resolved: completed + skipped,
     total: trip.quests.length,
     isFinished: completed + skipped === trip.quests.length,
+    hasEnding: trip.adventure.endingText.trim().length > 0,
   };
 }

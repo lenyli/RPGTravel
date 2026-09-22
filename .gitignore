@@ -29,11 +29,15 @@
 !/src/pages/LibraryPage.tsx
 !/src/pages/QuestPage.tsx
 !/src/pages/RoutePage.tsx
+!/src/ai/deepseek.ts
 !/src/protocol/extract.ts
+!/src/protocol/normalize.ts
 !/src/protocol/prompt.ts
 !/src/protocol/schema.ts
+!/src/protocol/text.ts
 !/src/protocol/validate.ts
 !/src/state.tsx
 !/src/storage/backup.ts
 !/src/storage/db.ts
+!/src/storage/settings.ts
 !/src/styles.css

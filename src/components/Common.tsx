@@ -64,17 +64,20 @@ export function CopyButton({
   disabled = false,
   success = '已复制',
   className = 'secondary',
+  onCopied,
 }: {
   text: string;
   children: ReactNode;
   disabled?: boolean;
   success?: string;
   className?: string;
+  onCopied?: () => void;
 }) {
   const [fallback, setFallback] = useState(false);
   const [message, setMessage] = useState('');
   const copy = () => {
     setMessage('');
+    onCopied?.();
     if (!navigator.clipboard?.writeText) {
       setFallback(true);
       return;
@@ -130,6 +133,13 @@ export function CopyButton({
 }
 export function MapPanel({ quest }: { quest: Quest }) {
   const [open, setOpen] = useState(false);
+  const searchable = `${quest.location.query} ${quest.location.address}`.trim();
+  if (!searchable)
+    return (
+      <button className="primary" type="button" disabled>
+        未提供导航
+      </button>
+    );
   const urls = mapUrls(quest.location);
   return (
     <>
@@ -208,7 +218,11 @@ export function PracticalNotes({ data }: { data: RPGTrip }) {
                   s.title
                 )}
                 <span className="source-url">{s.url}</span>
-                <span className="muted">AI 声明查阅于 {s.checkedOn}</span>
+                <span className="muted">
+                  {s.checkedOn
+                    ? `AI 声明查阅于 ${s.checkedOn}`
+                    : '未提供查阅日期'}
+                </span>
               </li>
             );
           })}

@@ -73,7 +73,7 @@ export function reliableDistance(
     location.latitude === null ||
     location.longitude === null ||
     location.coordinateSystem !== 'WGS84' ||
-    !location.coordinateSourceId ||
+    location.coordinateSourceId === null ||
     !validCoordinates(position)
   )
     return null;

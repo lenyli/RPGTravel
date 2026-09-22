@@ -1693,3 +1693,31 @@ main:focus {
     font-size: 0.86rem;
   }
 }
+.ai-row,
+.ai-key-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  margin: 0 0 8px;
+  padding: 10px 12px;
+  border: 1px solid #d7dece;
+  border-radius: 12px;
+  background: #fffef9;
+  text-align: left;
+}
+.ai-row[aria-pressed='true'] {
+  border-color: var(--green);
+}
+.ai-key-row {
+  font-size: 0.92rem;
+}
+.ai-key-actions {
+  display: flex;
+  gap: 8px;
+}
+.preview-places {
+  margin: 8px 0 12px;
+  padding-left: 1.2em;
+}

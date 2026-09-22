@@ -28,7 +28,7 @@ export default function RoutePage({ record }: { record: StoredAdventure }) {
           const state = record.progress.quests[quest.id];
           const chapter = record.data.chapters.find(
             (c) => c.id === quest.chapterId,
-          )!;
+          );
           const current = record.progress.currentQuestId === quest.id;
           return (
             <article className={`route-node ${state.status}`} key={quest.id}>
@@ -37,7 +37,7 @@ export default function RoutePage({ record }: { record: StoredAdventure }) {
               </span>
               <div className="route-card panel">
                 <div className="route-meta">
-                  <span>{chapter.area}</span>
+                  <span>{chapter?.area || '本次冒险'}</span>
                   <span className="badge">
                     {current ? '当前选择 · ' : ''}
                     {labels[state.status]}
@@ -50,8 +50,11 @@ export default function RoutePage({ record }: { record: StoredAdventure }) {
                   {quest.visit.recommendedDate
                     ? `参考日期 ${quest.visit.recommendedDate} · `
                     : ''}
-                  {quest.visit.recommendedTime || '日期与时间自行安排'} · 约{' '}
-                  {quest.visit.estimatedMinutes} 分钟
+                  {quest.visit.recommendedTime || '日期与时间自行安排'} ·{' '}
+                  {quest.visit.durationText ||
+                    (quest.visit.estimatedMinutes == null
+                      ? '用时未提供'
+                      : `约 ${quest.visit.estimatedMinutes} 分钟`)}
                 </p>
                 {quest.visit.transportNote && (
                   <p>交通：{quest.visit.transportNote}</p>

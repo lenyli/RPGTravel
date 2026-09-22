@@ -1,17 +1,87 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { DeepSeekError, generateWithDeepSeek } from '../ai/deepseek';
 import { useApp } from '../state';
 import {
+  applyRequestSnapshot,
   createGenerationPrompt,
   createRepairPrompt,
   validateTripInput,
   type TripInput,
 } from '../protocol/prompt';
+import {
+  loadAiSettings,
+  maskApiKey,
+  saveAiSettings,
+  type AiSettings,
+} from '../storage/settings';
 import type { Issue } from '../protocol/validate';
 import { parseImport, type ImportCandidate } from '../storage/backup';
 import { MAX_ENVELOPE_BYTES } from '../protocol/extract';
 import { CopyButton, Compass, Modal } from '../components/Common';
 
 type Preview = Extract<ReturnType<typeof parseImport>, { success: true }>;
+
+function humanIssues(errors: Issue[]): string[] {
+  const lines: string[] = [];
+  for (const error of errors) {
+    const message = humanIssue(error);
+    if (!lines.includes(message)) lines.push(message);
+    if (lines.length === 4) break;
+  }
+  return lines;
+}
+
+function humanIssue(error: Issue): string {
+  if (
+    error.code.includes('PHOTO') ||
+    error.message.includes('照片备份') ||
+    error.message.includes('私人照片')
+  )
+    return '这是一份照片备份，请用原文件恢复。';
+  if (
+    error.code === 'INVALID_JSON' ||
+    /停在|未闭合|半句/.test(error.message)
+  )
+    return '回复似乎停在半句话。原文已保留，可以检查后再导入。';
+  if (
+    /objectives|quests/.test(error.path) ||
+    /行动列表|没有识别到地点|没有识别到行动/.test(error.message)
+  )
+    return '没有识别到行动列表。';
+  return error.message;
+}
+
+function actionCount(preview: Preview): number {
+  return preview.data.quests.reduce(
+    (total, quest) => total + quest.objectives.length,
+    0,
+  );
+}
+
+function isImportantWarning(warning: string): boolean {
+  return /尚缺结局|引号|标点|不完整|1\.0|关联不确定|未关联|坐标|待核验|没有执行|疑似/.test(
+    warning,
+  );
+}
+
+function importantWarnings(warnings: string[]): string[] {
+  return [...new Set(warnings.filter(isImportantWarning))];
+}
+
+function hasRoutineWarning(warnings: string[]): boolean {
+  return warnings.some((warning) => !isImportantWarning(warning));
+}
+
+function needsSnapshot(preview: Preview): boolean {
+  const adventure = preview.data.adventure;
+  return (
+    !adventure.destination ||
+    adventure.destination === '未提供目的地' ||
+    !adventure.startDate ||
+    !adventure.endDate
+  );
+}
+
 export default function HomePage() {
   const app = useApp();
   const { input, raw } = app.draft;
@@ -24,7 +94,23 @@ export default function HomePage() {
   const [repairRaw, setRepairRaw] = useState(raw);
   const [duplicate, setDuplicate] = useState(false);
   const [showFormErrors, setShowFormErrors] = useState(false);
+  const [ai, setAi] = useState<AiSettings>({
+    enabled: false,
+    provider: 'deepseek',
+    model: 'deepseek-flash',
+  });
+  const [generating, setGenerating] = useState(false);
+  const [askKey, setAskKey] = useState(false);
+  const [keyDraft, setKeyDraft] = useState('');
+  const [aiError, setAiError] = useState('');
+  const [truncated, setTruncated] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+  const abortRef = useRef<AbortController | null>(null);
+  useEffect(() => {
+    void loadAiSettings()
+      .then(setAi)
+      .catch(() => {});
+  }, []);
   const personalBackup =
     raw.includes('"RPG_TRIP_SAVE"') || raw.includes('data:image/');
   const existing = preview
@@ -79,8 +165,67 @@ export default function HomePage() {
       if (fileRef.current) fileRef.current.value = '';
     }
   };
+  const rememberSnapshot = () =>
+    app.setDraft({ input, raw, promptSnapshot: input });
+  const generate = async (apiKey = ai.apiKey) => {
+    if (generating) return;
+    if (!apiKey) {
+      setAskKey(true);
+      return;
+    }
+    if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+      setAiError(
+        '当前离线，无法调用 DeepSeek；可关闭 AI，改用复制 Prompt。已经保存的冒险仍可离线使用。',
+      );
+      return;
+    }
+    if (inputErrors.length) {
+      setShowFormErrors(true);
+      return;
+    }
+    const controller = new AbortController();
+    abortRef.current = controller;
+    setGenerating(true);
+    setAiError('');
+    setTruncated(false);
+    try {
+      const reply = await generateWithDeepSeek({
+        apiKey,
+        prompt,
+        signal: controller.signal,
+      });
+      app.setDraft({ input, raw: reply.content, promptSnapshot: input });
+      if (reply.finishReason === 'length') {
+        setTruncated(true);
+        setAiError(
+          '回答可能被截断，没有把它标成完整冒险。原文留在粘贴框里，可以检查后再导入。',
+        );
+        return;
+      }
+      importRaw(reply.content);
+    } catch (error) {
+      if (error instanceof DeepSeekError && error.code === 'aborted') {
+        setAiError('已取消生成。');
+        return;
+      }
+      setAiError(error instanceof Error ? error.message : '生成没有完成。');
+    } finally {
+      setGenerating(false);
+      abortRef.current = null;
+    }
+  };
+  const saveKeyAndGenerate = async () => {
+    const apiKey = keyDraft.trim();
+    if (!apiKey) return;
+    const next = { ...ai, enabled: true, apiKey };
+    await saveAiSettings(next);
+    setAi(next);
+    setKeyDraft('');
+    setAskKey(false);
+    await generate(apiKey);
+  };
   const save = async () => {
-    if (!preview) return;
+    if (!preview || app.busy) return;
     if (existing && !duplicate) {
       setDuplicate(true);
       return;
@@ -146,7 +291,7 @@ export default function HomePage() {
               <input
                 name="destination"
                 required
-                maxLength={2000}
+                maxLength={1000}
                 placeholder="例如：一座旧城、一段山路，或一片街区"
                 value={input.destination}
                 onChange={(e) => field('destination', e.target.value)}
@@ -183,7 +328,7 @@ export default function HomePage() {
               <input
                 name="gameStyle"
                 value={input.gameStyle}
-                maxLength={2000}
+                maxLength={1000}
                 onChange={(e) => field('gameStyle', e.target.value)}
               />
             </label>
@@ -191,7 +336,7 @@ export default function HomePage() {
               兴趣 <span className="optional">选填</span>
               <input
                 name="interests"
-                maxLength={4000}
+                maxLength={1000}
                 placeholder="历史、建筑、艺术、当地生活…"
                 value={input.interests}
                 onChange={(e) => field('interests', e.target.value)}
@@ -208,6 +353,60 @@ export default function HomePage() {
                 onChange={(e) => field('constraints', e.target.value)}
               />
             </label>
+            <button
+              type="button"
+              className="ai-row"
+              aria-pressed={ai.enabled}
+              onClick={() => {
+                const enabled = !ai.enabled;
+                const next = { ...ai, enabled };
+                setAi(next);
+                void saveAiSettings(next);
+              }}
+            >
+              <span>使用 AI 直接生成</span>
+              <strong>{ai.enabled ? '开' : '关'}</strong>
+            </button>
+            {ai.enabled && (
+              <div className="ai-key-row">
+                <span>
+                  {ai.apiKey
+                    ? `DeepSeek · Key 已保存在本机 ${maskApiKey(ai.apiKey)}`
+                    : 'DeepSeek · 尚未保存 Key'}
+                </span>
+                <span className="ai-key-actions">
+                  <button
+                    type="button"
+                    className="text-button"
+                    onClick={() => {
+                      setKeyDraft('');
+                      setAskKey(true);
+                    }}
+                  >
+                    {ai.apiKey ? '修改 Key' : '配置 Key'}
+                  </button>
+                  {ai.apiKey && (
+                    <button
+                      type="button"
+                      className="text-button"
+                      onClick={() => {
+                        const next = { ...ai, apiKey: undefined };
+                        setAi(next);
+                        void saveAiSettings({ enabled: ai.enabled });
+                      }}
+                    >
+                      删除 Key
+                    </button>
+                  )}
+                </span>
+              </div>
+            )}
+            {ai.enabled && (
+              <p className="small muted">
+                此 Key 只保存在当前浏览器。任何能执行本页脚本的代码理论上都可能读取它；请使用你自己的、可以撤销的
+                DeepSeek Key。
+              </p>
+            )}
             {inputErrors.length ? (
               <>
                 <button
@@ -215,7 +414,15 @@ export default function HomePage() {
                   type="submit"
                   onClick={() => setShowFormErrors(true)}
                 >
-                  复制生成 Prompt <span aria-hidden="true">↗</span>
+                  {ai.enabled ? (
+                    <>
+                      直接生成冒险 <span aria-hidden="true">✦</span>
+                    </>
+                  ) : (
+                    <>
+                      复制生成 Prompt <span aria-hidden="true">↗</span>
+                    </>
+                  )}
                 </button>
                 {showFormErrors && (
                   <div role="alert" className="error-panel">
@@ -225,14 +432,69 @@ export default function HomePage() {
                   </div>
                 )}
               </>
+            ) : ai.enabled ? (
+              <>
+                <button
+                  className="primary full"
+                  type="button"
+                  disabled={generating}
+                  onClick={() => void generate()}
+                >
+                  {generating ? (
+                    'DeepSeek 正在生成…'
+                  ) : (
+                    <>
+                      直接生成冒险 <span aria-hidden="true">✦</span>
+                    </>
+                  )}
+                </button>
+                {generating && (
+                  <button
+                    className="secondary full"
+                    type="button"
+                    onClick={() => abortRef.current?.abort()}
+                  >
+                    取消生成
+                  </button>
+                )}
+              </>
             ) : (
               <CopyButton
                 className="primary full"
                 text={prompt}
                 success="已复制，发给你常用的 AI 即可"
+                onCopied={rememberSnapshot}
               >
                 复制生成 Prompt <span aria-hidden="true">↗</span>
               </CopyButton>
+            )}
+            {aiError && (
+              <div role="alert" className="error-panel">
+                <p>{aiError}</p>
+                {!truncated && (
+                  <>
+                    <button
+                      className="secondary"
+                      type="button"
+                      onClick={() => void generate()}
+                    >
+                      再试一次
+                    </button>
+                    <button
+                      className="text-button"
+                      type="button"
+                      onClick={() => {
+                        const next = { ...ai, enabled: false };
+                        setAi(next);
+                        void saveAiSettings(next);
+                        setAiError('');
+                      }}
+                    >
+                      关闭 AI，改用复制 Prompt
+                    </button>
+                  </>
+                )}
+              </div>
             )}
             <details className="prompt-preview">
               <summary>
@@ -279,7 +541,7 @@ export default function HomePage() {
               className="reply-input"
               rows={9}
               value={raw}
-              placeholder="在这里粘贴 AI 的整条回答…"
+              placeholder="粘贴 AI 的完整回复，支持新版故事正文和已有 JSON"
               onChange={(e) => {
                 app.setDraft({ input, raw: e.target.value });
                 setErrors([]);
@@ -305,7 +567,7 @@ export default function HomePage() {
               type="file"
               className="sr-only"
               aria-label="选择冒险备份文件"
-              accept=".json,.rpgtrip,application/json"
+              accept=".json,.rpgtrip,.txt,application/json,text/plain"
               onChange={(e) => void readFile(e.target.files?.[0])}
             />
             {errors.length > 0 && (
@@ -313,23 +575,36 @@ export default function HomePage() {
                 <h3>
                   {personalBackup ? '这份备份未能恢复' : '这份回答需要修正'}
                 </h3>
-                {errors.slice(0, 6).map((e, i) => (
-                  <p key={i}>
-                    {e.message}
-                    <small>
-                      {e.code} · {e.path}
-                    </small>
-                  </p>
+                {humanIssues(errors).map((message) => (
+                  <p key={message}>{message}</p>
                 ))}
-                {errors.length > 6 && (
-                  <p>
-                    还有 {errors.length - 6} 项，修复 Prompt 会包含全部错误。
-                  </p>
-                )}
+                <details>
+                  <summary>查看详细诊断（{errors.length}）</summary>
+                  {errors.map((e, i) => (
+                    <p key={i}>
+                      {e.message}
+                      <small>
+                        {e.code} · {e.path}
+                      </small>
+                    </p>
+                  ))}
+                </details>
                 {!personalBackup && (
-                  <CopyButton text={createRepairPrompt(repairRaw, errors)}>
-                    复制修复 Prompt
-                  </CopyButton>
+                  <>
+                    <CopyButton text={createRepairPrompt(repairRaw, errors)}>
+                      复制修复 Prompt
+                    </CopyButton>
+                    <CopyButton
+                      text={createRepairPrompt(
+                        repairRaw,
+                        errors,
+                        app.draft.promptSnapshot ?? undefined,
+                        { includeOriginal: true },
+                      )}
+                    >
+                      更换 AI 时附上原文
+                    </CopyButton>
+                  </>
                 )}
                 {storyOnly && (
                   <button
@@ -357,8 +632,8 @@ export default function HomePage() {
             </div>
             <h3>把注意力留给路上的发现</h3>
             <p>
-              不需要账号，也没有 AI
-              接口。导入故事后，线索、地点与进度都能离线随身带走。
+              不需要账号。可以复制 Prompt 交给自己的 AI，也可以把 DeepSeek Key
+              存在本机后直接生成。导入后，线索、地点与进度都能离线随身带走。
             </p>
             <div className="note-rule" />
             <p className="small">
@@ -382,6 +657,32 @@ export default function HomePage() {
           ))}
         </Modal>
       )}
+      {askKey && (
+        <Modal title="DeepSeek API Key" close={() => setAskKey(false)}>
+          <label>
+            DeepSeek API Key
+            <input
+              type="password"
+              name="deepseek-api-key"
+              autoComplete="off"
+              value={keyDraft}
+              onChange={(e) => setKeyDraft(e.target.value)}
+            />
+          </label>
+          <p className="small muted">
+            Key 仅保存在当前浏览器，不进入故事、备份或仓库。修改时需要重新输入完整新
+            Key，页面不会回填已保存的密钥。
+          </p>
+          <button
+            className="primary"
+            type="button"
+            disabled={!keyDraft.trim() || generating}
+            onClick={() => void saveKeyAndGenerate()}
+          >
+            保存并继续
+          </button>
+        </Modal>
+      )}
       {preview && (
         <Modal
           title={duplicate ? '这段故事已在本机' : '你的冒险准备好了'}
@@ -396,46 +697,92 @@ export default function HomePage() {
             {preview.progress ? '恢复完整存档' : '故事预览'}
           </p>
           <h3 className="preview-title">{preview.data.adventure.title}</h3>
-          <p>{preview.data.adventure.subtitle}</p>
+          <p>
+            已识别 {preview.data.quests.length} 个地点 · {actionCount(preview)}{' '}
+            项行动 ·{' '}
+            {preview.data.adventure.endingText.trim()
+              ? '已包含结局'
+              : '尚缺结局'}
+          </p>
           <dl className="preview-meta">
             <div>
               <dt>目的地</dt>
-              <dd>{preview.data.adventure.destination}</dd>
+              <dd>{preview.data.adventure.destination || '未提供目的地'}</dd>
             </div>
             <div>
               <dt>旅行日期</dt>
               <dd>
-                {preview.data.adventure.startDate} —{' '}
-                {preview.data.adventure.endDate}
-              </dd>
-            </div>
-            <div>
-              <dt>旅途篇幅</dt>
-              <dd>
-                {preview.data.chapters.length} 章 · {preview.data.quests.length}{' '}
-                项调查
+                {preview.data.adventure.startDate ?? '日期未提供'} —{' '}
+                {preview.data.adventure.endDate ?? '日期未提供'}
               </dd>
             </div>
           </dl>
+          <ul className="preview-places">
+            {preview.data.quests.map((quest) => {
+              const nav =
+                quest.location.query.trim() || quest.location.address.trim();
+              return (
+                <li key={quest.id}>
+                  {quest.title} · {nav || '未提供导航'}
+                </li>
+              );
+            })}
+          </ul>
+          <details>
+            <summary>
+              {preview.data.adventure.endingText.trim()
+                ? '查看结局（可能剧透）'
+                : '尚缺结局'}
+            </summary>
+            <p>
+              {preview.data.adventure.endingText.trim() ||
+                '结局尚未提供。可以先保存已有任务。'}
+            </p>
+          </details>
           {preview.photos.length > 0 && (
             <p className="success">
               随存档恢复 {preview.photos.length} 张任务照片。
             </p>
           )}
-          <p className="success">
-            格式检查通过，尚有 {preview.data.adventure.verificationNotes.length}{' '}
-            条出行信息待核验。
-          </p>
+          {hasRoutineWarning(preview.warnings) && <p>已整理格式。</p>}
+          {importantWarnings(preview.warnings).map((n) => (
+            <p className="warning-text" key={n}>
+              {n}
+            </p>
+          ))}
+          {preview.data.adventure.verificationNotes.length > 0 && (
+            <p className="warning-text">提醒：地点及交通信息未由本应用核验。</p>
+          )}
           {preview.data.adventure.verificationNotes.map((n, i) => (
             <p className="warning-text" key={i}>
               {n}
             </p>
           ))}
-          {preview.warnings.map((n, i) => (
-            <p className="muted" key={i}>
-              {n}
-            </p>
-          ))}
+          {preview.supplements.length > 0 && (
+            <details>
+              <summary>未关联内容（{preview.supplements.length}）</summary>
+              {preview.supplements.map((item, index) => (
+                <p key={index}>{item}</p>
+              ))}
+            </details>
+          )}
+          {needsSnapshot(preview) && app.draft.promptSnapshot && (
+            <button
+              className="secondary"
+              type="button"
+              onClick={() =>
+                setPreview({
+                  ...preview,
+                  data: applyRequestSnapshot(
+                    preview.data,
+                    app.draft.promptSnapshot!,
+                  ),
+                })
+              }
+            >
+              使用这次需求补齐
+            </button>
+          )}
           <p className="small muted">
             这不代表地点、历史或行程已核实。各地点可按任意顺序调查，线索和结局会随你的行动揭露。
           </p>

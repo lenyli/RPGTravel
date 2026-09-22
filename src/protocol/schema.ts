@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-// Keep this schema structural: the same object validates imports and is sent to AI.
+// Internal story shape after import. Generation prompts do not recite this schema.
 const id = z
   .string()
   .regex(/^[a-z][a-z0-9_]{0,63}$/)
@@ -8,9 +8,9 @@ const id = z
 const title = z
   .string()
   .min(1)
-  .max(160)
+  .max(20_000)
   .regex(/\S/)
-  .describe('非空标题，最多 160 字符');
+  .describe('非空标题，单字段安全上限 20000 字符');
 const text = z
   .string()
   .min(1)
@@ -22,22 +22,23 @@ const date = z
   .string()
   .regex(/^\d{4}-\d{2}-\d{2}$/)
   .describe('目的地本地日历日期 YYYY-MM-DD');
+const nullableDate = date.nullable();
 const references = (max: number) => z.array(id).max(max);
 
 export const sourceSchema = z.strictObject({
   id,
   title,
-  url: z.string().describe('AI 提供的来源网址原文；不因网址写法拒绝导入'),
-  checkedOn: date.describe('生成 AI 实际查阅的日期，不是提示生成日期'),
+  url: z.string().describe('来源网址原文；不因网址写法拒绝导入'),
+  checkedOn: nullableDate.describe('实际查阅日期；未提供为 null，不填今天'),
 });
 
 export const adventureSchema = z.strictObject({
   id,
   title,
-  subtitle: z.string().max(160),
+  subtitle: optionalText,
   destination: title.describe('目的地和明确游览范围'),
-  startDate: date,
-  endDate: date,
+  startDate: nullableDate,
+  endDate: nullableDate,
   timeZone: z
     .string()
     .min(1)
@@ -45,12 +46,12 @@ export const adventureSchema = z.strictObject({
     .nullable()
     .describe('目的地 IANA 时区；不确定为 null'),
   gameStyle: z.array(title).max(20),
-  premise: text.describe('不泄露最终答案的故事开场'),
-  mainMystery: text.describe('贯穿旅程的主要疑问'),
-  finalGoal: text,
-  endingTitle: title,
-  endingText: text.describe(
-    '所有地点完成或跳过后展示的完整结局，与访问顺序无关',
+  premise: optionalText.describe('不泄露最终答案的故事开场；未提供则为空'),
+  mainMystery: optionalText.describe('贯穿旅程的主要疑问；未提供则为空'),
+  finalGoal: optionalText,
+  endingTitle: optionalText,
+  endingText: optionalText.describe(
+    '结局正文；未提供则为空，不能用系统套话冒充',
   ),
   practicalNotes: z.array(text).max(100),
   verificationNotes: z
@@ -83,13 +84,8 @@ export const questSchema = z.strictObject({
   title,
   location: z.strictObject({
     name: title,
-    address: text.describe('游客可辨认的完整真实地点范围，不编造门牌'),
-    query: z
-      .string()
-      .min(1)
-      .max(1000)
-      .regex(/\S/)
-      .describe('地点名称加地区的地图搜索词'),
+    address: optionalText.describe('游客可辨认的地点范围；未提供则为空，不编造门牌'),
+    query: z.string().max(1000).describe('地点名称加地区的地图搜索词；没有则为空'),
     latitude: z.number().min(-90).max(90).nullable(),
     longitude: z.number().min(-180).max(180).nullable(),
     coordinateSystem: z.literal('WGS84'),
@@ -101,29 +97,37 @@ export const questSchema = z.strictObject({
     recommendedDate: date
       .nullable()
       .describe('可选出行提示日期，不构成任务门禁；没有明确需要时为 null'),
-    recommendedTime: title
+    recommendedTime: z
+      .string()
+      .max(20_000)
+      .regex(/\S/)
       .nullable()
       .describe('建议时段，不保证实际开放；未知为 null'),
-    estimatedMinutes: z.number().int().min(1).max(720),
+    estimatedMinutes: z.number().int().min(1).max(720).nullable(),
+    durationText: z
+      .string()
+      .max(200)
+      .optional()
+      .describe('无法换算成分钟时保留的原用时提示'),
     transportNote: optionalText,
     accessNote: optionalText.describe(
       '开放、预约、门票；无法确认时明确写待核验',
     ),
     safetyNote: optionalText,
-    fallbackText: text.describe(
-      '跳过现场行动时仍可推进的剧情补叙，不冒称已完成',
+    fallbackText: optionalText.describe(
+      '跳过现场行动时的剧情补叙；未提供则为空，不冒称已完成',
     ),
   }),
   story: z.strictObject({
-    scene: text.describe(
-      '本地点独立调查所需的完整情景与背景，不预设访问过其他地点',
+    scene: optionalText.describe(
+      '本地点情景与背景；未提供则为空，不预设访问过其他地点',
     ),
-    currentMystery: text,
+    currentMystery: optionalText,
   }),
   npcIds: references(60),
-  objectives: z.array(z.strictObject({ id, text })).min(3).max(5),
-  completionText: text,
-  rewardClueIds: references(3).min(1),
+  objectives: z.array(z.strictObject({ id, text })).max(20),
+  completionText: optionalText,
+  rewardClueIds: references(20),
   sourceIds: references(100),
 });
 
@@ -147,7 +151,7 @@ export const tripSchema = z.strictObject({
   adventure: adventureSchema,
   chapters: z.array(chapterSchema).min(1).max(60),
   quests: z.array(questSchema).min(1).max(60),
-  clues: z.array(clueSchema).min(1).max(180),
+  clues: z.array(clueSchema).max(180),
   npcs: z.array(npcSchema).max(60),
 });
 

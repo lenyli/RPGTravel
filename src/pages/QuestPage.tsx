@@ -14,11 +14,21 @@ import {
 export function Ending({ record }: { record: StoredAdventure }) {
   const summary = progressSummary(record.data, record.progress);
   if (!summary.isFinished) return null;
+  if (!summary.hasEnding)
+    return (
+      <section className="ending panel">
+        <p className="eyebrow">任务进度</p>
+        <h1>任务进度已完成，结局尚未提供</h1>
+        <p>
+          各地点已经完成或跳过。这份冒险还没有结局正文，这里不会用套话代替。
+        </p>
+      </section>
+    );
   return (
     <section className="ending panel">
       <p className="eyebrow">旅程的最后一页</p>
       <p className="adventure-title">{record.data.adventure.title}</p>
-      <h1>{record.data.adventure.endingTitle}</h1>
+      <h1>{record.data.adventure.endingTitle || '故事结局'}</h1>
       <p className="story-text">{record.data.adventure.endingText}</p>
       <p className="ending-status">
         {summary.skipped
@@ -80,7 +90,8 @@ export default function QuestPage({ record }: { record: StoredAdventure }) {
           : feedback.quest.completionText}
       </p>
       {feedback.quest.rewardClueIds.map((id) => {
-        const clue = data.clues.find((c) => c.id === id)!;
+        const clue = data.clues.find((c) => c.id === id);
+        if (!clue) return null;
         return (
           <div className="clue-card" key={id}>
             <span className="eyebrow">
@@ -93,7 +104,9 @@ export default function QuestPage({ record }: { record: StoredAdventure }) {
       })}
       <p className="success">
         {progressSummary(data, progress).isFinished
-          ? '进度已保存到本机，故事已收束。'
+          ? progressSummary(data, progress).hasEnding
+            ? '进度已保存到本机，故事已收束。'
+            : '进度已保存到本机。任务进度已完成，结局尚未提供。'
           : '进度已保存到本机，可自由选择其他地点继续。'}
       </p>
       <button className="primary full" onClick={() => setFeedback(null)}>
@@ -117,7 +130,7 @@ export default function QuestPage({ record }: { record: StoredAdventure }) {
         {feedbackModal}
       </>
     );
-  const chapter = data.chapters.find((c) => c.id === quest.chapterId)!;
+  const chapter = data.chapters.find((c) => c.id === quest.chapterId);
   const state = progress.quests[quest.id];
   const pendingProgress =
     app.pending?.record.instanceId === record.instanceId
@@ -222,8 +235,11 @@ export default function QuestPage({ record }: { record: StoredAdventure }) {
             {quest.visit.recommendedDate
               ? `${quest.visit.recommendedDate} · `
               : ''}{' '}
-            {quest.visit.recommendedTime || '日期与时间自行安排'} · 约{' '}
-            {quest.visit.estimatedMinutes} 分钟
+            {quest.visit.recommendedTime || '日期与时间自行安排'} ·{' '}
+            {quest.visit.durationText ||
+              (quest.visit.estimatedMinutes == null
+                ? '用时未提供'
+                : `约 ${quest.visit.estimatedMinutes} 分钟`)}
           </p>
           {quest.visit.transportNote && (
             <p>
@@ -241,9 +257,9 @@ export default function QuestPage({ record }: { record: StoredAdventure }) {
         </div>
       </section>
       <section className="panel investigation">
-        <p className="eyebrow">地点故事 · {chapter.title}</p>
+        <p className="eyebrow">地点故事 · {chapter?.title || '本次冒险'}</p>
         <h2>{quest.title}</h2>
-        {quest.id === chapter.questIds[0] && (
+        {chapter && quest.id === chapter.questIds[0] && (
           <p className="chapter-intro">{chapter.intro}</p>
         )}
         {
@@ -262,7 +278,8 @@ export default function QuestPage({ record }: { record: StoredAdventure }) {
         {state.status === 'active' && quest.npcIds.length > 0 && (
           <div className="npc-list">
             {quest.npcIds.map((id) => {
-              const npc = data.npcs.find((n) => n.id === id)!;
+              const npc = data.npcs.find((n) => n.id === id);
+              if (!npc) return null;
               return (
                 <details key={id}>
                   <summary>
@@ -290,18 +307,24 @@ export default function QuestPage({ record }: { record: StoredAdventure }) {
               我已到达，开始调查
             </button>
             <h3>现场行动</h3>
-            <ol className="objectives-preview">
-              {quest.objectives.map((o) => (
-                <li key={o.id}>{o.text}</li>
-              ))}
-            </ol>
+            {quest.objectives.length ? (
+              <ol className="objectives-preview">
+                {quest.objectives.map((o) => (
+                  <li key={o.id}>{o.text}</li>
+                ))}
+              </ol>
+            ) : (
+              <p>尚未提供行动</p>
+            )}
           </>
         ) : (
           <>
             <h3>
               现场行动{' '}
               <span className="muted">
-                {checks.length} / {quest.objectives.length}
+                {quest.objectives.length
+                  ? `${checks.length} / ${quest.objectives.length}`
+                  : '尚未提供行动'}
               </span>
             </h3>
             <div className="objectives">
@@ -330,6 +353,7 @@ export default function QuestPage({ record }: { record: StoredAdventure }) {
             <button
               className="primary full"
               disabled={
+                quest.objectives.length === 0 ||
                 checks.length !== quest.objectives.length ||
                 app.busy ||
                 !!app.pending

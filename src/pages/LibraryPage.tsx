@@ -75,8 +75,10 @@ export default function LibraryPage() {
                   <h2>{record.data.adventure.title}</h2>
                   <p>{record.data.adventure.destination}</p>
                   <p className="small muted">
-                    {record.data.adventure.startDate} —{' '}
-                    {record.data.adventure.endDate}
+                    {record.data.adventure.startDate &&
+                    record.data.adventure.endDate
+                      ? `${record.data.adventure.startDate} — ${record.data.adventure.endDate}`
+                      : '日期未提供'}
                   </p>
                   <div className="progress-track">
                     <span

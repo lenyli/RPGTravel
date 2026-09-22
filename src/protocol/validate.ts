@@ -1,9 +1,4 @@
-import {
-  adventureSchema,
-  chapterSchema,
-  tripSchema,
-  type RPGTrip,
-} from './schema';
+import { tripSchema, type RPGTrip } from './schema';
 import { isReservedId, MAX_REPLY_BYTES, unsafeStructureIssue } from './extract';
 
 export type Issue = { code: string; path: string; message: string };
@@ -22,105 +17,6 @@ export function isCalendarDate(value: string): boolean {
     day <=
     [31, leap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month - 1]
   );
-}
-
-function normalize(input: unknown): { value: unknown; warnings: string[] } {
-  const warnings: string[] = [];
-  if (!record(input)) return { value: input, warnings };
-  const value = { ...input };
-  if (!Object.hasOwn(value, 'adventure')) {
-    const keys = Object.keys(adventureSchema.shape);
-    const flat = Object.fromEntries(keys.map((key) => [key, input[key]]));
-    const candidates = [
-      { key: '$', data: flat },
-      ...['meta', 'trip', 'metadata'].map((key) => ({ key, data: input[key] })),
-    ].filter((candidate) => adventureSchema.safeParse(candidate.data).success);
-    if (candidates.length === 1) {
-      const candidate = candidates[0];
-      value.adventure = candidate.data;
-      if (candidate.key === '$') {
-        for (const key of keys) delete value[key];
-        warnings.push(
-          '根对象中完整的冒险概要字段已收拢至 adventure，内容未改写。',
-        );
-      } else {
-        delete value[candidate.key];
-        warnings.push(
-          `完整的 ${candidate.key} 冒险概要已改用 adventure 字段，内容未改写。`,
-        );
-      }
-    }
-  }
-  if (Array.isArray(input.chapters)) {
-    value.chapters = input.chapters.map((chapter: unknown, index: number) => {
-      if (!record(chapter)) return chapter;
-      const next = { ...chapter };
-      if (
-        typeof next.subtitle === 'string' &&
-        (!Object.hasOwn(next, 'intro') || typeof next.intro === 'string')
-      ) {
-        const intro = typeof next.intro === 'string' ? next.intro : '';
-        next.intro = !intro
-          ? next.subtitle
-          : !next.subtitle || intro === next.subtitle
-            ? intro
-            : `${intro}\n\n${next.subtitle}`;
-        delete next.subtitle;
-        warnings.push(
-          `第 ${index + 1} 个章节的 subtitle 已并入 intro，原文字保留。`,
-        );
-      }
-      if (
-        !Object.hasOwn(next, 'area') &&
-        chapterSchema.shape.title.safeParse(next.title).success
-      ) {
-        next.area = next.title;
-        warnings.push(
-          `第 ${index + 1} 个章节缺少 area，已使用现有章节标题作为分组名称。`,
-        );
-      }
-      if (!Object.hasOwn(next, 'intro')) {
-        next.intro = '';
-        warnings.push(
-          `第 ${index + 1} 个章节未给出 intro，已留空，不补写剧情。`,
-        );
-      }
-      return next;
-    });
-  }
-  if (!Array.isArray(input.quests)) return { value, warnings };
-  value.quests = input.quests.map((quest: unknown, index: number) => {
-    if (!record(quest)) return quest;
-    const next = { ...quest };
-    for (const key of ['npcIds', 'sourceIds']) {
-      if (!Object.hasOwn(next, key)) {
-        next[key] = [];
-        warnings.push(`第 ${index + 1} 个任务缺少 ${key}，已补为空数组。`);
-      }
-    }
-    if (record(quest.location)) {
-      const location = { ...quest.location };
-      const coordinateKeys = ['latitude', 'longitude', 'coordinateSourceId'];
-      if (coordinateKeys.every((key) => !Object.hasOwn(location, key))) {
-        for (const key of coordinateKeys) location[key] = null;
-        warnings.push(
-          `第 ${index + 1} 个任务未给出坐标字段，已补为 null，使用地点搜索导航。`,
-        );
-      }
-      if (
-        coordinateKeys.every((key) => location[key] === null) &&
-        !Object.hasOwn(location, 'coordinateSystem')
-      ) {
-        location.coordinateSystem = 'WGS84';
-        warnings.push(
-          `第 ${index + 1} 个任务坐标全空，已补缺省坐标系统 WGS84。`,
-        );
-      }
-      next.location = location;
-    }
-    return next;
-  });
-  return { value, warnings };
 }
 
 export function validateTrip(input: unknown): TripValidation {
@@ -169,8 +65,7 @@ export function validateTrip(input: unknown): TripValidation {
         },
       ],
     };
-  const normalized = normalize(input);
-  const result = tripSchema.safeParse(normalized.value);
+  const result = tripSchema.safeParse(input);
   if (!result.success) {
     return {
       success: false,
@@ -201,7 +96,7 @@ export function validateTrip(input: unknown): TripValidation {
             path,
             message: '字段为空、数量不足或数值过小，请按 Schema 补齐。',
           };
-        let actual = normalized.value;
+        let actual = input;
         for (const part of issue.path) {
           actual =
             (record(actual) || Array.isArray(actual)) &&
@@ -310,16 +205,13 @@ export function validateTrip(input: unknown): TripValidation {
       );
     return valid;
   };
-  const startValid = checkDate(
-    data.adventure.startDate,
-    '$.adventure.startDate',
-  );
-  const endValid = checkDate(data.adventure.endDate, '$.adventure.endDate');
-  if (
-    startValid &&
-    endValid &&
-    data.adventure.endDate < data.adventure.startDate
-  )
+  const startValue = data.adventure.startDate;
+  const endValue = data.adventure.endDate;
+  const startValid =
+    startValue !== null && checkDate(startValue, '$.adventure.startDate');
+  const endValid =
+    endValue !== null && checkDate(endValue, '$.adventure.endDate');
+  if (startValid && endValid && endValue < startValue)
     add(
       'INVALID_DATE_RANGE',
       '$.adventure.endDate',
@@ -337,7 +229,8 @@ export function validateTrip(input: unknown): TripValidation {
     }
   }
   data.adventure.sources.forEach((source, index) => {
-    checkDate(source.checkedOn, `$.adventure.sources[${index}].checkedOn`);
+    if (source.checkedOn !== null)
+      checkDate(source.checkedOn, `$.adventure.sources[${index}].checkedOn`);
   });
 
   const chapters = [...data.chapters].sort((a, b) => a.order - b.order);
@@ -427,8 +320,7 @@ export function validateTrip(input: unknown): TripValidation {
       startValid &&
       endValid &&
       recommendedDate !== null &&
-      (recommendedDate < data.adventure.startDate ||
-        recommendedDate > data.adventure.endDate)
+      (recommendedDate < startValue || recommendedDate > endValue)
     )
       add(
         'QUEST_DATE_OUTSIDE_TRIP',
@@ -513,5 +405,5 @@ export function validateTrip(input: unknown): TripValidation {
   });
   return errors.length
     ? { success: false, errors }
-    : { success: true, data, warnings: normalized.warnings };
+    : { success: true, data, warnings: [] };
 }

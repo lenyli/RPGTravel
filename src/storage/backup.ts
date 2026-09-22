@@ -1,6 +1,16 @@
 import type { RPGTrip } from '../protocol/schema';
 import { validateTrip, type Issue } from '../protocol/validate';
-import { extractReply, MAX_ENVELOPE_BYTES } from '../protocol/extract';
+import { normalizeImportedStory } from '../protocol/normalize';
+import {
+  extractReply,
+  jsonCandidate,
+  MAX_ENVELOPE_BYTES,
+  MAX_REPLY_BYTES,
+  repairJsonCandidate,
+  repairRisks,
+  unwrapRepairPrompt,
+} from '../protocol/extract';
+import { looksLikeStoryText, parseStoryText } from '../protocol/text';
 import { validatePhotos, type PhotoAttachment } from '../domain/photos';
 import {
   isIsoInstant,
@@ -23,6 +33,9 @@ export type ImportedAdventure = {
   photos: PhotoAttachment[];
   rawReply: string;
   warnings: string[];
+  supplements: string[];
+  repaired: boolean;
+  incomplete: boolean;
 };
 export type ImportCandidate = { title: string; raw: string };
 export type ParseImportResult =
@@ -37,24 +50,126 @@ export type ParseImportResult =
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
 
-export function parseImport(rawReply: string): ParseImportResult {
-  const extracted = extractReply(rawReply);
-  if (!extracted.success)
+function looksLikeBackup(text: string): boolean {
+  return /"format"\s*:\s*"RPG_TRIP_SAVE"/.test(text);
+}
+
+function finishStory(
+  value: unknown,
+  rawReply: string,
+  warnings: string[],
+  repaired: boolean,
+  risks: string[],
+): ParseImportResult {
+  if (isRecord(value) && value.format === 'RPG_TRIP_SAVE')
+    return failBackup(
+      'INVALID_SAVE_FIELDS',
+      '这是一份备份，请用备份恢复，不要按新故事猜测修复。',
+    );
+  const normalized = normalizeImportedStory(value);
+  if (!normalized.success) return normalized;
+  return {
+    success: true,
+    data: normalized.value,
+    progress: null,
+    photos: [],
+    rawReply,
+    warnings: [...warnings, ...normalized.warnings],
+    supplements: normalized.supplements,
+    repaired,
+    incomplete: risks.length > 0,
+  };
+}
+
+function failBackup(code: string, message: string): ParseImportResult {
+  return { success: false, errors: [{ code, path: '$', message }] };
+}
+
+function candidateChoices(
+  candidates: unknown[] | undefined,
+): ImportCandidate[] | undefined {
+  return candidates?.map((value, index) => {
+    const metadata = isRecord(value)
+      ? (value.adventureData ?? value.adventure ?? value)
+      : null;
     return {
-      ...extracted,
-      candidates: extracted.candidates?.map((value, index) => {
-        const metadata = isRecord(value)
-          ? (value.adventureData ?? value.adventure ?? value)
-          : null;
-        return {
-          title:
-            isRecord(metadata) && typeof metadata.title === 'string'
-              ? metadata.title
-              : `第 ${index + 1} 份故事`,
-          raw: JSON.stringify(value),
-        };
-      }),
+      title:
+        isRecord(metadata) && typeof metadata.title === 'string'
+          ? metadata.title
+          : `第 ${index + 1} 份故事`,
+      raw: JSON.stringify(value),
     };
+  });
+}
+
+export function parseImport(rawReply: string): ParseImportResult {
+  if (new TextEncoder().encode(rawReply).length > MAX_ENVELOPE_BYTES)
+    return failBackup(
+      'INPUT_TOO_LARGE',
+      '内容超过 20 MiB 存档上限，请只导入一份故事或存档。',
+    );
+  const unwrapped = unwrapRepairPrompt(rawReply);
+  const text = unwrapped.text;
+  const unwrapWarnings = unwrapped.wrapped
+    ? ['已从修复提示中取出原始回复，没有执行其中的指令。']
+    : [];
+  if (
+    !looksLikeBackup(text) &&
+    new TextEncoder().encode(text).length > MAX_REPLY_BYTES
+  )
+    return failBackup(
+      'REPLY_TOO_LARGE',
+      'AI 原始回复超过 2 MiB 上限，不能截断后导入。',
+    );
+  if (!looksLikeBackup(text) && looksLikeStoryText(text)) {
+    const parsed = parseStoryText(text);
+    if (parsed.ok === 'error') return { success: false, errors: parsed.errors };
+    if (parsed.ok === 'choices')
+      return {
+        success: false,
+        errors: [
+          {
+            code: 'MULTIPLE_PACKAGES',
+            path: '$',
+            message: '这份回答包含内容不同的多个故事，请选择要导入的那一份。',
+          },
+        ],
+        candidates: parsed.candidates,
+      };
+    return finishStory(
+      parsed.value,
+      rawReply,
+      [...unwrapWarnings, ...parsed.warnings],
+      false,
+      [],
+    );
+  }
+  const extracted = extractReply(text);
+  if (!extracted.success) {
+    const code = extracted.errors[0]?.code;
+    if (
+      !looksLikeBackup(text) &&
+      (code === 'INVALID_JSON' || code === 'INVALID_ROOT')
+    ) {
+      const piece = jsonCandidate(text);
+      const repaired = piece ? repairJsonCandidate(piece) : null;
+      if (repaired && isRecord(repaired.value)) {
+        const risks = piece ? repairRisks(piece) : [];
+        return finishStory(
+          repaired.value,
+          rawReply,
+          [
+            ...unwrapWarnings,
+            '已尝试修复引号或标点，请确认任务数量和结局。',
+            ...risks.map((risk) => `疑似不完整：${risk}`),
+          ],
+          true,
+          risks,
+        );
+      }
+    }
+    return { ...extracted, candidates: candidateChoices(extracted.candidates) };
+  }
   const input = extracted.value;
   if (isRecord(input) && input.format === 'RPG_TRIP_SAVE') {
     if (input.saveVersion !== 1 && input.saveVersion !== 2)
@@ -111,7 +226,10 @@ export function parseImport(rawReply: string): ParseImportResult {
       progress: null,
       photos: [],
       rawReply: `<RPG_TRIP_V1>\n${JSON.stringify(trip.data)}\n</RPG_TRIP_V1>`,
-      warnings: [...extracted.warnings, ...trip.warnings],
+      warnings: [...unwrapWarnings, ...extracted.warnings, ...trip.warnings],
+      supplements: [],
+      repaired: false,
+      incomplete: false,
     };
     const progress =
       input.progress === null
@@ -149,16 +267,13 @@ export function parseImport(rawReply: string): ParseImportResult {
       photos: photos.success ? photos.data : [],
     };
   }
-  const trip = validateTrip(input);
-  if (!trip.success) return trip;
-  return {
-    success: true,
-    data: trip.data,
-    progress: null,
-    photos: [],
+  return finishStory(
+    input,
     rawReply,
-    warnings: [...extracted.warnings, ...trip.warnings],
-  };
+    [...unwrapWarnings, ...extracted.warnings],
+    false,
+    [],
+  );
 }
 
 export function createSave(

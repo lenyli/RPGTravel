@@ -1,3 +1,4 @@
+import { jsonrepair } from 'jsonrepair';
 import type { Issue } from './validate';
 
 export const MAX_REPLY_BYTES = 2 * 1024 * 1024;
@@ -234,4 +235,102 @@ export function extractReply(raw: string): Extraction {
   const unsafe = unsafeStructureIssue(value);
   if (unsafe) return { success: false, errors: [unsafe] };
   return { success: true, value, warnings };
+}
+
+export function unwrapRepairPrompt(raw: string, depth = 0): {
+  text: string;
+  wrapped: boolean;
+} {
+  if (depth >= 2) return { text: raw, wrapped: false };
+  const marker = '原始 AI 回复：JSON 字符串数据';
+  const index = raw.indexOf(marker);
+  if (index < 0) return { text: raw, wrapped: false };
+  const after = raw.slice(index + marker.length);
+  const quote = after.indexOf('"');
+  if (quote < 0) return { text: raw, wrapped: false };
+  const literal = readJsonString(after.slice(quote));
+  if (literal == null) return { text: raw, wrapped: false };
+  const next = unwrapRepairPrompt(literal, depth + 1);
+  return { text: next.text, wrapped: true };
+}
+
+function readJsonString(text: string): string | null {
+  if (!text.startsWith('"')) return null;
+  let escaped = false;
+  for (let index = 1; index < text.length; index += 1) {
+    const char = text[index];
+    if (escaped) {
+      escaped = false;
+      continue;
+    }
+    if (char === '\\') {
+      escaped = true;
+      continue;
+    }
+    if (char === '"') {
+      try {
+        const value = JSON.parse(text.slice(0, index + 1));
+        return typeof value === 'string' ? value : null;
+      } catch {
+        return null;
+      }
+    }
+  }
+  return null;
+}
+
+export function jsonCandidate(text: string): string | null {
+  const content = text.replace(/^\uFEFF/, '').trim();
+  const startTag = '<RPG_TRIP_V1>';
+  const endTag = '</RPG_TRIP_V1>';
+  const start = content.indexOf(startTag);
+  const end = content.lastIndexOf(endTag);
+  if (start !== -1 && end > start)
+    return content.slice(start + startTag.length, end).trim();
+  const fence = content.match(/```(?:json)?\s*([\s\S]*?)```/i);
+  if (fence) return fence[1].trim();
+  if (content.startsWith('{') || content.startsWith('[')) return content;
+  return null;
+}
+
+export function repairJsonCandidate(
+  original: string,
+): { value: unknown } | null {
+  try {
+    return { value: JSON.parse(jsonrepair(original)) };
+  } catch {
+    return null;
+  }
+}
+
+export function repairRisks(original: string): string[] {
+  const trimmed = original.trim();
+  const risks: string[] = [];
+  if (!trimmed.endsWith('}') && !trimmed.endsWith(']'))
+    risks.push('回复似乎停在半句话');
+  const slashes = trimmed.match(/\\+$/);
+  if (slashes && slashes[0].length % 2 === 1) risks.push('回复停在转义符中间');
+  if (hasStructuralEllipsis(trimmed))
+    risks.push('回复含有省略占位，不能当成完整故事');
+  return risks;
+}
+
+function hasStructuralEllipsis(text: string): boolean {
+  let quoted = false;
+  let escaped = false;
+  for (let index = 0; index < text.length; index += 1) {
+    const char = text[index];
+    if (quoted) {
+      if (escaped) escaped = false;
+      else if (char === '\\') escaped = true;
+      else if (char === '"') quoted = false;
+      continue;
+    }
+    if (char === '"') {
+      quoted = true;
+      continue;
+    }
+    if (char === '.' && text.slice(index, index + 3) === '...') return true;
+  }
+  return false;
 }

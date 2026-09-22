@@ -33,7 +33,12 @@ import {
   type StoredAdventure,
 } from './storage/db';
 
-export type Draft = { version?: 2; input: TripInput; raw: string };
+export type Draft = {
+  version?: 2;
+  input: TripInput;
+  raw: string;
+  promptSnapshot?: TripInput | null;
+};
 const emptyDraft: Draft = {
   version: 2,
   input: {
@@ -160,7 +165,15 @@ function useWorkspace() {
   };
   const setDraft = (next: Draft) => {
     if (updateGate.current) return;
-    const versioned: Draft = { ...next, version: 2 };
+    const versioned: Draft = {
+      ...draftRef.current,
+      ...next,
+      version: 2,
+      promptSnapshot:
+        next.promptSnapshot === undefined
+          ? draftRef.current.promptSnapshot
+          : next.promptSnapshot,
+    };
     draftRef.current = versioned;
     setDraftState(versioned);
     dirty.current = true;
